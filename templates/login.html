@@ -2,14 +2,13 @@
 <html>
     <header><h3>Log In</h3>
     <a href="{{ url_for('signup') }}">Don't Have an Account?</a>
+    <a href="{{ url_for('forgotpass') }}">Forgot Password?</a>
     <br>
     </header>
 
     <body>
         
         <form action="/login" method="post">
-            
-            
             <input type="name" name="name">
             <input type="password" name="pass">
             <input type="submit" name="login">

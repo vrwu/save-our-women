@@ -3,6 +3,11 @@ from flask import *
 
 app = Flask(__name__)
 
+'''
+!!! most returns and forms connect with HTML since idk react native/swift/etc and I used quick html for visualization/testing purposes
+They can be changed to accomodate for whatever frontend language is used  
+'''
+
 firebaseConfig = {
     'apiKey': "AIzaSyA1UYeJTygTIPNIBTLd_upZ8EsCjL5iUNs",
     'authDomain': "save-our-women-b9aef.firebaseapp.com",
@@ -18,8 +23,9 @@ firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
 
 @app.route('/')
-def home():
-    return render_template("home.html")
+def start():
+
+    return render_template("start.html")
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -39,14 +45,14 @@ def signup():
 
             # returns message for now that leads to deadend but maybe a pop up message instead
             # needs coordinating with front end
-           # return 'Account Created! Please verify email before signing in'
+            return 'Account Created! Please verify email before signing in'
             return redirect(url_for('login'))
 
         except:
 
-            #same as the account created, probably a pop up message
+            # same as the account created, probably a pop up message
             return 'Account creation failed. Please ensure a new email or a password of at least 6 characters'
-    return render_template('signup.html', error=error)
+            return render_template('signup.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -54,20 +60,38 @@ def login():
 
     if request.method == 'GET':
         return render_template('login.html')
+
     else:
         email = request.form['name']
         password = request.form['pass']
 
-        # issue with email verification, don't know how to check for email verified or not
-        if (auth.User.emailVerified == False):
-            return "Email not verified!"
-            return redirect(url_for('login'))
-        try: 
-            login = auth.sign_in_with_email_and_password(email, password)
-            return "Logged In"
-        except:
-            return "Invalid email and/or password"
-    #return render_template('login.html')
+    # issue with email verification, don't know how to check for email verified or not
+    try: 
+        login = auth.sign_in_with_email_and_password(email, password)
+
+        # a pop up message with logged in should show and it should then proceed to the home page
+        return "Logged In"
+
+    except:
+
+        # a pop up message
+        return "Invalid email and/or password"
+        return render_template('login.html')
+
+
+@app.route('/forgotpass', methods=['GET', 'POST'])
+def forgotpass():
+
+    if request.method == 'GET':
+        return render_template('forgotpass.html')
+
+    else:
+        email = request.form['name']
+        auth.send_password_reset_email(email)
+
+    # should flash a message saying that an email has been sent to reset password
+    return render_template('login.html')
+
 
 if __name__ == '__main__':
     app.run()

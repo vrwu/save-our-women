@@ -11,16 +11,6 @@
             <input type="name" name="name">
             <input type="password" name="pass">
             <input type="submit" name="sign up">
-            <br>
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <ul class=flashes>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-             {% endfor %}
-            </ul>
-            {% endif %}
-           {% endwith %}
         </form>
     </body>
 
