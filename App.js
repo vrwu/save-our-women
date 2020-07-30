@@ -2,9 +2,10 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import Login from './Welcome/Login';
+import Email from './Welcome/Email';
 import SignUp from './Welcome/SignUp';
 import Logo from './Welcome/Logo';
+import Password from './Welcome/Password'
 
 export default function App() {
   return (
@@ -12,7 +13,8 @@ export default function App() {
       <Text style={{color:'#FFFFFF', fontSize: 50}}>Save Our Women</Text>
       <StatusBar style="auto" />
       <Logo/>
-      <Login/>
+      <Email/>
+      <Password/>
       <SignUp/>
     </View>
   );
