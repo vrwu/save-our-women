@@ -23,5 +23,8 @@ const style = StyleSheet.create({
   container : {
     width: 200,
     height: 200,
+    alignContent: 'center',
+    justifyContent: 'center',
+    marginTop: 125
     }
 })

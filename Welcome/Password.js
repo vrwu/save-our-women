@@ -11,7 +11,7 @@ export default class password extends Component<{}> {
     return(
       <View style={styles.container}>
         <TextInput style={styles.inputBox}
-          placeholder="password"
+          placeholder="Password"
           placeholderTextColor="#FFFFFF"
         />
       </View>
@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
 
   inputBox: {
     width: 300,
+    height: 50,
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
     borderRadius: 25,
     paddingHorizontal: 16,

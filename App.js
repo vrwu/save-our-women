@@ -5,15 +5,15 @@ import { StyleSheet, Text, View } from 'react-native';
 import Login from './Welcome/Login';
 import SignUp from './Welcome/SignUp';
 import Logo from './Welcome/Logo';
+import Password from './Welcome/Password';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text style={{color:'#FFFFFF', fontSize: 50}}>Save Our Women</Text>
       <StatusBar style="auto" />
       <Logo/>
-      <Login/>
-      <SignUp/>
+      <Text style={styles.SOWLogo}>save our women</Text>
+      <Password/>
     </View>
   );
 }
@@ -23,6 +23,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#9e6590',
     alignItems: 'center',
-    justifyContent: 'center',
+    //paddingTop:100,
+    paddingBottom:100
+  },
+
+  SOWLogo: {
+    alignItems: 'center',
+    color:'#FFFFFF',
+    fontSize: 30,
+    position: 'absolute',
+    paddingTop: 260
   },
 });
