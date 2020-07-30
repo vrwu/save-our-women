@@ -51,7 +51,10 @@ def signup():
             # returns message for now that leads to deadend but maybe a pop up message instead
             # needs coordinating with front end
 
+            # this can probably be a message
             # return 'Account Created! Please verify email before signing in'
+
+            # redirects to profile so new user can create a profile to be added to database
             return redirect(url_for('profile'))
 
         except:
@@ -84,7 +87,7 @@ def login():
         return "Invalid email and/or password"
         return render_template('login.html')
 
-
+# sends an email to change password
 @app.route('/forgotpass', methods=['GET', 'POST'])
 def forgotpass():
 
@@ -104,6 +107,10 @@ def profile():
     if request.method == 'GET':
         return render_template('profile.html')
 
+    # only accomodates for new users only
+    # NEEDS A FEATURE so that existing users can edit their info without having
+    # a new form or pushing a new user to database
+    # need to figure out a way to KEEP user's email and pass associated with this unit in database
     else:
         first_name = request.form['first']
         last_name = request.form['last']
