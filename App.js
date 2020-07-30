@@ -1,20 +1,58 @@
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 import Email from './Welcome/Email';
 import Logo from './Welcome/Logo';
-import LoginButton from './Welcome/LoginButton';
+import {forgotPassScreen} from './Welcome/forgotPassScreen';
 
-export default function App() {
+const Stack = createStackNavigator();
+
+function WelcomeScreen({navigation}) {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
       <Logo/>
       <Text style={styles.SOWText}>save our women</Text>
       <Email/>
-      <LoginButton/>
+      <View>
+        <TouchableOpacity
+          onPress={() =>navigation.navigate('forgot password')}
+          >
+          <Text
+            style={styles.forgotPass}>
+                Forgot password?</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style = {styles.noAcc}>
+          <Text> Don't have an account?</Text>
+          <Text style = {styles.signupText}> Sign Up. </Text>
+        </TouchableOpacity>
+      </View>
     </View>
+  );
+}
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="welcome"
+        screenOptions={{
+          headerShown:false
+        }}
+      >
+        <Stack.Screen
+          name="welcome"
+          component={WelcomeScreen}
+        />
+        <Stack.Screen
+          name="forgot password"
+          component={forgotPassScreen}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
@@ -23,7 +61,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#9e6590',
     alignItems: 'center',
-    //paddingTop:100,
     paddingBottom:100
   },
 
@@ -32,6 +69,26 @@ const styles = StyleSheet.create({
     color:'#FFFFFF',
     fontSize: 30,
     position: 'absolute',
-    paddingTop: 260
+    paddingTop: 300
   },
+
+  forgotPass: {
+    color:'#FFFFFF',
+    position: 'relative',
+    top:0,
+    left:100,
+    bottom:190
+  },
+
+  noAcc: {
+    position: 'relative',
+    top:200
+  },
+
+  signupText: {
+    position: 'relative',
+    color: '#FFFFFF',
+    flex:1,
+    paddingLeft: 50,
+  }
 });

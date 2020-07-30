@@ -25,6 +25,6 @@ const style = StyleSheet.create({
     height: 200,
     alignContent: 'center',
     justifyContent: 'center',
-    marginTop: 125
+    marginTop: 130
     }
 })
