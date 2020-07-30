@@ -20,7 +20,12 @@ firebaseConfig = {
     }
 
 firebase = pyrebase.initialize_app(firebaseConfig)
+
+# authentication
 auth = firebase.auth()
+
+# database
+db = firebase.database()
 
 @app.route('/')
 def start():
@@ -35,7 +40,7 @@ def signup():
 
     else:
         # retrieves email and pass from user
-        email = request.form['name']
+        email = request.form['email']
         password = request.form['pass']
 
         try: 
@@ -45,8 +50,9 @@ def signup():
 
             # returns message for now that leads to deadend but maybe a pop up message instead
             # needs coordinating with front end
-            return 'Account Created! Please verify email before signing in'
-            return redirect(url_for('login'))
+
+            # return 'Account Created! Please verify email before signing in'
+            return redirect(url_for('profile'))
 
         except:
 
@@ -62,7 +68,7 @@ def login():
         return render_template('login.html')
 
     else:
-        email = request.form['name']
+        email = request.form['email']
         password = request.form['pass']
 
     # issue with email verification, don't know how to check for email verified or not
@@ -86,12 +92,27 @@ def forgotpass():
         return render_template('forgotpass.html')
 
     else:
-        email = request.form['name']
+        email = request.form['email']
         auth.send_password_reset_email(email)
 
     # should flash a message saying that an email has been sent to reset password
     return render_template('login.html')
 
+@app.route('/profile', methods=['GET', 'POST'])
+def profile():
+
+    if request.method == 'GET':
+        return render_template('profile.html')
+
+    else:
+        first_name = request.form['first']
+        last_name = request.form['last']
+        phone = request.form['num']
+
+        data={"First Name": first_name, "Last Name": last_name, "Phone Number": phone}
+        db.push(data)
+
+    return render_template('login.html')    
 
 if __name__ == '__main__':
     app.run()
