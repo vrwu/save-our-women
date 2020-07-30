@@ -2,18 +2,18 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import Login from './Welcome/Login';
-import SignUp from './Welcome/SignUp';
+import Email from './Welcome/Email';
 import Logo from './Welcome/Logo';
-import Password from './Welcome/Password';
+import LoginButton from './Welcome/LoginButton';
 
 export default function App() {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
       <Logo/>
-      <Text style={styles.SOWLogo}>save our women</Text>
-      <Password/>
+      <Text style={styles.SOWText}>save our women</Text>
+      <Email/>
+      <LoginButton/>
     </View>
   );
 }
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     paddingBottom:100
   },
 
-  SOWLogo: {
+  SOWText: {
     alignItems: 'center',
     color:'#FFFFFF',
     fontSize: 30,
