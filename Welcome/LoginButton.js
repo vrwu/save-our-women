@@ -5,7 +5,8 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Alert
+  Alert,
+  ScrollView
 } from 'react-native';
 
 export default class LoginButton extends Component<{}>{
@@ -14,14 +15,17 @@ export default class LoginButton extends Component<{}>{
     return (
 
     <View style={styles.container}>
+
     <TouchableOpacity>
-      <Text style={{paddingLeft:100, paddingBottom:25}}> Forgot password?</Text>
+      <Text style={styles.forgotPass}>
+                  Forgot password?</Text>
     </TouchableOpacity>
+
       <TouchableOpacity style={styles.button}>
         <Text style={styles.loginText}> Login </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style = {{position:'absolute', paddingTop:850}}>
+      <TouchableOpacity style = {styles.noAcc}>
         <Text> Don't have an account?</Text>
         <Text style = {styles.signupText}> Sign Up. </Text>
       </TouchableOpacity>
@@ -35,8 +39,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent:'center',
     alignItems:'center',
-    position: 'absolute',
-    paddingTop: 550
+    position: 'relative',
   },
 
   loginText: {
@@ -44,6 +47,13 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     textAlign: 'center',
     color:'#FFFFFF'
+  },
+
+  forgotPass: {
+    color:'#FFFFFF',
+    paddingBottom:25,
+    paddingTop:30,
+    paddingLeft: 150
   },
 
   button: {
@@ -55,6 +65,7 @@ const styles = StyleSheet.create({
   },
   noAcc: {
     position: 'relative',
+    paddingTop: 150
   },
 
   signupText: {
