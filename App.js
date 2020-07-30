@@ -17,18 +17,17 @@ function WelcomeScreen({navigation}) {
       <Logo/>
       <Text style={styles.SOWText}>save our women</Text>
       <Email/>
-      <HSButtons/>
+      <View>
+        <TouchableOpacity
+          onPress={() =>navigation.navigate('forgot password')}
+          >
+          <Text
+            style={styles.forgotPass}>
+                Forgot password?</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
-}
-
-function forgotPassScreen({navigation}){
-  return (
-    <View>
-      <StatusBar style="auto"/>
-      <Logo/>
-      </View>
-    );
 }
 
 export default function App() {
@@ -41,7 +40,7 @@ export default function App() {
         }}
       >
         <Stack.Screen
-          name="home"
+          name="welcome"
           component={WelcomeScreen}
         />
         <Stack.Screen
@@ -66,6 +65,14 @@ const styles = StyleSheet.create({
     color:'#FFFFFF',
     fontSize: 30,
     position: 'absolute',
-    paddingTop: 260
+    paddingTop: 300
+  },
+
+  forgotPass: {
+    color:'#FFFFFF',
+    position: 'absolute',
+    paddingTop:0,
+    paddingLeft: 25,
+    bottom:190
   },
 });
