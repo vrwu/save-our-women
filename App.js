@@ -7,6 +7,8 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Email from './Welcome/Email';
 import Logo from './Welcome/Logo';
 import {forgotPassScreen} from './Welcome/forgotPassScreen';
+import {signUpScreen} from './Welcome/signUpScreen';
+
 
 const Stack = createStackNavigator();
 
@@ -25,7 +27,15 @@ function WelcomeScreen({navigation}) {
             style={styles.forgotPass}>
                 Forgot password?</Text>
         </TouchableOpacity>
-        <TouchableOpacity style = {styles.noAcc}>
+
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.loginText}> Login </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style = {styles.noAcc}
+          onPress={() => navigation.navigate('sign up')}
+        >
           <Text> Don't have an account?</Text>
           <Text style = {styles.signupText}> Sign Up. </Text>
         </TouchableOpacity>
@@ -51,6 +61,10 @@ export default function App() {
           name="forgot password"
           component={forgotPassScreen}
         />
+        <Stack.Screen
+          name="sign up"
+          component={signUpScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -69,20 +83,21 @@ const styles = StyleSheet.create({
     color:'#FFFFFF',
     fontSize: 30,
     position: 'absolute',
-    paddingTop: 300
+    paddingTop: 275
   },
 
   forgotPass: {
     color:'#FFFFFF',
-    position: 'relative',
-    top:0,
-    left:100,
-    bottom:190
+    position: 'absolute',
+    left:175,
+    bottom:-10,
+
   },
 
   noAcc: {
     position: 'relative',
-    top:200
+    top:125,
+    left: 75,
   },
 
   signupText: {
@@ -90,5 +105,20 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     flex:1,
     paddingLeft: 50,
-  }
+  },
+
+  button: {
+    width: 300,
+    height: 50,
+    backgroundColor: 'rgba(0, 0, 0, 0.25)',
+    borderRadius:25,
+    marginVertical:25
+  },
+
+  loginText: {
+    fontSize: 16,
+    paddingTop: 15,
+    textAlign: 'center',
+    color:'#FFFFFF'
+  },
 });
