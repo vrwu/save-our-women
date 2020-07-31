@@ -2,34 +2,39 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput }
+import { StyleSheet, Text, View, TouchableOpacity, TextInput,
+  KeyboardAvoidingView
+ }
 from 'react-native';
 
 export function forgotPassScreen({navigation}){
   return (
-    <View style = {styles.container}>
-      <StatusBar style="auto"/>
-      <Text style = {styles.mainText}>
-        Forgot password?
-      </Text>
-      <Text style = {styles.moreInfo}>
-        Enter an email address and we will send you instructions to reset your
-        password.
-      </Text>
-      <TextInput style = {styles.email}
-        autoCapitalize = 'none'
-        placeholder = 'Email'
-        placeholderTextColor = '#FFFFFF'
-        enablesReturnKeyAutomatically={true}
-        autoCorrect={false}
-        keyboardType='email-address'>
-      </TextInput>
-      <TouchableOpacity style = {styles.enterButton}>
-        <Text style = {styles.buttonText}>
-          Continue
+    <KeyboardAvoidingView style = {styles.keyboard}
+    behavior ='padding'>
+      <View style = {styles.container}>
+        <StatusBar style="auto"/>
+        <Text style = {styles.mainText}>
+          Forgot password?
         </Text>
-      </TouchableOpacity>
-    </View>
+        <Text style = {styles.moreInfo}>
+          Enter an email address and we will send you instructions to reset your
+          password.
+        </Text>
+        <TextInput style = {styles.email}
+          autoCapitalize = 'none'
+          placeholder = 'Email'
+          placeholderTextColor = '#FFFFFF'
+          enablesReturnKeyAutomatically={true}
+          autoCorrect={false}
+          keyboardType='email-address'>
+        </TextInput>
+        <TouchableOpacity style = {styles.enterButton}>
+          <Text style = {styles.buttonText}>
+            Continue
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -87,5 +92,10 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     alignSelf: 'center',
     top: 15
+  },
+
+  keyboard: {
+    flex: 1,
+    justifyContent:'center'
   }
 });
