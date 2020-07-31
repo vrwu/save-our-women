@@ -48,6 +48,16 @@ def signup():
             user = auth.create_user_with_email_and_password(email, password)
             auth.send_email_verification(user['idToken'])
 
+            uid = user['localId']
+            first_name = request.form['first']
+            last_name = request.form['last']
+            phone = request.form['num']
+
+            data={"First Name": first_name, "Last Name": last_name, "Phone Number": phone, "Email": email}
+
+            db.child("users").child(uid).child("details").set(data)
+            return render_template('login.html')
+
             # returns message for now that leads to deadend but maybe a pop up message instead
             # needs coordinating with front end
 
@@ -55,7 +65,7 @@ def signup():
             # return 'Account Created! Please verify email before signing in'
 
             # redirects to profile so new user can create a profile to be added to database
-            return redirect(url_for('profile'))
+            # return redirect(url_for('profile'))
 
         except:
 
@@ -79,7 +89,7 @@ def login():
         login = auth.sign_in_with_email_and_password(email, password)
 
         # a pop up message with logged in should show and it should then proceed to the home page
-        return "Logged In"
+        return render_template('home.html')
 
     except:
 
@@ -101,6 +111,20 @@ def forgotpass():
     # should flash a message saying that an email has been sent to reset password
     return render_template('login.html')
 
+# logs out and returns to start
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    auth.logout()
+    return render_template('start.html')
+
+# home screen 
+@app.route('/home', methods=['GET', 'POST'])
+def home():
+
+    if request.method == 'GET':
+        return render_template('home.html')
+
+# profile // TO BE EDITED, needs to display user information!! 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
 
