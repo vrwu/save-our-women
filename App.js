@@ -7,8 +7,6 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Email from './Welcome/Email';
 import Logo from './Welcome/Logo';
 import {forgotPassScreen} from './Welcome/forgotPassScreen';
-import {signUpScreen} from './Welcome/signUpScreen';
-
 
 const Stack = createStackNavigator();
 
@@ -34,7 +32,7 @@ function WelcomeScreen({navigation}) {
 
         <TouchableOpacity
           style = {styles.noAcc}
-          onPress={() => navigation.navigate('sign up')}
+        //  onPress={() => navigation.navigate('sign up')}
         >
           <Text> Don't have an account?</Text>
           <Text style = {styles.signupText}> Sign Up. </Text>
@@ -61,10 +59,7 @@ export default function App() {
           name="forgot password"
           component={forgotPassScreen}
         />
-        <Stack.Screen
-          name="sign up"
-          component={signUpScreen}
-        />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -48,7 +48,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 13,
     fontSize: 16,
     color: '#FFFFFF',
-    marginVertical: 10
+    marginVertical: 10,
+    top: 100
   },
 
   inputBoxTwo: {
@@ -58,7 +59,8 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingHorizontal: 13,
     fontSize: 16,
-    color: '#FFFFFF'
+    color: '#FFFFFF',
+    top: 100
 
     }
 }
