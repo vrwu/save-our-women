@@ -3,30 +3,52 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput
+  TextInput,
+  KeyboardAvoidingView,
+  Keyboard,
+  Console
 } from 'react-native';
 
-export default class Email extends Component<{}> {
+// sample login
+const VALID_EMAIL = "sow@save-our-women.com"
+const VALID_PASSWORD = "tech-tank"
+
+export default class Email extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      password: ''
+    }
+  }
+
   render() {
     return(
-      <View style = {styles.container}>
-        <TextInput style={styles.inputBox}
-          autoCapitalize='none'
-          placeholder="Email"
-          placeholderTextColor="#FFFFFF"
-          enablesReturnKeyAutomatically={true}
-          autoCorrect={false}
-          keyboardType='email-address'
-        />
-        <TextInput style={styles.inputBoxTwo}
-          placeholder="Password"
-          placeholderTextColor="#FFFFFF"
-          secureTextEntry={true}
-          enablesReturnKeyAutomatically={true}
-          autoCapitalize='none'
-          autoCorrect={false}
-        />
-      </View>
+        <View style = {styles.container}>
+          <TextInput style={styles.inputBox}
+            value = {this.state.email}
+            autoCapitalize='none'
+            placeholder="Email"
+            placeholderTextColor="#FFFFFF"
+            autoCorrect={false}
+            keyboardType='email-address'
+            label='enter email'
+            onChangeText={text => this.setState({email:VALID_EMAIL}, () => {
+              console.log(this.state.email, 'email change')})}
+          />
+          <TextInput style={styles.inputBoxTwo}
+            value={this.state.password}
+            label='enter password'
+            placeholder="Password"
+            placeholderTextColor="#FFFFFF"
+            secureTextEntry={true}
+            autoCapitalize='none'
+            autoCorrect={false}
+            onChangeText=
+              {text => this.setState({password:VALID_EMAIL},
+                () => {console.log(this.state.password)})}
+          />
+        </View>
     )
   }
 }
@@ -48,7 +70,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 13,
     fontSize: 16,
     color: '#FFFFFF',
-    marginVertical: 10
+    marginVertical: 10,
+    top:100,
   },
 
   inputBoxTwo: {
@@ -58,8 +81,13 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingHorizontal: 13,
     fontSize: 16,
-    color: '#FFFFFF'
+    color: '#FFFFFF',
+    top: 100
+  },
 
-    }
+  login: {
+    flex: 1,
+    justifyContent:'center',
+  }
 }
 )

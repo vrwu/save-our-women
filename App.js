@@ -2,35 +2,60 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
+  Keyboard, Alert
+ } from 'react-native';
 
 import Email from './Welcome/Email';
 import Logo from './Welcome/Logo';
-import {forgotPassScreen} from './Welcome/forgotPassScreen';
+import {forgotPassScreen} from './Welcome/forgotPassScreen'
+
+const VALID_EMAIL = "sow@save-our-women.com"
+const VALID_PASSWORD = "tech-tank"
 
 const Stack = createStackNavigator();
 
 function WelcomeScreen({navigation}) {
+  function handleLogin() {
+
+    if (Email.state != null) {
+      navigation.navigate('forgot password');
+    }
+  }
   return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <Logo/>
-      <Text style={styles.SOWText}>save our women</Text>
-      <Email/>
-      <View>
-        <TouchableOpacity
-          onPress={() =>navigation.navigate('forgot password')}
+    <KeyboardAvoidingView style = {styles.login}>
+      <View style={styles.container}>
+        <StatusBar style="auto" />
+        <Logo/>
+        <Text style={styles.SOWText}>save our women</Text>
+        <Email/>
+        <View>
+          <TouchableOpacity
+            onPress={() =>navigation.navigate('forgot password')}
           >
-          <Text
-            style={styles.forgotPass}>
-                Forgot password?</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style = {styles.noAcc}>
-          <Text> Don't have an account?</Text>
-          <Text style = {styles.signupText}> Sign Up. </Text>
-        </TouchableOpacity>
+            <Text
+              style={styles.forgotPass}>
+                  Forgot password?</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button}
+            onPress = {() => {handleLogin(); Keyboard.dismiss()}}
+          >
+            <Text style={styles.loginText}>
+            Login
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style = {styles.noAcc}
+          //  onPress={() => navigation.navigate('sign up')}
+          >
+            <Text> Don't have an account?</Text>
+            <Text style = {styles.signupText}> Sign Up. </Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -51,6 +76,7 @@ export default function App() {
           name="forgot password"
           component={forgotPassScreen}
         />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -69,20 +95,21 @@ const styles = StyleSheet.create({
     color:'#FFFFFF',
     fontSize: 30,
     position: 'absolute',
-    paddingTop: 300
+    paddingTop: 275
   },
 
   forgotPass: {
     color:'#FFFFFF',
-    position: 'relative',
-    top:0,
-    left:100,
-    bottom:190
+    position: 'absolute',
+    left:175,
+    top: -5
+
   },
 
   noAcc: {
     position: 'relative',
-    top:200
+    top:125,
+    left: 75,
   },
 
   signupText: {
@@ -90,5 +117,27 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     flex:1,
     paddingLeft: 50,
+    top: 0
+  },
+
+  button: {
+    width: 300,
+    height: 50,
+    backgroundColor: 'rgba(0, 0, 0, 0.25)',
+    borderRadius:25,
+    marginVertical:25,
+    top: 0
+  },
+
+  loginText: {
+    fontSize: 16,
+    paddingTop: 15,
+    textAlign: 'center',
+    color:'#FFFFFF'
+  },
+
+  login: {
+    flex: 1,
+    justifyContent:'center',
   }
 });
