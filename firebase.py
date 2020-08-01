@@ -1,6 +1,6 @@
 import pyrebase
 from flask import *
-
+from flask import Flask, session, request
 app = Flask(__name__)
 
 '''
@@ -27,6 +27,8 @@ auth = firebase.auth()
 # database
 db = firebase.database()
 
+uid = int(0)
+
 @app.route('/')
 def start():
 
@@ -48,6 +50,7 @@ def signup():
             user = auth.create_user_with_email_and_password(email, password)
             auth.send_email_verification(user['idToken'])
 
+            global uid
             uid = user['localId']
             first_name = request.form['first']
             last_name = request.form['last']
@@ -58,11 +61,7 @@ def signup():
             db.child("users").child(uid).child("details").set(data)
             return render_template('login.html')
 
-            # returns message for now that leads to deadend but maybe a pop up message instead
-            # needs coordinating with front end
-
-            # this can probably be a message
-            # return 'Account Created! Please verify email before signing in'
+            # pop up message'Account Created! Please verify email before signing in'
 
             # redirects to profile so new user can create a profile to be added to database
             # return redirect(url_for('profile'))
@@ -77,7 +76,7 @@ def signup():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 
-    if request.method == 'GET':
+    if request.method == 'GET': 
         return render_template('login.html')
 
     else:
@@ -86,16 +85,17 @@ def login():
 
     # issue with email verification, don't know how to check for email verified or not
     try: 
-        login = auth.sign_in_with_email_and_password(email, password)
+        user = auth.sign_in_with_email_and_password(email, password)
+        global uid 
+        uid = user['localId']
 
-        # a pop up message with logged in should show and it should then proceed to the home page
-        return render_template('home.html')
-
+        # a pop up message with logged in should show and it should then proceed to the home page 
+        return render_template('home.html') 
+ 
     except:
-
-        # a pop up message
-        return "Invalid email and/or password"
+        # pop up message return "Invalid email and/or password"
         return render_template('login.html')
+
 
 # sends an email to change password
 @app.route('/forgotpass', methods=['GET', 'POST'])
@@ -114,6 +114,7 @@ def forgotpass():
 # logs out and returns to start
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
+
     auth.logout()
     return render_template('start.html')
 
@@ -121,15 +122,19 @@ def logout():
 @app.route('/home', methods=['GET', 'POST'])
 def home():
 
-    if request.method == 'GET':
-        return render_template('home.html')
+    global uid
+    return render_template('home.html', value=uid)
 
 # profile // TO BE EDITED, needs to display user information!! 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
 
     if request.method == 'GET':
-        return render_template('profile.html')
+
+        info = db.child("users").child(uid).get()
+
+        print(info.val())
+        # return render_template('profile.html')
 
     # only accomodates for new users only
     # NEEDS A FEATURE so that existing users can edit their info without having
@@ -144,6 +149,30 @@ def profile():
         db.push(data)
 
     return render_template('login.html')    
+
+@app.route('/emergency_contacts', methods=['GET', 'POST'])
+def emergency_contacts(): 
+    
+    global uid
+    if request.method == 'GET':
+        # needs to display the emergency contacts
+        return render_template('emergency_contacts.html', value=uid)
+    
+@app.route('/add_emergency_contact', methods=['GET', 'POST'])
+def add_emergency_contact():
+
+    if request.method == 'GET':
+        return render_template('add_emergency_contact.html')
+
+    else:
+        first_name = request.form['first']
+        last_name = request.form['last']
+        phone = request.form['num']
+
+        data={"First Name": first_name, "Last Name": last_name, "Phone Number": phone}
+        db.child("users").child(uid).child("emergency contacts").push(data)
+
+    return render_template('home.html')
 
 if __name__ == '__main__':
     app.run()
