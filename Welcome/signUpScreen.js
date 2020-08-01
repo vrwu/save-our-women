@@ -12,7 +12,7 @@ export function signUpScreen({navigation}){
     behavior ='padding'>
       <View style = {styles.container}>
         <StatusBar style="auto" />
-        <Text style={styles.title}>Sign Up</Text>
+        <Text style={styles.title}>Create an Account</Text>
         <TextInput style={styles.email}
           autoCapitalize='none'
           placeholder="Email"
@@ -38,7 +38,6 @@ export function signUpScreen({navigation}){
         />
         <TouchableOpacity style={styles.button}>
           <Text style={styles.SignUpText}> Sign Up </Text>
-          //navigate to home
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
@@ -49,18 +48,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#9e6590',
-    paddingBottom:170
+    //paddingBottom:170
   },
 
 
   title: {
-    alignItems: 'center',
+    alignSelf: 'center',
     textAlign: 'center',
     alignSelf: 'center',
-    marginVertical: 100,
+    //marginVertical: 200,
     color:'#FFFFFF',
     fontSize: 30,
     position: 'relative',
+    top:250
 
   },
 
@@ -68,15 +68,15 @@ const styles = StyleSheet.create({
     width: 300,
     height: 50,
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
-
     borderRadius: 25,
     paddingHorizontal: 13,
     fontSize: 16,
     paddingLeft: 30,
-  //  marginVertical: 50,
     justifyContent:'center',
-    alignSelf:'center'
-    //top: 100
+    alignSelf:'center',
+    top: 300
+
+
   },
 
   phoneNumber: {
@@ -86,11 +86,11 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingHorizontal: 13,
     fontSize: 16,
-    color: '#9e6590',
+    //color: '#9e6590',
     paddingLeft: 30,
     justifyContent:'center',
     alignSelf:'center',
-    marginVertical: 10,
+    top: 310
 
   },
 
@@ -103,9 +103,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 13,
     fontSize: 16,
     color: '#9e6590',
-    justifyContent:'center',
+    //justifyContent:'center',
     alignSelf:'center',
-    marginVertical: 1
+    top: 320
 
   },
 
@@ -114,8 +114,9 @@ const styles = StyleSheet.create({
       color: '#FFFFFF',
       flex:1,
       top: 10,
-      fontSize: 20,
-      textAlign:'center'
+      fontSize: 16,
+      textAlign:'center',
+      top: 13
     },
 
 
@@ -127,7 +128,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.25)',
     borderRadius:25,
     marginVertical:75,
-    top: 0,
+    top: 325,
     alignSelf:'center'
   },
 

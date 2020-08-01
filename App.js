@@ -10,6 +10,7 @@ import Email from './Welcome/Email';
 import Logo from './Welcome/Logo';
 import {forgotPassScreen} from './Welcome/forgotPassScreen'
 import {signUpScreen} from './Welcome/signUpScreen';
+//import {EmergencySOS} from './Welcome/EmergencySOS';
 
 const VALID_EMAIL = "sow@save-our-women.com"
 const VALID_PASSWORD = "tech-tank"
