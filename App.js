@@ -9,6 +9,7 @@ import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
 import Email from './Welcome/Email';
 import Logo from './Welcome/Logo';
 import {forgotPassScreen} from './Welcome/forgotPassScreen'
+import {signUpScreen} from './Welcome/signUpScreen';
 
 const VALID_EMAIL = "sow@save-our-women.com"
 const VALID_PASSWORD = "tech-tank"
@@ -48,7 +49,7 @@ function WelcomeScreen({navigation}) {
 
           <TouchableOpacity
             style = {styles.noAcc}
-          //  onPress={() => navigation.navigate('sign up')}
+            onPress={() => navigation.navigate('sign up')}
           >
             <Text> Don't have an account?</Text>
             <Text style = {styles.signupText}> Sign Up. </Text>
@@ -75,6 +76,11 @@ export default function App() {
         <Stack.Screen
           name="forgot password"
           component={forgotPassScreen}
+        />
+
+        <Stack.Screen
+          name="sign up"
+          component={signUpScreen}
         />
 
       </Stack.Navigator>
