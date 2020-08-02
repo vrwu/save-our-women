@@ -6,22 +6,19 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput,
   KeyboardAvoidingView
  } from 'react-native';
 
-//const Stack = createStackNavigator();
-
-export function signUpScreen({navigation}){
+export function Contacts({navigation}){
   return (
     <KeyboardAvoidingView style = {styles.keyboard}
     behavior ='padding'>
       <View style = {styles.container}>
         <StatusBar style="auto" />
-        <Text style={styles.title}>Create an Account</Text>
-        <TextInput style={styles.email}
+        <Text style={styles.title}>Add Emergency Contacts</Text>
+        <TextInput style={styles.name}
           autoCapitalize='none'
-          placeholder="Email"
+          placeholder="Name"
           placeholderTextColor="#FFFFFF"
           enablesReturnKeyAutomatically={true}
           autoCorrect={false}
-          keyboardType='email-address'
         />
         <TextInput style={styles.phoneNumber}
           placeholder="Phone Number"
@@ -30,19 +27,26 @@ export function signUpScreen({navigation}){
           autoCapitalize='none'
           autoCorrect={false}
         />
-        <TextInput style={styles.password}
-          placeholder="Password"
-          placeholderTextColor="#FFFFFF"
-          secureTextEntry={true}
-          enablesReturnKeyAutomatically={true}
-          autoCapitalize='none'
-          autoCorrect={false}
-        />
+
         <TouchableOpacity
-          style = {styles.button}
+          style = {styles.SubmitButton}
           onPress={() => navigation.navigate('contacts')}
         >
-          <Text style={styles.SignUpText}> Sign Up </Text>
+          <Text style={styles.SubmitText}> Submit </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style = {styles.AddButton}
+          onPress={() => navigation.navigate('contacts')}
+        >
+          <Text style={styles.AddText}> Add Another Contact </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style = {styles.HomeButton}
+          onPress={() => navigation.navigate('home')}
+        >
+          <Text style={styles.AddText}> Go to Home </Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
@@ -53,7 +57,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#9e6590',
-    //paddingBottom:170
+
   },
 
 
@@ -61,7 +65,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     textAlign: 'center',
     alignSelf: 'center',
-    //marginVertical: 200,
     color:'#FFFFFF',
     fontSize: 30,
     position: 'relative',
@@ -69,7 +72,7 @@ const styles = StyleSheet.create({
 
   },
 
-  email: {
+  name: {
     width: 300,
     height: 50,
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
@@ -91,7 +94,6 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingHorizontal: 13,
     fontSize: 16,
-    //color: '#9e6590',
     paddingLeft: 30,
     justifyContent:'center',
     alignSelf:'center',
@@ -99,22 +101,8 @@ const styles = StyleSheet.create({
 
   },
 
-  password: {
-    width: 300,
-    height: 50,
-    paddingLeft: 30,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    borderRadius: 25,
-    paddingHorizontal: 13,
-    fontSize: 16,
-    color: '#9e6590',
-    //justifyContent:'center',
-    alignSelf:'center',
-    top: 320
 
-  },
-
-  SignUpText: {
+  SubmitText: {
       position: 'relative',
       color: '#FFFFFF',
       flex:1,
@@ -125,15 +113,53 @@ const styles = StyleSheet.create({
     },
 
 
-
-
-  button: {
+  SubmitButton: {
     width: 300,
     height: 50,
     backgroundColor: 'rgba(0, 0, 0, 0.25)',
     borderRadius:25,
     marginVertical:75,
-    top: 325,
+    top: 315,
+    alignSelf:'center'
+  },
+
+  AddText: {
+      position: 'relative',
+      color: '#FFFFFF',
+      flex:1,
+      top: 10,
+      fontSize: 16,
+      textAlign:'center',
+      top: 13
+    },
+
+  AddButton: {
+    width: 300,
+    height: 50,
+    backgroundColor: 'rgba(0, 0, 0, 0.25)',
+    borderRadius:25,
+    marginVertical:75,
+    top: 175,
+    alignSelf:'center'
+  },
+
+  HomeText: {
+      position: 'relative',
+      color: '#FFFFFF',
+      flex:1,
+      top: 10,
+      fontSize: 16,
+      textAlign:'center',
+      top: 13
+    },
+
+  HomeButton: {
+    width: 300,
+    height: 50,
+    backgroundColor: 'rgba(0, 0, 0, 0.25)',
+    borderRadius:25,
+    marginVertical:75,
+    top: 35,
     alignSelf:'center'
   },
 
