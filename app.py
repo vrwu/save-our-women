@@ -133,18 +133,14 @@ def emergency_contacts():
     global uid
 
     name_arr = []
-    phone = []
+    phone_arr = []
 
     all_users = db.child("users").child(uid).child('emergency contacts').get()
     for user in all_users.each():
-        first = user.child('First Name').get().val()
-        last = user.child('Last Name').get().val()
-
-        name = first + " " + last
+        name = user.key()
         name_arr.append(name)
-        phone.append(user.child('Phone Name').get().val())
 
-    return render_template('emergency_contacts.html', nane=name_arr, phone=phone)
+    return render_template('emergency_contacts.html', name=name_arr)
     
 @app.route('/add_emergency_contact', methods=['GET', 'POST'])
 def add_emergency_contact():
@@ -157,8 +153,8 @@ def add_emergency_contact():
         last_name = request.form['last']
         phone = request.form['num']
 
-        data={"First Name": first_name, "Last Name": last_name, "Phone Number": phone}
-        db.child("users").child(uid).child("emergency contacts").push(data)
+        name = str(first_name) + " " + str(last_name)
+        db.child("users").child(uid).child("emergency contacts").child(name).set(phone)
 
     return render_template('home.html')
 
