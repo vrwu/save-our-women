@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
-  Keyboard, Alert
+  Keyboard, Alert, TextInput, Component
  } from 'react-native';
 
+import homeScreen from './Welcome/homescreen'
 import Email from './Welcome/Email';
 import Logo from './Welcome/Logo';
 import {forgotPassScreen} from './Welcome/forgotPassScreen'
@@ -19,14 +21,13 @@ const Stack = createStackNavigator();
 
 function WelcomeScreen({navigation}) {
   function handleLogin() {
-
-    if (Email.state != null) {
-      navigation.navigate('forgot password');
+    if (Email.email == null) {
+      navigation.navigate('home')
     }
   }
   return (
     <KeyboardAvoidingView style = {styles.login}>
-      <View style={styles.container}>
+      <View style={styles.containerOne}>
         <StatusBar style="auto" />
         <Logo/>
         <Text style={styles.SOWText}>save our women</Text>
@@ -41,7 +42,7 @@ function WelcomeScreen({navigation}) {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.button}
-            onPress = {() => {handleLogin(); Keyboard.dismiss()}}
+            onPress = {() => { handleLogin()}}
           >
             <Text style={styles.loginText}>
             Login
@@ -78,12 +79,14 @@ export default function App() {
           name="forgot password"
           component={forgotPassScreen}
         />
-
+        <Stack.Screen
+          name = "home"
+          component = {homeScreen}
+        />
         <Stack.Screen
           name="sign up"
           component={signUpScreen}
         />
-
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -91,6 +94,44 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    justifyContent:'center',
+    position: 'relative',
+    alignItems: 'center',
+    paddingBottom:170
+
+  },
+
+
+  inputBox: {
+    width: 300,
+    height: 50,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 25,
+    paddingHorizontal: 13,
+    fontSize: 16,
+    color: '#FFFFFF',
+    marginVertical: 10,
+    top:100,
+  },
+
+  inputBoxTwo: {
+    width: 300,
+    height: 50,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 25,
+    paddingHorizontal: 13,
+    fontSize: 16,
+    color: '#FFFFFF',
+    top: 100
+  },
+
+  login: {
+    flex: 1,
+    justifyContent:'center',
+  },
+
+  containerOne: {
     flex: 1,
     backgroundColor: '#9e6590',
     alignItems: 'center',
