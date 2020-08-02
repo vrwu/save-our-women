@@ -1,6 +1,6 @@
 import pyrebase
 from flask import *
-from flask import Flask, session, request
+
 app = Flask(__name__)
 
 '''
@@ -41,9 +41,10 @@ def signup():
         return render_template('signup.html')
 
     else:
-        # retrieves email and pass from user
+        # retrieves email, pass, and number from user
         email = request.form['email']
         password = request.form['pass']
+        phone = request.form['num']
 
         try: 
              # creates an account on database and requests for verification
@@ -52,26 +53,17 @@ def signup():
 
             global uid
             uid = user['localId']
-            first_name = request.form['first']
-            last_name = request.form['last']
-            phone = request.form['num']
-
-            data={"First Name": first_name, "Last Name": last_name, "Phone Number": phone, "Email": email}
+            
+            data={"Email": email, "Phone Number": phone}
 
             db.child("users").child(uid).child("details").set(data)
-            return render_template('login.html')
-
-            # pop up message'Account Created! Please verify email before signing in'
-
-            # redirects to profile so new user can create a profile to be added to database
-            # return redirect(url_for('profile'))
+            return render_template('add_emergency_contact.html', value=uid)
 
         except:
-
-            # same as the account created, probably a pop up message
-            return 'Account creation failed. Please ensure a new email or a password of at least 6 characters'
+            # message 'Account creation failed. Please ensure a new email or a password of at least 6 characters'
             return render_template('signup.html')
 
+# sign up -> add emergency contacts
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -97,7 +89,6 @@ def login():
         return render_template('login.html')
 
 
-# sends an email to change password
 @app.route('/forgotpass', methods=['GET', 'POST'])
 def forgotpass():
 
@@ -128,7 +119,7 @@ def home():
 # profile // TO BE EDITED, needs to display user information!! 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
-
+# profile -> emergency contact -> add emergency contacts
     if request.method == 'GET':
 
         info = db.child("users").child(uid).get()
