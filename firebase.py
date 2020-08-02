@@ -120,34 +120,31 @@ def home():
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
 # profile -> emergency contact -> add emergency contacts
-    if request.method == 'GET':
 
-        info = db.child("users").child(uid).get()
+    global uid
+    email = db.child("users").child(uid).child('details').child('Email').get().val()
+    phone = db.child("users").child(uid).child('details').child('Phone Number').get().val()
 
-        print(info.val())
-        # return render_template('profile.html')
-
-    # only accomodates for new users only
-    # NEEDS A FEATURE so that existing users can edit their info without having
-    # a new form or pushing a new user to database
-    # need to figure out a way to KEEP user's email and pass associated with this unit in database
-    else:
-        first_name = request.form['first']
-        last_name = request.form['last']
-        phone = request.form['num']
-
-        data={"First Name": first_name, "Last Name": last_name, "Phone Number": phone}
-        db.push(data)
-
-    return render_template('login.html')    
+    return render_template('profile.html', email=email, phone=phone)
 
 @app.route('/emergency_contacts', methods=['GET', 'POST'])
 def emergency_contacts(): 
     
     global uid
-    if request.method == 'GET':
-        # needs to display the emergency contacts
-        return render_template('emergency_contacts.html', value=uid)
+
+    name_arr = []
+    phone = []
+
+    all_users = db.child("users").child(uid).child('emergency contacts').get()
+    for user in all_users.each():
+        first = user.child('First Name').get().val()
+        last = user.child('Last Name').get().val()
+
+        name = first + " " + last
+        name_arr.append(name)
+        phone.append(user.child('Phone Name').get().val())
+
+    return render_template('emergency_contacts.html', nane=name_arr, phone=phone)
     
 @app.route('/add_emergency_contact', methods=['GET', 'POST'])
 def add_emergency_contact():

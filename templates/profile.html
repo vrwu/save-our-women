@@ -5,16 +5,13 @@
 
     <body>
         <p>will return profile details and able to edit</p>
-        <a href="{{ url_for('home') }}">Home</a><br>
+        
         <!--need logout button-->
-        <!-- 
-        <p>FIRST NAME, LAST NAME, PHONE NUMBER </p>
-        <form action="/profile" method="POST">
-            <input type="name" name="first">
-            <input type="name" name="last">
-            <input type="number" name="num">
-            <input type="submit" name="submit">
-        </form> -->
+
+        Email: {{e}}<br>
+        Phone Number: {{p}}<br>
+        <a href="{{ url_for('home') }}">Home</a><br>
+        <a href="{{ url_for('emergency_contacts') }}">Emergency Contacts</a><br>
     </body>
 
 </html>
