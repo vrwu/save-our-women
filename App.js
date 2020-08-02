@@ -11,6 +11,8 @@ import homeScreen from './Welcome/homescreen'
 import Email from './Welcome/Email';
 import Logo from './Welcome/Logo';
 import {forgotPassScreen} from './Welcome/forgotPassScreen'
+import {signUpScreen} from './Welcome/signUpScreen';
+//import {EmergencySOS} from './Welcome/EmergencySOS';
 
 const VALID_EMAIL = "sow@save-our-women.com"
 const VALID_PASSWORD = "tech-tank"
@@ -49,7 +51,7 @@ function WelcomeScreen({navigation}) {
 
           <TouchableOpacity
             style = {styles.noAcc}
-          //  onPress={() => navigation.navigate('sign up')}
+            onPress={() => navigation.navigate('sign up')}
           >
             <Text> Don't have an account?</Text>
             <Text style = {styles.signupText}> Sign Up. </Text>
@@ -80,6 +82,10 @@ export default function App() {
         <Stack.Screen
           name = "home"
           component = {homeScreen}
+        />
+        <Stack.Screen
+          name="sign up"
+          component={signUpScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
