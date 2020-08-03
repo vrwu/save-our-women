@@ -23,6 +23,7 @@ export default class Email extends Component {
   }
 
   render() {
+    const {navigation} = this.props;
     return(
         <View style = {styles.container}>
           <TextInput style={styles.inputBox}
@@ -33,7 +34,7 @@ export default class Email extends Component {
             autoCorrect={false}
             keyboardType='email-address'
             label='enter email'
-            onChangeText={text => this.setState({email:VALID_EMAIL}, () => {
+            onChangeText={text => this.setState({email:text}, () => {
               console.log(this.state.email, 'email change')})}
           />
           <TextInput style={styles.inputBoxTwo}
@@ -45,7 +46,7 @@ export default class Email extends Component {
             autoCapitalize='none'
             autoCorrect={false}
             onChangeText=
-              {text => this.setState({password:VALID_EMAIL},
+              {text => this.setState({password:text},
                 () => {console.log(this.state.password)})}
           />
         </View>

@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { StackActions } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput,
-  KeyboardAvoidingView
+  KeyboardAvoidingView, Component, Alert
  }
 from 'react-native';
 
@@ -28,9 +29,14 @@ export function forgotPassScreen({navigation}){
           autoCorrect={false}
           keyboardType='email-address'>
         </TextInput>
-        <TouchableOpacity style = {styles.enterButton}>
-          <Text style = {styles.buttonText}>
-            Continue
+        <TouchableOpacity style = {styles.enterButton}
+          title = {"Send Email"}
+          onPress={
+          //  () => navigation.navigate('welcome')}
+            () => navigation.dispatch(StackActions.pop(1))}
+        >
+                  <Text style = {styles.buttonText}>
+            Send Email
           </Text>
         </TouchableOpacity>
       </View>
@@ -58,8 +64,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     position: 'relative',
     top: 300,
-    paddingLeft: 50,
-    paddingRight: 50,
+    paddingLeft: 70,
+    paddingRight: 70,
+    textAlignVertical:'center',
     color: 'rgba(255, 255, 255, 0.7)'
   },
 

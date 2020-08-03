@@ -27,6 +27,8 @@ auth = firebase.auth()
 # database
 db = firebase.database()
 
+uid = int(0)
+
 @app.route('/')
 def start():
 
@@ -39,35 +41,34 @@ def signup():
         return render_template('signup.html')
 
     else:
-        # retrieves email and pass from user
+        # retrieves email, pass, and number from user
         email = request.form['email']
         password = request.form['pass']
+        phone = request.form['num']
 
         try: 
              # creates an account on database and requests for verification
             user = auth.create_user_with_email_and_password(email, password)
             auth.send_email_verification(user['idToken'])
 
-            # returns message for now that leads to deadend but maybe a pop up message instead
-            # needs coordinating with front end
+            global uid
+            uid = user['localId']
+            
+            data={"Email": email, "Phone Number": phone}
 
-            # this can probably be a message
-            # return 'Account Created! Please verify email before signing in'
-
-            # redirects to profile so new user can create a profile to be added to database
-            return redirect(url_for('profile'))
+            db.child("users").child(uid).child("details").set(data)
+            return render_template('add_emergency_contact.html', value=uid)
 
         except:
-
-            # same as the account created, probably a pop up message
-            return 'Account creation failed. Please ensure a new email or a password of at least 6 characters'
+            # message 'Account creation failed. Please ensure a new email or a password of at least 6 characters'
             return render_template('signup.html')
 
+# sign up -> add emergency contacts
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 
-    if request.method == 'GET':
+    if request.method == 'GET': 
         return render_template('login.html')
 
     else:
@@ -76,18 +77,18 @@ def login():
 
     # issue with email verification, don't know how to check for email verified or not
     try: 
-        login = auth.sign_in_with_email_and_password(email, password)
+        user = auth.sign_in_with_email_and_password(email, password)
+        global uid 
+        uid = user['localId']
 
-        # a pop up message with logged in should show and it should then proceed to the home page
-        return "Logged In"
-
+        # a pop up message with logged in should show and it should then proceed to the home page 
+        return render_template('home.html') 
+ 
     except:
-
-        # a pop up message
-        return "Invalid email and/or password"
+        # pop up message return "Invalid email and/or password"
         return render_template('login.html')
 
-# sends an email to change password
+
 @app.route('/forgotpass', methods=['GET', 'POST'])
 def forgotpass():
 
@@ -101,25 +102,61 @@ def forgotpass():
     # should flash a message saying that an email has been sent to reset password
     return render_template('login.html')
 
+# logs out and returns to start
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+
+    auth.logout()
+    return render_template('start.html')
+
+# home screen 
+@app.route('/home', methods=['GET', 'POST'])
+def home():
+
+    global uid
+    return render_template('home.html', value=uid)
+
+# profile // TO BE EDITED, needs to display user information!! 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
+# profile -> emergency contact -> add emergency contacts
+
+    global uid
+    email = db.child("users").child(uid).child('details').child('Email').get().val()
+    phone = db.child("users").child(uid).child('details').child('Phone Number').get().val()
+
+    return render_template('profile.html', email=email, phone=phone)
+
+@app.route('/emergency_contacts', methods=['GET', 'POST'])
+def emergency_contacts(): 
+    
+    global uid
+
+    name_arr = []
+    phone_arr = []
+
+    all_users = db.child("users").child(uid).child('emergency contacts').get()
+    for user in all_users.each():
+        name = user.key()
+        name_arr.append(name)
+
+    return render_template('emergency_contacts.html', name=name_arr)
+    
+@app.route('/add_emergency_contact', methods=['GET', 'POST'])
+def add_emergency_contact():
 
     if request.method == 'GET':
-        return render_template('profile.html')
+        return render_template('add_emergency_contact.html')
 
-    # only accomodates for new users only
-    # NEEDS A FEATURE so that existing users can edit their info without having
-    # a new form or pushing a new user to database
-    # need to figure out a way to KEEP user's email and pass associated with this unit in database
     else:
         first_name = request.form['first']
         last_name = request.form['last']
         phone = request.form['num']
 
-        data={"First Name": first_name, "Last Name": last_name, "Phone Number": phone}
-        db.push(data)
+        name = str(first_name) + " " + str(last_name)
+        db.child("users").child(uid).child("emergency contacts").child(name).set(phone)
 
-    return render_template('login.html')    
+    return render_template('home.html')
 
 if __name__ == '__main__':
     app.run()
