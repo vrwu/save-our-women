@@ -88,10 +88,13 @@ export default function App() {
           name="sign up"
           component={signUpScreen}
         />
+<<<<<<< HEAD
         <Stack.Screen
           name="contacts"
           component={Contacts}
         />
+=======
+>>>>>>> 6afd44bc99bb51ec4b5d9403ff7a9c77f70e2eea
       </Stack.Navigator>
     </NavigationContainer>
   );
