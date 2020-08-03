@@ -1,5 +1,12 @@
 import pyrebase
 from flask import *
+import os
+from twilio.rest import Client
+
+account_sid = "AC64d5bde78b62b02e3b6a90066b0f70ca"
+auth_token = "52346e71802d7fe93145f63f6f63603b"
+
+client = Client(account_sid, auth_token)
 
 app = Flask(__name__)
 
@@ -149,14 +156,34 @@ def add_emergency_contact():
         return render_template('add_emergency_contact.html')
 
     else:
-        first_name = request.form['first']
-        last_name = request.form['last']
+        full_name = request.form['name']
         phone = request.form['num']
 
-        name = str(first_name) + " " + str(last_name)
+        name = str(full_name)
         db.child("users").child(uid).child("emergency contacts").child(name).set(phone)
 
     return render_template('home.html')
+
+
+# sends sos message to the numbers listed below
+@app.route('/send_emergency_sos', methods=['GET', 'POST'])
+def send_emergency_sos():
+
+    global uid
+
+    all_users = db.child("users").child(uid).child('emergency contacts').get()
+    for user in all_users.each():
+        phone = str(user.val())
+
+        number = "+1" + phone
+        client.messages.create(
+            
+            body = "Quick, your friend is in trouble at this location!",
+            from_ = "+13213042130",
+            to = number
+        )
+    return render_template('send_emergency_sos.html', phone=phone)
+    
 
 if __name__ == '__main__':
     app.run()

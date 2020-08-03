@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <header><h3>Emergency SOS</h3>
+    </header>
+
+    <body>
+        SOS messages sent to:<br>
+        {%for items in phone %}
+            <li>{{ items }}</li>
+        {% endfor %}
+        <a href="{{ url_for('home') }}">Home</a>
+    </body>
+
+</html>
