@@ -2,6 +2,8 @@ import pyrebase
 from flask import *
 import os
 from twilio.rest import Client
+from datetime import datetime
+import pytz
 
 account_sid = "AC64d5bde78b62b02e3b6a90066b0f70ca"
 auth_token = "52346e71802d7fe93145f63f6f63603b"
@@ -24,7 +26,7 @@ firebaseConfig = {
     'messagingSenderId': "53046274329",
     'appId': "1:53046274329:web:92782bf1780b708be63d88",
     'measurementId': "G-62FZQ6M0FF"
-    }
+}
 
 firebase = pyrebase.initialize_app(firebaseConfig)
 
@@ -36,10 +38,12 @@ db = firebase.database()
 
 uid = int(0)
 
+
 @app.route('/')
 def start():
 
     return render_template("start.html")
+
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -53,15 +57,15 @@ def signup():
         password = request.form['pass']
         phone = request.form['num']
 
-        try: 
-             # creates an account on database and requests for verification
+        try:
+            # creates an account on database and requests for verification
             user = auth.create_user_with_email_and_password(email, password)
             auth.send_email_verification(user['idToken'])
 
             global uid
             uid = user['localId']
-            
-            data={"Email": email, "Phone Number": phone}
+
+            data = {"Email": email, "Phone Number": phone}
 
             db.child("users").child(uid).child("details").set(data)
             return render_template('add_emergency_contact.html', value=uid)
@@ -72,10 +76,11 @@ def signup():
 
 # sign up -> add emergency contacts
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 
-    if request.method == 'GET': 
+    if request.method == 'GET':
         return render_template('login.html')
 
     else:
@@ -83,14 +88,14 @@ def login():
         password = request.form['pass']
 
     # issue with email verification, don't know how to check for email verified or not
-    try: 
+    try:
         user = auth.sign_in_with_email_and_password(email, password)
-        global uid 
+        global uid
         uid = user['localId']
 
-        # a pop up message with logged in should show and it should then proceed to the home page 
-        return render_template('home.html') 
- 
+        # a pop up message with logged in should show and it should then proceed to the home page
+        return render_template('home.html')
+
     except:
         # pop up message return "Invalid email and/or password"
         return render_template('login.html')
@@ -110,33 +115,42 @@ def forgotpass():
     return render_template('login.html')
 
 # logs out and returns to start
+
+
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
 
     auth.logout()
     return render_template('start.html')
 
-# home screen 
+# home screen
+
+
 @app.route('/home', methods=['GET', 'POST'])
 def home():
 
     global uid
     return render_template('home.html', value=uid)
 
-# profile // TO BE EDITED, needs to display user information!! 
+# profile // TO BE EDITED, needs to display user information!!
+
+
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
-# profile -> emergency contact -> add emergency contacts
+    # profile -> emergency contact -> add emergency contacts
 
     global uid
-    email = db.child("users").child(uid).child('details').child('Email').get().val()
-    phone = db.child("users").child(uid).child('details').child('Phone Number').get().val()
+    email = db.child("users").child(uid).child(
+        'details').child('Email').get().val()
+    phone = db.child("users").child(uid).child(
+        'details').child('Phone Number').get().val()
 
     return render_template('profile.html', email=email, phone=phone)
 
+
 @app.route('/emergency_contacts', methods=['GET', 'POST'])
-def emergency_contacts(): 
-    
+def emergency_contacts():
+
     global uid
 
     name_arr = []
@@ -148,7 +162,8 @@ def emergency_contacts():
         name_arr.append(name)
 
     return render_template('emergency_contacts.html', name=name_arr)
-    
+
+
 @app.route('/add_emergency_contact', methods=['GET', 'POST'])
 def add_emergency_contact():
 
@@ -160,7 +175,8 @@ def add_emergency_contact():
         phone = request.form['num']
 
         name = str(full_name)
-        db.child("users").child(uid).child("emergency contacts").child(name).set(phone)
+        db.child("users").child(uid).child(
+            "emergency contacts").child(name).set(phone)
 
     return render_template('home.html')
 
@@ -177,13 +193,31 @@ def send_emergency_sos():
 
         number = "+1" + phone
         client.messages.create(
-            
-            body = "Quick, your friend is in trouble at this location!",
-            from_ = "+13213042130",
-            to = number
+
+            body="Quick, your friend is in trouble at this location!",
+            from_="+13213042130",
+            to=number
         )
     return render_template('send_emergency_sos.html', phone=phone)
-    
+
+
+@app.route('/make_report', methods=['GET', 'POST'])
+def make_report():
+    global uid
+
+    if request.method == 'GET':
+        return render_template('make_report.html')
+
+    else:
+        today = datetime.now()
+        date = today.strftime("%B %d, %Y %H:%M:%S")
+
+        location = request.form['location']
+        report = request.form['report']
+        db.child("reports").child('location').child(location).child(date).set(report)
+
+    return render_template('home.html')
+
 
 if __name__ == '__main__':
     app.run()
