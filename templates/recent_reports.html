@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <header><h3>Recent Reports</h3>
+    </header>
+
+    <body>
+        <a href="{{ url_for('home') }}">Home</a>
+        {%for report in reports %}
+            <li>{{ report }}</li><br>
+        {% endfor %}
+        
+    </body>
+
+</html>

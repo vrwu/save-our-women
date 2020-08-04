@@ -175,8 +175,9 @@ def add_emergency_contact():
         phone = request.form['num']
 
         name = str(full_name)
-        db.child("users").child(uid).child(
-            "emergency contacts").child(name).set(phone)
+
+        # Name: Phone Number
+        db.child("users").child(uid).child("emergency contacts").child(name).set(phone)
 
     return render_template('home.html')
 
@@ -188,36 +189,76 @@ def send_emergency_sos():
     global uid
 
     all_users = db.child("users").child(uid).child('emergency contacts').get()
+
+    phone_arr = []
+
     for user in all_users.each():
+
         phone = str(user.val())
-
         number = "+1" + phone
-        client.messages.create(
 
+        phone_arr.append(number)
+
+        # needs name or else find a way to use their own phone number
+        client.messages.create(
             body="Quick, your friend is in trouble at this location!",
             from_="+13213042130",
             to=number
         )
-    return render_template('send_emergency_sos.html', phone=phone)
+
+    return render_template('send_emergency_sos.html', phone=phone_arr)
 
 
 @app.route('/make_report', methods=['GET', 'POST'])
 def make_report():
-    global uid
 
     if request.method == 'GET':
         return render_template('make_report.html')
 
     else:
+
+        # not time zoned yet
         today = datetime.now()
         date = today.strftime("%B %d, %Y %H:%M:%S")
 
+        # user should be able to search with google api 
         location = request.form['location']
         report = request.form['report']
         db.child("reports").child('location').child(location).child(date).set(report)
 
     return render_template('home.html')
 
+# need more instruction on how to filter it: location/time etc
+@app.route('/recent_reports', methods=['GET', 'POST'])
+def recent_reports():
+    
+    all_reports = db.child("reports").child('location').get()
+
+    incident_arr = []
+
+    for report in all_reports.each():
+        location = str(report.key())
+        location = location.replace('"', "")
+        incident_arr.append(location)
+
+        reps = db.child("reports").child('location').child(location).order_by_key().get()
+
+        for rep in reps.each():
+            date = str(rep.key())
+            date = date.replace('"', "")
+
+            incident = str(rep.val())
+            incident = incident.replace('"', "")
+            incident = incident.replace('{', "")
+            incident = incident.replace('}', "")
+
+            incident = date + " - " + incident
+
+            incident_arr.append(incident)
+        
+
+    # returns array of arrays, [["LA, CA", "Aug 3, 2020 - this is what happened"], ["SD, CA", "Aug 3, 2020 - incident"]]
+    return render_template('recent_reports.html', reports=incident_arr)
 
 if __name__ == '__main__':
     app.run()
