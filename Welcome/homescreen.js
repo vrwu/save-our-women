@@ -4,18 +4,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {home} from '../Welcome/home'
+import {EmergencySOS} from '../Welcome/EmergencySOS'
 
 const Tab = createBottomTabNavigator();
 
 export default function homeScreen({navigation}) {
   return(
     <Tab.Navigator
-      initialRouteName="home"
-      navigationOptions = {{
-        headerStyle: {
-          setColor: 'purple'
-        }
-      }}
     >
       <Tab.Screen
         name = "home"
@@ -24,7 +19,7 @@ export default function homeScreen({navigation}) {
       />
       <Tab.Screen
         name = "SOS"
-        component = {home}
+        component = {EmergencySOS}
         options = {{tabBarLabel:'SOS'}}
       />
       <Tab.Screen

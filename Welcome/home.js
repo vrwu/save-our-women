@@ -20,21 +20,14 @@ export function home({navigation}) {
 
       <TouchableOpacity
         style = {styles.sendAlert}
-        onPress={() =>navigation.navigate('newsfeed')}
       >
         <Text style = {styles.smallText}>
-          Recent Reports
+          Send Alert
         </Text>
-        <Image
-            style = {styles.newsImg}
-            source={require('../src/icons/news.png')}
-         />
       </TouchableOpacity>
 
       <TouchableOpacity
         style = {styles.makeReport}
-        onPress={() =>navigation.navigate('new report')}
-
       >
         <Text style = {styles.smallText}>
           Make Report
@@ -70,13 +63,6 @@ export function home({navigation}) {
 
     },
 
-    newsImg: {
-      height: 100,
-      width: 100,
-      top: 10,
-      left: 40
-    },
-
     sendAlert: {
       width: 180,
       height: 180,
@@ -102,7 +88,7 @@ export function home({navigation}) {
       textAlign: 'right',
       right: 20,
       fontSize: 18,
-      top: 200
+      top: 175
     },
 
     makeReport: {
@@ -119,7 +105,7 @@ export function home({navigation}) {
 
     map: {
       width: 378,
-      height: 450,
+      height: 400,
       position: 'absolute',
       backgroundColor: 'white',
       marginVertical: 300,

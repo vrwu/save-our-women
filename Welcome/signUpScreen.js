@@ -6,6 +6,7 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput,
   KeyboardAvoidingView
  } from 'react-native';
 
+
 export function signUpScreen({navigation}){
   return (
     <KeyboardAvoidingView style = {styles.keyboard}
@@ -36,7 +37,10 @@ export function signUpScreen({navigation}){
           autoCapitalize='none'
           autoCorrect={false}
         />
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style = {styles.button}
+          onPress={() => navigation.navigate('contacts')}
+        >
           <Text style={styles.SignUpText}> Sign Up </Text>
         </TouchableOpacity>
       </View>

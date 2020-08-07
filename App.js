@@ -1,3 +1,7 @@
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
@@ -12,8 +16,9 @@ import homeScreen from './Welcome/homescreen'
 import Email from './Welcome/Email';
 import Logo from './Welcome/Logo';
 import {forgotPassScreen} from './Welcome/forgotPassScreen'
-import {newsfeed} from './Welcome/newsfeed'
-import {newReport} from './Welcome/newReport'
+import {signUpScreen} from './Welcome/signUpScreen';
+import {EmergencySOS} from './Welcome/EmergencySOS';
+import {Contacts} from './Welcome/Contacts';
 
 const VALID_EMAIL = "sow@save-our-women.com"
 const VALID_PASSWORD = "tech-tank"
@@ -52,7 +57,7 @@ function WelcomeScreen({navigation}) {
 
           <TouchableOpacity
             style = {styles.noAcc}
-          //  onPress={() => navigation.navigate('sign up')}
+            onPress={() => navigation.navigate('sign up')}
           >
             <Text> Don't have an account?</Text>
             <Text style = {styles.signupText}> Sign Up. </Text>
@@ -85,13 +90,16 @@ export default function App() {
           component = {homeScreen}
         />
         <Stack.Screen
-          name = "newsfeed"
-          component = {newsfeed}
+          name="sign up"
+          component={signUpScreen}
         />
+<<<<<<< HEAD
         <Stack.Screen
-          name = "new report"
-          component = {newReport}
+          name="contacts"
+          component={Contacts}
         />
+=======
+>>>>>>> 6afd44bc99bb51ec4b5d9403ff7a9c77f70e2eea
       </Stack.Navigator>
     </NavigationContainer>
   );
