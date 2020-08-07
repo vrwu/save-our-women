@@ -10,6 +10,12 @@ const Tab = createBottomTabNavigator();
 export default function homeScreen({navigation}) {
   return(
     <Tab.Navigator
+      initialRouteName="home"
+      navigationOptions = {{
+        headerStyle: {
+          setColor: 'purple'
+        }
+      }}
     >
       <Tab.Screen
         name = "home"

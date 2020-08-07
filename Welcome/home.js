@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
-  Keyboard, Alert, TextInput
+  Keyboard, Alert, TextInput, Image
  } from 'react-native';
 
 export function home({navigation}) {
@@ -20,14 +20,21 @@ export function home({navigation}) {
 
       <TouchableOpacity
         style = {styles.sendAlert}
+        onPress={() =>navigation.navigate('newsfeed')}
       >
         <Text style = {styles.smallText}>
-          Send Alert
+          Recent Reports
         </Text>
+        <Image
+            style = {styles.newsImg}
+            source={require('../src/icons/news.png')}
+         />
       </TouchableOpacity>
 
       <TouchableOpacity
         style = {styles.makeReport}
+        onPress={() =>navigation.navigate('new report')}
+
       >
         <Text style = {styles.smallText}>
           Make Report
@@ -63,6 +70,13 @@ export function home({navigation}) {
 
     },
 
+    newsImg: {
+      height: 100,
+      width: 100,
+      top: 10,
+      left: 40
+    },
+
     sendAlert: {
       width: 180,
       height: 180,
@@ -88,7 +102,7 @@ export function home({navigation}) {
       textAlign: 'right',
       right: 20,
       fontSize: 18,
-      top: 175
+      top: 200
     },
 
     makeReport: {
@@ -105,7 +119,7 @@ export function home({navigation}) {
 
     map: {
       width: 378,
-      height: 400,
+      height: 450,
       position: 'absolute',
       backgroundColor: 'white',
       marginVertical: 300,

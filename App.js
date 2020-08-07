@@ -12,6 +12,8 @@ import homeScreen from './Welcome/homescreen'
 import Email from './Welcome/Email';
 import Logo from './Welcome/Logo';
 import {forgotPassScreen} from './Welcome/forgotPassScreen'
+import {newsfeed} from './Welcome/newsfeed'
+import {newReport} from './Welcome/newReport'
 
 const VALID_EMAIL = "sow@save-our-women.com"
 const VALID_PASSWORD = "tech-tank"
@@ -81,6 +83,14 @@ export default function App() {
         <Stack.Screen
           name = "home"
           component = {homeScreen}
+        />
+        <Stack.Screen
+          name = "newsfeed"
+          component = {newsfeed}
+        />
+        <Stack.Screen
+          name = "new report"
+          component = {newReport}
         />
       </Stack.Navigator>
     </NavigationContainer>
