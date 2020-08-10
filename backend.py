@@ -2,7 +2,7 @@ import pyrebase
 from flask import *
 import os
 from twilio.rest import Client
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytz
 
 account_sid = "AC64d5bde78b62b02e3b6a90066b0f70ca"
@@ -11,10 +11,9 @@ auth_token = "52346e71802d7fe93145f63f6f63603b"
 client = Client(account_sid, auth_token)
 
 app = Flask(__name__)
-
+app.permanent_session_lifetime = timedelta(days=5)
 '''
-!!! most returns and forms connect with HTML since idk react native/swift/etc and I used quick html for visualization/testing purposes
-They can be changed to accomodate for whatever frontend language is used  
+THIS VERSION IS TO CONNECT WITH REACT NATIVE/JS FRONT END
 '''
 
 firebaseConfig = {
@@ -39,93 +38,81 @@ db = firebase.database()
 uid = int(0)
 
 
-@app.route('/')
-def start():
-
-    return render_template("start.html")
-
-
-@app.route('/signup', methods=['GET', 'POST'])
+@app.route('/signup', methods=['POST'])
 def signup():
 
-    if request.method == 'GET':
-        return render_template('signup.html')
+    # retrieves email, pass, and number from user
+    email = request.json['email']
+    password = request.json['pass']
+    phone = request.json['num']
 
-    else:
-        # retrieves email, pass, and number from user
-        email = request.form['email']
-        password = request.form['pass']
-        phone = request.form['num']
+    try:
+        # creates an account on database and requests for verification
+        user = auth.create_user_with_email_and_password(email, password)
+        auth.send_email_verification(user['idToken'])
 
-        try:
-            # creates an account on database and requests for verification
-            user = auth.create_user_with_email_and_password(email, password)
-            auth.send_email_verification(user['idToken'])
+    except:
+        # message 'Account creation failed. Please ensure a new email or a password of at least 6 characters'
+        return({'reason': 'Account creation unsuccessful'}), 400
 
-            global uid
-            uid = user['localId']
+    session.permanent = True
+    global uid
+    uid = user['localId']
+    session["uid"] = uid
 
-            data = {"Email": email, "Phone Number": phone}
+    data = {"Email": email, "Phone Number": phone}
+    db.child("users").child(uid).child("details").set(data)
 
-            db.child("users").child(uid).child("details").set(data)
-            return render_template('add_emergency_contact.html', value=uid)
-
-        except:
-            # message 'Account creation failed. Please ensure a new email or a password of at least 6 characters'
-            return render_template('signup.html')
+    return jsonify('reason': 'Account successfully created'), 200
 
 # sign up -> add emergency contacts
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['POST'])
 def login():
 
-    if request.method == 'GET':
-        return render_template('login.html')
-
-    else:
-        email = request.form['email']
-        password = request.form['pass']
+    email = request.json['email']
+    password = request.json['pass']
 
     # issue with email verification, don't know how to check for email verified or not
     try:
         user = auth.sign_in_with_email_and_password(email, password)
-        global uid
-        uid = user['localId']
-
-        # a pop up message with logged in should show and it should then proceed to the home page
-        return render_template('home.html')
 
     except:
         # pop up message return "Invalid email and/or password"
-        return render_template('login.html')
+        return({'reason': 'Invalid credentials'}), 400
+    
+    session.permanent = True
+    global uid
+    uid = user['localId']
+    session["uid"] = uid
+
+    # a pop up message with logged in should show and it should then proceed to the home page
+    return jsonify('reason': 'Account successfully created'), 200
 
 
-@app.route('/forgotpass', methods=['GET', 'POST'])
+@app.route('/forgotpass', methods=['POST'])
 def forgotpass():
 
-    if request.method == 'GET':
-        return render_template('forgotpass.html')
+    email = request.json['email']
+    auth.send_password_reset_email(email)
 
-    else:
-        email = request.form['email']
-        auth.send_password_reset_email(email)
+    message = "Password reset has been sent to " + email
 
     # should flash a message saying that an email has been sent to reset password
-    return render_template('login.html')
+    return jsonify('reason': message), 200
+
 
 # logs out and returns to start
-
-
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
 
+    session.pop("uid", None)
     auth.logout()
-    return render_template('start.html')
+    return jsonify('reason': 'Successful logout'), 200
+
 
 # home screen
-
-
 @app.route('/home', methods=['GET', 'POST'])
 def home():
 
@@ -140,10 +127,8 @@ def profile():
     # profile -> emergency contact -> add emergency contacts
 
     global uid
-    email = db.child("users").child(uid).child(
-        'details').child('Email').get().val()
-    phone = db.child("users").child(uid).child(
-        'details').child('Phone Number').get().val()
+    email = db.child("users").child(uid).child('details').child('Email').get().val()
+    phone = db.child("users").child(uid).child('details').child('Phone Number').get().val()
 
     return render_template('profile.html', email=email, phone=phone)
 
