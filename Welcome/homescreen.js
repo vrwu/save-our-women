@@ -5,6 +5,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {home} from '../Welcome/home'
 import {EmergencySOS} from '../Welcome/EmergencySOS'
+import {profile} from '../Welcome/profile'
 
 const Tab = createBottomTabNavigator();
 
@@ -24,7 +25,7 @@ export default function homeScreen({navigation}) {
       />
       <Tab.Screen
         name = "profile"
-        component = {home}
+        component = {profile}
         options = {{tabBarLabel:'Profile'}}
       />
     </Tab.Navigator>

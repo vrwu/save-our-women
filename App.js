@@ -1,9 +1,4 @@
-import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-import * as React from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -19,6 +14,7 @@ import {forgotPassScreen} from './Welcome/forgotPassScreen'
 import {signUpScreen} from './Welcome/signUpScreen';
 import {EmergencySOS} from './Welcome/EmergencySOS';
 import {Contacts} from './Welcome/Contacts';
+import {profile} from './Welcome/profile';
 
 const VALID_EMAIL = "sow@save-our-women.com"
 const VALID_PASSWORD = "tech-tank"
@@ -93,13 +89,14 @@ export default function App() {
           name="sign up"
           component={signUpScreen}
         />
-<<<<<<< HEAD
         <Stack.Screen
           name="contacts"
           component={Contacts}
         />
-=======
->>>>>>> 6afd44bc99bb51ec4b5d9403ff7a9c77f70e2eea
+        <Stack.Screen
+          name="profile page"
+          component={profile}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
