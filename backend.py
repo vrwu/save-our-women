@@ -6,8 +6,8 @@ from datetime import datetime, timedelta
 import pytz
 
 account_sid = "AC64d5bde78b62b02e3b6a90066b0f70ca"
-auth_token = "52346e71802d7fe93145f63f6f63603b"
-
+auth_token = os.environ.get('API_TWILIO')
+# ask vivian w for twilio api
 client = Client(account_sid, auth_token)
 
 app = Flask(__name__)
@@ -15,9 +15,9 @@ app.permanent_session_lifetime = timedelta(days=5)
 '''
 THIS VERSION IS TO CONNECT WITH REACT NATIVE/JS FRONT END
 '''
-
+# ask for api
 firebaseConfig = {
-    'apiKey': "AIzaSyA1UYeJTygTIPNIBTLd_upZ8EsCjL5iUNs",
+    'apiKey': os.environ.get('API_FIREBASE'),
     'authDomain': "save-our-women-b9aef.firebaseapp.com",
     'databaseURL': "https://save-our-women-b9aef.firebaseio.com",
     'projectId': "save-our-women-b9aef",

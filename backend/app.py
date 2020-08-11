@@ -7,7 +7,7 @@ import pytz
 
 account_sid = "AC64d5bde78b62b02e3b6a90066b0f70ca"
 auth_token = os.environ.get('API_TWILIO')
-
+# ask vivian w for twilio api
 client = Client(account_sid, auth_token)
 
 app = Flask(__name__)
@@ -18,7 +18,7 @@ app.permanent_session_lifetime = timedelta(days=5)
 !!! most returns and forms connect with HTML since idk react native/swift/etc and I used quick html for visualization/testing purposes
 They can be changed to accomodate for whatever frontend language is used  
 '''
-
+# ask for api
 firebaseConfig = {
     'apiKey': os.environ.get('API_FIREBASE'),
     'authDomain': "save-our-women-b9aef.firebaseapp.com",
