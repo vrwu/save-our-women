@@ -1,16 +1,36 @@
 import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StatusBar } from 'expo-status-bar';
 import { StackActions } from '@react-navigation/native';
+import BottomSheet from 'reanimated-bottom-sheet'
 import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
-  Keyboard, Alert, TextInput, Image, ScrollView
+  Keyboard, Alert, TextInput, Image, ScrollView, FlatList, Component, Root
  } from 'react-native';
 
- export function newsfeed({navigation}) {
-   return(
-     <ScrollView>
+ import newReport from '../Welcome/newReport'
+
+export default class newsfeed extends React.Component {
+  constructor(props){
+    super(props);
+    this.array = [],
+    this.state = {
+      arrayHolder: [],
+      textInput_Holder: ''
+    }
+  }
+
+  componentDidMount() {
+    this.setState({ arrayHolder: [...this.array] })
+  }
+
+  joinData = () => {
+    this.array.push({title : this.state.textInput_Holder});
+    this.setState({ arrayHolder: [...this.array] })
+  }
+
+  render() {
+    const {navigation} = this.props;
+    return(
+     <View>
       <View style = {styles.header}>
         <Text style = {styles.mainText}>
           Newsfeed
@@ -38,61 +58,36 @@ import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
         </TouchableOpacity>
       </View>
 
-        <TouchableOpacity style = {styles.newsContainer}>
-        </TouchableOpacity>
+        <View>
+        <TextInput
+          style = {styles.testInput}
+          placeholder="Enter Value Here"
+          onChangeText={data => this.setState({ textInput_Holder: data })}
+        />
 
-        <TouchableOpacity style = {styles.newsContainer}>
-          <View style = {styles.addPhoto}>
-            <Text style = {{alignSelf:'center', top: 200}}>
-              No Photo
-            </Text>
-          </View>
-          <View style = {styles.addText}>
-            <Text style = {styles.descriptionBox}>
-            August 1, 2020
-            </Text>
-            <Text>
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-incididunt ut labore et dolore magna aliqua. Ut enim ad minim ven
-            </Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style = {styles.newsContainer}>
-        <View style = {styles.addPhoto}>
-          <Text style = {{alignSelf:'center', top: 200}}>
-            No Photo
-          </Text>
+      <TouchableOpacity
+        style = {styles.testButton}
+        onPress={this.joinData}
+        activeOpacity={0.7}
+      >
+      <Text style={styles.buttonText}> Add Values To FlatList </Text>
+      </TouchableOpacity>
+          <FlatList
+          data = {this.state.arrayHolder}
+          keyExtractor = {(index) => index.toString()}
+          renderItem={({ item }) =>
+            <Text
+              style={styles.newsContainer}
+            >
+              {item.title}
+            </Text>}
+          />
         </View>
-        <View style = {styles.addText}>
-          <Text style = {styles.descriptionBox}>
-          August 1, 2020
-          </Text>
-          <Text>
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-incididunt ut labore et dolore magna aliqua. Ut enim ad minim ven
-          </Text>
-        </View>
-        </TouchableOpacity>
-        <TouchableOpacity style = {styles.newsContainer}>
-        <View style = {styles.addPhoto}>
-          <Text style = {{alignSelf:'center', top: 200}}>
-            No Photo
-          </Text>
-        </View>
-        <View style = {styles.addText}>
-          <Text style = {styles.descriptionBox}>
-          August 1, 2020
-          </Text>
-          <Text>
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-incididunt ut labore et dolore magna aliqua. Ut enim ad minim ven
-          </Text>
-        </View>
-        </TouchableOpacity>
-     </ScrollView>
+     </View>
 
    )
  }
+}
 
 const styles = StyleSheet.create({
   mainText: {
@@ -142,31 +137,22 @@ const styles = StyleSheet.create({
   },
 
   newsContainer: {
-    height: 250,
+    height: 150,
     width: 378,
     alignSelf: 'center',
     backgroundColor:'white',
     borderRadius: 25,
     marginVertical: 10,
-    top: 60
+    top: 80
   },
 
-  addPhoto: {
-    height: 200,
-    width: 150,
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
-    top:25,
-    left: 25
-  },
-
-  addText: {
-    height: 200,
-    width: 180,
+  testButton: {
     alignSelf:'center',
-    bottom: 175,
-    left: 85
   },
 
-  descriptionBox: {
+  testInput: {
+    alignSelf:'center',
   }
+
 })
+
