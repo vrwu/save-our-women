@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -11,6 +11,10 @@ import homeScreen from './Welcome/homescreen'
 import Email from './Welcome/Email';
 import Logo from './Welcome/Logo';
 import {forgotPassScreen} from './Welcome/forgotPassScreen'
+import {signUpScreen} from './Welcome/signUpScreen';
+import {EmergencySOS} from './Welcome/EmergencySOS';
+import {Contacts} from './Welcome/Contacts';
+import {profile} from './Welcome/profile';
 
 const VALID_EMAIL = "sow@save-our-women.com"
 const VALID_PASSWORD = "tech-tank"
@@ -49,7 +53,7 @@ function WelcomeScreen({navigation}) {
 
           <TouchableOpacity
             style = {styles.noAcc}
-          //  onPress={() => navigation.navigate('sign up')}
+            onPress={() => navigation.navigate('sign up')}
           >
             <Text> Don't have an account?</Text>
             <Text style = {styles.signupText}> Sign Up. </Text>
@@ -80,6 +84,18 @@ export default function App() {
         <Stack.Screen
           name = "home"
           component = {homeScreen}
+        />
+        <Stack.Screen
+          name="sign up"
+          component={signUpScreen}
+        />
+        <Stack.Screen
+          name="contacts"
+          component={Contacts}
+        />
+        <Stack.Screen
+          name="profile page"
+          component={profile}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <header><h3>Forgot Password</h3>
+    <a href="{{ url_for('start') }}">Return to start</a>
+    <br>
+    </header>
+
+    <body>
+        
+        <form action="/forgotpass" method="POST">
+            <input type="name" name="email">
+            <input type="submit" name="submit">
+        </form>
+    </body>
+
+</html>

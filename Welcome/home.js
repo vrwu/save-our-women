@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
-  Keyboard, Alert, TextInput
+  Keyboard, Alert, TextInput, Image
  } from 'react-native';
 
 export function home({navigation}) {

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <header><h3>Emergency Contacts</h3>
+    </header>
+
+    <body>
+        {%for items in name %}
+            <li>{{ items }}</li>
+        {% endfor %}
+        <a href="{{ url_for('add_emergency_contact') }}">Add An Emergency Contact</a>
+        <a href="{{ url_for('home') }}">Home</a>
+    </body>
+
+</html>
