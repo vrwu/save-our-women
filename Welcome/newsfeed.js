@@ -61,7 +61,7 @@ export default class newsfeed extends React.Component {
         <View>
         <TextInput
           style = {styles.testInput}
-          placeholder="Enter Value Here"
+          placeholder="Enter Test Report"
           onChangeText={data => this.setState({ textInput_Holder: data })}
         />
 
@@ -70,7 +70,7 @@ export default class newsfeed extends React.Component {
         onPress={this.joinData}
         activeOpacity={0.7}
       >
-      <Text style={styles.buttonText}> Add Values To FlatList </Text>
+      <Text style={styles.buttonText}> Publish </Text>
       </TouchableOpacity>
           <FlatList
           data = {this.state.arrayHolder}
@@ -155,4 +155,3 @@ const styles = StyleSheet.create({
   }
 
 })
-
