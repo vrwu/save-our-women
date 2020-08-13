@@ -17,7 +17,7 @@ import {Contacts} from './Welcome/Contacts';
 import {profile} from './Welcome/profile';
 import newsfeed from './Welcome/newsfeed';
 import newReport from './Welcome/newReport';
-import {contactList} from './contactList';
+import {contactList} from './Welcome/contactList';
 
 
 const VALID_EMAIL = "sow@save-our-women.com"
@@ -102,17 +102,16 @@ export default function App() {
           component={profile}
         />
         <Stack.Screen
-<<<<<<< HEAD
           name="list of contacts"
           component={contactList}
-=======
+        />
+        <Stack.Screen
           name="newsfeed"
           component={newsfeed}
         />
         <Stack.Screen
           name="new report"
           component={newReport}
->>>>>>> 394115517ed914912647ce8e4f44d047497046d8
         />
       </Stack.Navigator>
     </NavigationContainer>
