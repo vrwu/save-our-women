@@ -4,6 +4,7 @@ import os
 from twilio.rest import Client
 from datetime import datetime, timedelta
 import pytz
+import time
 
 account_sid = "AC64d5bde78b62b02e3b6a90066b0f70ca"
 auth_token = os.environ.get('API_TWILIO')
@@ -12,7 +13,7 @@ client = Client(account_sid, auth_token)
 
 app = Flask(__name__)
 app.secret_key = "hello"
-app.permanent_session_lifetime = timedelta(days=5)
+app.permanent_session_lifetime = timedelta(days=30)
 
 '''
 !!! most returns and forms connect with HTML since idk react native/swift/etc and I used quick html for visualization/testing purposes
@@ -37,6 +38,8 @@ auth = firebase.auth()
 
 # database
 db = firebase.database()
+
+storage = firebase.storage()
 
 uid = int(0)
 
@@ -237,12 +240,31 @@ def make_report():
 
         # not time zoned yet
         today = datetime.now()
-        date = today.strftime("%B %d, %Y %H:%M:%S")
+        curr_time = time.localtime()
+
+        day = today.strftime("%B %d, %Y ")
+        curr_time = str(time.strftime("%H:%M", curr_time))
+        clock = datetime.strptime(curr_time, "%H:%M")
+        clock = clock.strftime("%I:%M %p").lstrip('0')
+        date = day + clock
 
         # user should be able to search with google api 
         location = request.form['location']
         report = request.form['report']
-        db.child("reports").child('location').child(location).child(date).set(report)
+        photo = request.files['fileToUpload']
+
+        picture = str(photo)
+
+        if picture == "<FileStorage: '' ('application/octet-stream')>":
+            link = ""
+
+        else:
+            storage.child("images/" + picture).put(photo)
+            link = storage.child('images/' + picture).get_url(None)
+            db.child("reports").child(date).child('image').set(link)
+
+    db.child("reports").child(date).child('location').set(location)
+    db.child("reports").child(date).child('report').set(report)
 
     return render_template('home.html')
 
@@ -250,32 +272,33 @@ def make_report():
 @app.route('/recent_reports', methods=['GET', 'POST'])
 def recent_reports():
     
-    all_reports = db.child("reports").child('location').get()
+    all_reports = db.child("reports").get()
 
     incident_arr = []
 
-    for report in all_reports.each():
-        location = str(report.key())
-        location = location.replace('"', "")
-        incident_arr.append(location)
+    details_arr = []
 
-        reps = db.child("reports").child('location').child(location).order_by_key().get()
+    for report in all_reports.each():
+        date = str(report.key())
+        date = date.replace('"', "")
+        details_arr.append(date)
+
+        reps = db.child("reports").child(date).get()
 
         for rep in reps.each():
-            date = str(rep.key())
-            date = date.replace('"', "")
+            detail = str(rep.val())
+            detail = detail.replace('"', "")
+            detail = detail.replace('{', "")
+            detail = detail.replace('}', "")
 
-            incident = str(rep.val())
-            incident = incident.replace('"', "")
-            incident = incident.replace('{', "")
-            incident = incident.replace('}', "")
+            details_arr.append(detail)
 
-            incident = date + " - " + incident
-
-            incident_arr.append(incident)
+        incident_arr.insert(0, details_arr)
+        details_arr = []
         
 
-    # returns array of arrays, [["LA, CA", "Aug 3, 2020 - this is what happened"], ["SD, CA", "Aug 3, 2020 - incident"]]
+    # returns array of arrays, [[DATE + TIME, URL TO IMAGE, LOCATION, INCIDENT], [August 12, 2020 08:40 PM, https://, LA, INCIDENT]]
+    # SOME REPORTS MAY NOT HAVE URLS!!! 
     return render_template('recent_reports.html', reports=incident_arr)
 
 if __name__ == '__main__':
