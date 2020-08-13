@@ -20,7 +20,7 @@ export default class newReport extends React.Component {
     if (Constants.platform.ios) {
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
       if (status !== 'granted') {
-        alert('Please turn on camera permissions');
+        alert('Please turn on camera permissions to upload a photo');
       }
     }
   };
