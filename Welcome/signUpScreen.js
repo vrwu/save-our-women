@@ -14,6 +14,13 @@ export function signUpScreen({navigation}){
       <View style = {styles.container}>
         <StatusBar style="auto" />
         <Text style={styles.title}>Create an Account</Text>
+        <TextInput style={styles.name}
+          autoCapitalize='none'
+          placeholder="Name"
+          placeholderTextColor="#FFFFFF"
+          enablesReturnKeyAutomatically={true}
+          autoCorrect={false}
+        />
         <TextInput style={styles.email}
           autoCapitalize='none'
           placeholder="Email"
@@ -60,11 +67,24 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     textAlign: 'center',
     alignSelf: 'center',
-    //marginVertical: 200,
     color:'#FFFFFF',
     fontSize: 30,
     position: 'relative',
-    top:250
+    top:210
+
+  },
+
+  name: {
+    width: 300,
+    height: 50,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 25,
+    paddingHorizontal: 13,
+    fontSize: 16,
+    paddingLeft: 30,
+    justifyContent:'center',
+    alignSelf:'center',
+    top: 290
 
   },
 

@@ -15,6 +15,7 @@ import {signUpScreen} from './Welcome/signUpScreen';
 import {EmergencySOS} from './Welcome/EmergencySOS';
 import {Contacts} from './Welcome/Contacts';
 import {profile} from './Welcome/profile';
+import {contactList} from './Welcome/contactList'
 
 const VALID_EMAIL = "sow@save-our-women.com"
 const VALID_PASSWORD = "tech-tank"
@@ -96,6 +97,10 @@ export default function App() {
         <Stack.Screen
           name="profile page"
           component={profile}
+        />
+        <Stack.Screen
+          name="list of contacts"
+          component={contactList}
         />
       </Stack.Navigator>
     </NavigationContainer>

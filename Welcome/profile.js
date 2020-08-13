@@ -24,7 +24,7 @@ export function profile({navigation}) {
 
       <TouchableOpacity
         style = {styles.viewContactsButton}
-        onPress={() => navigation.navigate('contacts')}
+        onPress={() => navigation.navigate('list of contacts')}
       >
         <Text style = {styles.viewContactsText}>
           View Contacts
