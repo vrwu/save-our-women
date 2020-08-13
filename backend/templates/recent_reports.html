@@ -6,7 +6,9 @@
     <body>
         <a href="{{ url_for('home') }}">Home</a>
         {%for report in reports %}
-            <li>{{ report }}</li><br>
+            {%for item in report %}
+                <li>{{ item }}</li><br>
+            {% endfor %}
         {% endfor %}
         
     </body>
