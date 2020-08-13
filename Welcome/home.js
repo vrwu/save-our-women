@@ -8,42 +8,44 @@ import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
   Keyboard, Alert, TextInput, Image
  } from 'react-native';
 
-export function home({navigation}) {
-  return (
-    <View>
-      <View style = {styles.container}>
-      </View>
+ export function home({navigation}) {
+   return (
+     <View>
+       <View style = {styles.container}>
+       </View>
 
-      <Text style = {styles.homeText}>
-        Home
-      </Text>
+       <Text style = {styles.homeText}>
+         Home
+       </Text>
 
-      <TouchableOpacity
-        style = {styles.sendAlert}
-      >
-        <Text style = {styles.smallText}>
-          Send Alert
-        </Text>
-      </TouchableOpacity>
+       <TouchableOpacity
+         style = {styles.sendAlert}
+         onPress={() => navigation.navigate('newsfeed')}
+       >
+         <Text style = {styles.smallText}>
+           Newsfeed
+         </Text>
+       </TouchableOpacity>
 
-      <TouchableOpacity
-        style = {styles.makeReport}
-      >
-        <Text style = {styles.smallText}>
-          Make Report
-        </Text>
-      </TouchableOpacity>
+       <TouchableOpacity
+         style = {styles.makeReport}
+         onPress={() =>navigation.navigate('new report')}
+       >
+         <Text style = {styles.smallText}>
+           Make Report
+         </Text>
+       </TouchableOpacity>
 
-      <TouchableOpacity
-        style = {styles.map}
-      >
-        <Text style = {styles.mapText}>
-          Map
-        </Text>
-      </TouchableOpacity>
-    </View>
-  )
-}
+       <TouchableOpacity
+         style = {styles.map}
+       >
+         <Text style = {styles.mapText}>
+           Map
+         </Text>
+       </TouchableOpacity>
+     </View>
+   )
+ }
   const styles = StyleSheet.create({
     container: {
       top: -10,

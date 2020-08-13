@@ -1,60 +1,106 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StackActions } from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker';
+import Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions';
 import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
-  Keyboard, Alert, TextInput, Image
+  Keyboard, Alert, TextInput, Image, Component, Button
 } from 'react-native';
 
-import homeScreen from '../Welcome/homescreen'
-import {newsfeed} from '../Welcome/newsfeed'
+export default class newReport extends React.Component {
+  state = {
+    image: null,
+  };
 
-export function newReport({navigation}) {
-  return(
-    <View style = {styles.background}>
+  componentDidMount() {
+    this.getPermissionAsync();
+  }
 
-      <Text style = {styles.mainText}>
-        Make a Report
-      </Text>
+  getPermissionAsync = async () => {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        alert('Please turn on camera permissions to upload a photo');
+      }
+    }
+  };
 
-      <Text style = {styles.smallText}>
-        Publish an online report about a potential threat or incident. Provide
-        a description of the perpetuator or upload an image or video of the
-        incident.
-        If an emergency situation has occurred, contact authorities immediately
-        for medical help.
-      </Text>
-      <View style = {styles.container}>
+  _pickImage = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      if (!result.cancelled) {
+        this.setState({ image: result.uri });
+      }
 
-        <Text style = {styles.secondHeader}>
-          Incident Report
+      console.log(result);
+    } catch (E) {
+      console.log(E);
+    }
+  };
+
+  render() {
+    const {navigation} = this.props
+    let { image } = this.state;
+    return(
+      <View style = {styles.background}>
+
+        <Text style = {styles.mainText}>
+          Make a Report
         </Text>
-        <TextInput style = {styles.infoBox}
-          placeholder="   Subject"
-        >
-        </TextInput>
-        <TextInput style = {styles.moreInfo}
-          placeholder="   Description"
-        >
-        </TextInput>
 
-        <TouchableOpacity style = {styles.submitButton}>
-          <Text style = {styles.buttonText}> Submit
+        <Text style = {styles.smallText}>
+          Publish an online report about a potential threat or incident. Provide
+          a description of the perpetuator or upload an image or video of the
+          incident.
+          If an emergency situation has occurred, contact authorities immediately
+          for medical help.
+        </Text>
+        <View style = {styles.container}>
+
+          <Text style = {styles.secondHeader}>
+            Incident Report
+          </Text>
+
+          <TextInput style = {styles.moreInfo}
+            placeholder="   Description"
+            multiline={true}
+          >
+          </TextInput>
+
+          <TouchableOpacity
+            style = {styles.addButton}
+            title="Add Image"
+            onPress={this._pickImage}>
+              <Text style = {styles.buttonText}> Add Image
+              </Text>
+          </TouchableOpacity>
+              {image && <Image source={{ uri: image }}
+              style={{ width: 200, height: 200 }} /
+              >}
+
+          <TouchableOpacity style = {styles.submitButton}>
+            <Text style = {styles.buttonText}> Submit
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity
+          style = {styles.backButton}
+          onPress={
+            () => navigation.dispatch(StackActions.pop(1))}
+        >
+          <Text style = {styles.backArrow}>
+            ←
           </Text>
         </TouchableOpacity>
       </View>
-
-      <TouchableOpacity
-        style = {styles.backButton}
-        onPress={
-          () => navigation.dispatch(StackActions.pop(1))}
-      >
-        <Text style = {styles.backArrow}>
-          ←
-        </Text>
-      </TouchableOpacity>
-    </View>
-  )
+    )
+  }
 }
 
 const styles = StyleSheet.create({
@@ -112,30 +158,35 @@ const styles = StyleSheet.create({
     top: 10,
   },
 
-  infoBox: {
-    backgroundColor: 'rgba(158, 101, 144, 0.2)',
-    height: 50,
-    width: 275,
-    alignSelf: 'center',
-    marginVertical: 25,
-    borderRadius: 25
-  },
 
   moreInfo: {
     backgroundColor:'rgba(158, 101, 144, 0.2)',
-    height: 50,
+    height: 400,
     width: 275,
     alignSelf:'center',
-    borderRadius: 25
+    borderRadius: 25,
+    top: 25
   },
 
   submitButton: {
     backgroundColor: 'rgba(158, 101, 144, 0.7)',
     height: 50,
-    width: 275,
+    width: 125,
     alignSelf: 'center',
-    marginVertical: 25,
-    borderRadius: 25
+    left: 80,
+    marginVertical: 35,
+    borderRadius: 25,
+    bottom: 120
+  },
+
+  addButton: {
+    backgroundColor: 'rgba(158, 101, 144, 0.5)',
+    height: 50,
+    width: 125,
+    alignSelf: 'center',
+    marginVertical: 35,
+    borderRadius: 25,
+    right: 80,
   },
 
   buttonText: {

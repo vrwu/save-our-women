@@ -1,0 +1,3 @@
+flask
+Pyrebase4==4.3.0
+twilio==6.44.1

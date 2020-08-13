@@ -33,8 +33,7 @@ export function forgotPassScreen({navigation}){
         <TouchableOpacity style = {styles.enterButton}
           title = {"Send Email"}
           onPress={
-          //  () => navigation.navigate('welcome')}
-            () => navigation.dispatch(StackActions.pop(1))}
+            () => navigation.dispatch(StackActions.pop(1)), Alert.alert('Email Sent!')}
         >
                   <Text style = {styles.buttonText}>
             Send Email
