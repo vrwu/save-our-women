@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StackActions } from '@react-navigation/native';
-import BottomSheet from 'reanimated-bottom-sheet'
 import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
   Keyboard, Alert, TextInput, Image, ScrollView, FlatList, Component, Root
  } from 'react-native';

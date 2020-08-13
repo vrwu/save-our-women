@@ -15,6 +15,9 @@ import {signUpScreen} from './Welcome/signUpScreen';
 import {EmergencySOS} from './Welcome/EmergencySOS';
 import {Contacts} from './Welcome/Contacts';
 import {profile} from './Welcome/profile';
+import newsfeed from './Welcome/newsfeed';
+import newReport from './Welcome/newReport';
+
 
 const VALID_EMAIL = "sow@save-our-women.com"
 const VALID_PASSWORD = "tech-tank"
@@ -96,6 +99,14 @@ export default function App() {
         <Stack.Screen
           name="profile page"
           component={profile}
+        />
+        <Stack.Screen
+          name="newsfeed"
+          component={newsfeed}
+        />
+        <Stack.Screen
+          name="new report"
+          component={newReport}
         />
       </Stack.Navigator>
     </NavigationContainer>
