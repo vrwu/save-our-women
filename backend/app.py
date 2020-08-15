@@ -188,7 +188,10 @@ def emergency_contacts():
         name = user.key()
         name_arr.append(name)
 
-    return render_template('emergency_contacts.html', name=name_arr)
+        phone = user.val()
+        phone_arr.append(phone)
+
+    return render_template('emergency_contacts.html', name=name_arr, phone=phone_arr)
 
 
 @app.route('/add_emergency_contact', methods=['GET', 'POST'])
@@ -341,7 +344,7 @@ def map():
         coords_arr.append(details_arr)
         details_arr = []
 
-        # [[DATE, LAT, LONG], [DATE, LAT, LONG]]
+    # [[DATE, LAT, LONG], [DATE, LAT, LONG]]
     return render_template('map.html', coord=coords_arr)
 
 if __name__ == '__main__':

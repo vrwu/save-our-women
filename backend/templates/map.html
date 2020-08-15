@@ -16,6 +16,10 @@
       </head>
     <body>
         <h1>Map</h1>
+
+        <!-- 
+            to grab the user's current location so the map is centered in the area where they are in!!!
+        -->
        <script>
             if (navigator.geolocation)
                 navigator.geolocation.getCurrentPosition(function(position) {
@@ -28,7 +32,24 @@
                 console.log("geolocation not supported");
         
         </script>
+        <!-- this refers to the style above everything-->
         <div id="map"></div>
+
+        <!-- 
+            var options to center and adjust zoom
+            markers will represent each incident
+                - HAVEN'T FIGURED A WAY TO DISPLAY OUR ARRAY OF
+                COORDINATES PASSED FROM DATABASE (coords_arr in python)
+                - the markers array below is from a tutorial where they
+                hard coded coordinates!
+            addMarker function will add a marker at every coordinate in markers[]
+            
+            markers can have: custom icon, location of coordinates, content
+            What is being passed in from python is an array of [date, lat, long]
+                - date is meant to be the 'content' 
+            upon clicking the marker, the content is shown
+
+        -->
         <script>
             function initMap(){
 

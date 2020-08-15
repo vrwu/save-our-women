@@ -3,9 +3,9 @@
     <header><h3>Make Report</h3>
     </header>
 
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <body>
 
+        
         <form id = "location-form" action="/make_report" method="POST" enctype="multipart/form-data">
             <p>Location:<br><input id="search" type= "text" name="location"><br>
             <p>Latitude:<input id="latitude" type= "text" name="latitude" readonly><br></p>
@@ -16,7 +16,16 @@
             <input type="submit" name="submit"></p> 
         </form>
 
-        
+        <!-- 
+            CODE EXPLANATION:
+            input is taking search from the form above, it is the location of the incident
+            autocomplete will then list related locations to that value
+
+            everything below is to get the latitude and longitude
+            latitude and longitude  in the form above are READ ONLY so no one can change it
+                - i found it easier to pass back to python this way so the coordinates
+                    can be used to plug into the map
+        -->
         <script>
             function initAutocomplete() {
                 var input = document.getElementById('search')

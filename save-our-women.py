@@ -5,8 +5,6 @@ from twilio.rest import Client
 from datetime import datetime, timedelta
 import time
 import googlemaps
-from geopy.geocoders import Nominatim 
-from geopy import geocoders
 
 
 account_sid = "AC64d5bde78b62b02e3b6a90066b0f70ca"
@@ -48,6 +46,7 @@ db = firebase.database()
 # storage
 storage = firebase.storage()
 
+# uid is each user's unique id
 uid = int(0)
 
 @app.route('/')
@@ -58,7 +57,7 @@ def start():
     # user session still logged in
     if "uid" in session:
         uid = session['uid']
-        return jsonify('reason': 'User still logged in', value=uid), 200
+        return jsonify({'reason': 'User still logged in', 'value': uid}), 200
 
     # user not logged in, prompt to log in page
     else:
@@ -74,13 +73,13 @@ def signup():
     password = request.json['pass']
     phone = request.json['num']
 
+    # creates an account on database and requests for verification
     try:
-        # creates an account on database and requests for verification
         user = auth.create_user_with_email_and_password(email, password)
         auth.send_email_verification(user['idToken'])
 
+    # message 'Account creation failed. Please ensure a new email or a password of at least 6 characters'
     except:
-        # message 'Account creation failed. Please ensure a new email or a password of at least 6 characters'
         return({'reason': 'Account creation unsuccessful'}), 400
 
     # sets session as permanent for x days and establishes the user uid
@@ -93,7 +92,7 @@ def signup():
     data = {"Name": name, "Email": email, "Phone Number": phone}
     db.child("users").child(uid).child("details").set(data)
 
-    return jsonify('reason': 'Account successfully created', value=uid), 200
+    return jsonify({'reason': 'Account successfully created', 'value': uid}), 200
 
 
 @app.route('/login', methods=['POST'])
@@ -101,9 +100,10 @@ def login():
 
     global uid
 
+    # checks if user still in session
     if "uid" in session:
         uid = session['uid']
-        return jsonify('reason': 'User still logged in', value=uid), 200
+        return jsonify({'reason': 'User still logged in', 'value': uid}), 200
 
     else:
         email = request.json['email']
@@ -113,26 +113,33 @@ def login():
     try:
         user = auth.sign_in_with_email_and_password(email, password)
 
+     # pop up message return "Invalid email and/or password"
     except:
-        # pop up message return "Invalid email and/or password"
         return({'reason': 'Invalid credentials'}), 400
     
+    # create a permanent session of x days
     session.permanent = True
     uid = user['localId']
     session["uid"] = uid
 
     # a pop up message with logged in should show and it should then proceed to the home page
-    return jsonify('reason': 'Account successfully loggin in'), 200
+    return jsonify({'reason': 'Account successfully loggin in'}), 200
 
 
 @app.route('/forgotpass', methods=['POST'])
 def forgotpass():
 
-    email = request.json['email']
+    email = request.json['email'] if 'email' in request.json else None
     auth.send_password_reset_email(email)
 
-    # should flash a message saying that an email has been sent to reset password
-    return jsonify('reason': 'Email sent to reset password'), 200
+    if email is None:
+        return({'reason': 'Empty email entry'}), 400
+
+    else: 
+         message = "Email has been sent to " + email
+
+        # should flash a message saying that an email has been sent to reset password
+        return jsonify({'reason': 'Email sent to reset password', 'message': message}), 200
 
 # logs out and returns to start
 
@@ -142,8 +149,7 @@ def logout():
 
     session.pop("uid", None)
 
-    # auth.logout()
-    return jsonify('reason': 'Successful logout'), 200
+    return jsonify({'reason': 'Successful logout'}), 200
 
 # dont think need a home page for back end?
 '''
@@ -158,14 +164,13 @@ def home():
 
 @app.route('/profile', methods=['GET'])
 def profile():
-    # profile -> emergency contact -> add emergency contacts
 
     global uid
     name = db.child("users").child(uid).child('details').child('Name').get().val()
     email = db.child("users").child(uid).child('details').child('Email').get().val()
     phone = db.child("users").child(uid).child('details').child('Phone Number').get().val()
 
-    return jsonify('reason': 'Profile data sent', name=name, email=email, phone=phone), 200
+    return jsonify({'reason': 'Profile data bundle sent', 'name': name, 'email': email, 'phone': phone}), 200
 
 
 @app.route('/emergency_contacts', methods=['GET'])
@@ -173,6 +178,7 @@ def emergency_contacts():
 
     global uid
 
+    # arrays 
     name_arr = []
     phone_arr = []
 
@@ -181,7 +187,10 @@ def emergency_contacts():
         name = user.key()
         name_arr.append(name)
 
-    return jsonify('reason': 'Emergency Contact data sent', name=name_arr), 200
+        phone = user.val()
+        phone_arr.append(phone)
+
+    return jsonify({'reason': 'Emergency Contact data sent', 'name': name_arr}), 200
 
 
 @app.route('/add_emergency_contact', methods=['POST'])
@@ -195,7 +204,7 @@ def add_emergency_contact():
     # Name: Phone Number
     db.child("users").child(uid).child("emergency contacts").child(name).set(phone)
 
-    return jsonify('reason': 'Emergency Contact Added'), 200
+    return jsonify({'reason': 'Emergency Contact Added'}), 200
 
 
 # sends sos message to the numbers listed below
@@ -226,7 +235,7 @@ def send_emergency_sos():
         )
 
     # pop up message to show the numbers that the message was sent to
-    return jsonify('reason': 'Emergency SOS sent to contacts', phone=phone_arr), 200
+    return jsonify({'reason': 'Emergency SOS sent to contacts', 'phone': phone_arr}), 200
 
 
 @app.route('/make_report', methods=['POST'])
@@ -267,7 +276,7 @@ def make_report():
     db.child("coordinates").child(date).child("latitude").set(lat)
     db.child("coordinates").child(date).child("longitude").set(lng)
 
-    return jsonify('reason': 'Incident Report created'), 200
+    return jsonify({'reason': 'Incident Report created'}), 200
 
 # need more instruction on how to filter it: location/time etc
 @app.route('/recent_reports', methods=['GET'])
@@ -299,7 +308,7 @@ def recent_reports():
 
     # returns array of arrays, [[DATE + TIME, URL TO IMAGE, LOCATION, INCIDENT], [August 12, 2020 08:40 PM, https://, LA, INCIDENT]]
     # SOME REPORTS MAY NOT HAVE URLS!!! 
-    return jsonify('reason': 'Recent Reports Bundle Created', reports=incident_arr), 200
+    return jsonify({'reason': 'Recent Reports Bundle Created', 'reports': incident_arr}), 200
 
 @app.route('/map', methods=['GET'])
 def map():
@@ -329,8 +338,8 @@ def map():
         coords_arr.append(details_arr)
         details_arr = []
 
-        # [[DATE, LAT, LONG], [DATE, LAT, LONG]]
-    return jsonify('reason': 'Coordinates of Incidents Sent', coord=coords_arr), 200
+     # [[DATE, LAT, LONG], [DATE, LAT, LONG]]
+    return jsonify({'reason': 'Coordinates of Incidents Sent', 'coord': coords_arr}), 200
 
 if __name__ == '__main__':
     app.run()
