@@ -5,7 +5,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {home} from '../Welcome/home'
 import {EmergencySOS} from '../Welcome/EmergencySOS'
-import {profile} from '../Welcome/profile'
+import profile from '../Welcome/profile'
 
 const Tab = createBottomTabNavigator();
 

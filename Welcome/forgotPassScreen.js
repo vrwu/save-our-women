@@ -10,11 +10,21 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput,
 from 'react-native';
 
 export function forgotPassScreen({navigation}){
+
   return (
     <KeyboardAvoidingView style = {styles.keyboard}
     behavior ='padding'>
       <View style = {styles.container}>
         <StatusBar style="auto"/>
+        <TouchableOpacity
+          style = {styles.backButton}
+          onPress={
+            () => navigation.dispatch(StackActions.pop(1))}
+        >
+          <Text style = {styles.backArrow}>
+            ←
+          </Text>
+        </TouchableOpacity>
         <Text style = {styles.mainText}>
           Forgot password?
         </Text>
@@ -33,9 +43,9 @@ export function forgotPassScreen({navigation}){
         <TouchableOpacity style = {styles.enterButton}
           title = {"Send Email"}
           onPress={
-            () => navigation.dispatch(StackActions.pop(1)), Alert.alert('Email Sent!')}
+            () =>  Alert.alert('Email Sent!')}
         >
-                  <Text style = {styles.buttonText}>
+          <Text style = {styles.buttonText}>
             Send Email
           </Text>
         </TouchableOpacity>
@@ -48,6 +58,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#9e6590'
+  },
+
+  backArrow: {
+    height: 100,
+    width: 100,
+    color:'white',
+    left: 40,
+    top: 80,
+    position: 'absolute',
+    color: 'rgba(0, 0, 0, 0.3)',
+    fontSize: 30,
+
   },
 
   mainText: {

@@ -14,7 +14,7 @@ import {forgotPassScreen} from './Welcome/forgotPassScreen'
 import {signUpScreen} from './Welcome/signUpScreen';
 import {EmergencySOS} from './Welcome/EmergencySOS';
 import {Contacts} from './Welcome/Contacts';
-import {profile} from './Welcome/profile';
+import profile from './Welcome/profile';
 import newsfeed from './Welcome/newsfeed';
 import newReport from './Welcome/newReport';
 

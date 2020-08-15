@@ -33,6 +33,7 @@ export default class newReport extends React.Component {
         aspect: [4, 3],
         quality: 1,
       });
+      console.log(result);
       if (!result.cancelled) {
         this.setState({ image: result.uri });
       }
@@ -79,8 +80,8 @@ export default class newReport extends React.Component {
               <Text style = {styles.buttonText}> Add Image
               </Text>
           </TouchableOpacity>
-              {image && <Image source={{ uri: image }}
-              style={{ width: 200, height: 200 }} /
+              {image && <Image source={require('../src/icons/polaroid.png')}
+              style = {styles.photoUpload} /
               >}
 
           <TouchableOpacity style = {styles.submitButton}>
@@ -195,5 +196,14 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "bold",
     marginVertical: 15
+  },
+
+  photoUpload: {
+    height: 50,
+    width: 50,
+    position: 'absolute',
+    left: 75,
+    top: 520
+
   }
 })
