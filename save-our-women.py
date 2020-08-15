@@ -45,6 +45,7 @@ auth = firebase.auth()
 # database
 db = firebase.database()
 
+# storage
 storage = firebase.storage()
 
 uid = int(0)
@@ -53,93 +54,85 @@ uid = int(0)
 def start():
 
     global uid
+
+    # user session still logged in
     if "uid" in session:
         uid = session['uid']
-        return render_template('home.html', value=uid)
+        return jsonify('reason': 'User still logged in', value=uid), 200
 
+    # user not logged in, prompt to log in page
     else:
-        return render_template("start.html")
+        return({'reason': 'User not logged in'}), 400
 
 
-@app.route('/signup', methods=['GET', 'POST'])
+@app.route('/signup', methods=['POST'])
 def signup():
 
-    if request.method == 'GET':
-        return render_template('signup.html')
+    # retrieves name, email, pass, and number from user
+    name = request.json['name']
+    email = request.json['email']
+    password = request.json['pass']
+    phone = request.json['num']
 
-    else:
-        # retrieves name, email, pass, and number from user
-        name = request.form['name']
-        email = request.form['email']
-        password = request.form['pass']
-        phone = request.form['num']
+    try:
+        # creates an account on database and requests for verification
+        user = auth.create_user_with_email_and_password(email, password)
+        auth.send_email_verification(user['idToken'])
 
-        try:
-            # creates an account on database and requests for verification
-            user = auth.create_user_with_email_and_password(email, password)
-            auth.send_email_verification(user['idToken'])
+    except:
+        # message 'Account creation failed. Please ensure a new email or a password of at least 6 characters'
+        return({'reason': 'Account creation unsuccessful'}), 400
 
-        except:
-            # message 'Account creation failed. Please ensure a new email or a password of at least 6 characters'
-            return render_template('signup.html')
+    # sets session as permanent for x days and establishes the user uid
+    global uid
+    session.permanent = True
+    uid = user['localId']
+    session["uid"] = uid
 
-        global uid
-        session.permanent = True
-        uid = user['localId']
-        session["uid"] = uid
+    # assigns data and pushes to database
+    data = {"Name": name, "Email": email, "Phone Number": phone}
+    db.child("users").child(uid).child("details").set(data)
 
-        data = {"Name": name, "Email": email, "Phone Number": phone}
-        db.child("users").child(uid).child("details").set(data)
-        return render_template('add_emergency_contact.html', value=uid)
-
-# sign up -> add emergency contacts
+    return jsonify('reason': 'Account successfully created', value=uid), 200
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['POST'])
 def login():
 
     global uid
-    if request.method == 'GET':
 
-        if "uid" in session:
-            uid = session['uid']
-            return render_template('home.html', value=uid)
-
-        else: 
-            return render_template('login.html')
+    if "uid" in session:
+        uid = session['uid']
+        return jsonify('reason': 'User still logged in', value=uid), 200
 
     else:
-        email = request.form['email']
-        password = request.form['pass']
+        email = request.json['email']
+        password = request.json['pass']
 
-    # issue with email verification, don't know how to check for email verified or not
+    # try to sign in
     try:
         user = auth.sign_in_with_email_and_password(email, password)
 
     except:
         # pop up message return "Invalid email and/or password"
-        return render_template('login.html')
+        return({'reason': 'Invalid credentials'}), 400
     
     session.permanent = True
     uid = user['localId']
     session["uid"] = uid
 
     # a pop up message with logged in should show and it should then proceed to the home page
-    return render_template('home.html')
+    return jsonify('reason': 'Account successfully loggin in'), 200
 
 
-@app.route('/forgotpass', methods=['GET', 'POST'])
+@app.route('/forgotpass', methods=['POST'])
 def forgotpass():
 
-    if request.method == 'GET':
-        return render_template('forgotpass.html')
-
-    else:
-        email = request.form['email']
-        auth.send_password_reset_email(email)
+    email = request.json['email']
+    auth.send_password_reset_email(email)
 
     # should flash a message saying that an email has been sent to reset password
-    return render_template('login.html')
+    return jsonify('reason': 'Email sent to reset password'), 200
 
 # logs out and returns to start
 
@@ -148,12 +141,12 @@ def forgotpass():
 def logout():
 
     session.pop("uid", None)
+
     # auth.logout()
-    return render_template('start.html')
+    return jsonify('reason': 'Successful logout'), 200
 
-# home screen
-
-
+# dont think need a home page for back end?
+'''
 @app.route('/home', methods=['GET', 'POST'])
 def home():
 
@@ -161,9 +154,9 @@ def home():
     return render_template('home.html', value=uid)
 
 # profile // TO BE EDITED, needs to display user information!!
+'''
 
-
-@app.route('/profile', methods=['GET', 'POST'])
+@app.route('/profile', methods=['GET'])
 def profile():
     # profile -> emergency contact -> add emergency contacts
 
@@ -172,10 +165,10 @@ def profile():
     email = db.child("users").child(uid).child('details').child('Email').get().val()
     phone = db.child("users").child(uid).child('details').child('Phone Number').get().val()
 
-    return render_template('profile.html', name=name, email=email, phone=phone)
+    return jsonify('reason': 'Profile data sent', name=name, email=email, phone=phone), 200
 
 
-@app.route('/emergency_contacts', methods=['GET', 'POST'])
+@app.route('/emergency_contacts', methods=['GET'])
 def emergency_contacts():
 
     global uid
@@ -188,29 +181,25 @@ def emergency_contacts():
         name = user.key()
         name_arr.append(name)
 
-    return render_template('emergency_contacts.html', name=name_arr)
+    return jsonify('reason': 'Emergency Contact data sent', name=name_arr), 200
 
 
-@app.route('/add_emergency_contact', methods=['GET', 'POST'])
+@app.route('/add_emergency_contact', methods=['POST'])
 def add_emergency_contact():
 
-    if request.method == 'GET':
-        return render_template('add_emergency_contact.html')
+    full_name = request.json['name']
+    phone = request.json['num']
 
-    else:
-        full_name = request.form['name']
-        phone = request.form['num']
+    name = str(full_name)
 
-        name = str(full_name)
+    # Name: Phone Number
+    db.child("users").child(uid).child("emergency contacts").child(name).set(phone)
 
-        # Name: Phone Number
-        db.child("users").child(uid).child("emergency contacts").child(name).set(phone)
-
-    return render_template('home.html')
+    return jsonify('reason': 'Emergency Contact Added'), 200
 
 
 # sends sos message to the numbers listed below
-@app.route('/send_emergency_sos', methods=['GET', 'POST'])
+@app.route('/send_emergency_sos', methods=['GET'])
 def send_emergency_sos():
 
     global uid
@@ -236,53 +225,52 @@ def send_emergency_sos():
             to=number
         )
 
-    return render_template('send_emergency_sos.html', phone=phone_arr)
+    # pop up message to show the numbers that the message was sent to
+    return jsonify('reason': 'Emergency SOS sent to contacts', phone=phone_arr), 200
 
 
-@app.route('/make_report', methods=['GET', 'POST'])
+@app.route('/make_report', methods=['POST'])
 def make_report():
 
-    if request.method == 'GET':
-        return render_template('make_report.html')
+    # getting the time and changing to current timezone
+    today = datetime.now()
+    curr_time = time.localtime()
 
+    day = today.strftime("%B %d, %Y ")
+    curr_time = str(time.strftime("%H:%M", curr_time))
+    clock = datetime.strptime(curr_time, "%H:%M")
+    clock = clock.strftime("%I:%M %p").lstrip('0')
+    date = day + clock
+
+    # gets report information to be pushed to database
+    location = request.json['location']
+    report = request.json['report']
+    photo = request.files['fileToUpload']
+    lat = request.json['latitude']
+    lng = request.json['longitude']
+
+    picture = str(photo)
+
+    # if the person did not upload a picture
+    if picture == "<FileStorage: '' ('application/octet-stream')>":
+        link = ""
+
+    # picture is uploaded to firebase storage and url is generated and pushed to database
     else:
-        
-        # getting the time and changing to current timezone
-        today = datetime.now()
-        curr_time = time.localtime()
+        storage.child("images/" + picture).put(photo)
+        link = storage.child('images/' + picture).get_url(None)
+        db.child("reports").child(date).child('image').set(link)
 
-        day = today.strftime("%B %d, %Y ")
-        curr_time = str(time.strftime("%H:%M", curr_time))
-        clock = datetime.strptime(curr_time, "%H:%M")
-        clock = clock.strftime("%I:%M %p").lstrip('0')
-        date = day + clock
+    # push more information to database
+    db.child("reports").child(date).child('location').set(location)
+    db.child("reports").child(date).child('report').set(report)
+    db.child("coordinates").child(date).child("latitude").set(lat)
+    db.child("coordinates").child(date).child("longitude").set(lng)
 
-        # gets report information to be pushed to database
-        location = request.form['location']
-        report = request.form['report']
-        photo = request.files['fileToUpload']
-        lat = request.form['latitude']
-        lng = request.form['longitude']
-
-        picture = str(photo)
-
-        if picture == "<FileStorage: '' ('application/octet-stream')>":
-            link = ""
-
-        else:
-            storage.child("images/" + picture).put(photo)
-            link = storage.child('images/' + picture).get_url(None)
-            db.child("reports").child(date).child('image').set(link)
-
-        db.child("reports").child(date).child('location').set(location)
-        db.child("reports").child(date).child('report').set(report)
-        db.child("coordinates").child(date).child("latitude").set(lat)
-        db.child("coordinates").child(date).child("longitude").set(lng)
-
-        return render_template('home.html')
+    return jsonify('reason': 'Incident Report created'), 200
 
 # need more instruction on how to filter it: location/time etc
-@app.route('/recent_reports', methods=['GET', 'POST'])
+@app.route('/recent_reports', methods=['GET'])
 def recent_reports():
     
     all_reports = db.child("reports").get()
@@ -311,7 +299,7 @@ def recent_reports():
 
     # returns array of arrays, [[DATE + TIME, URL TO IMAGE, LOCATION, INCIDENT], [August 12, 2020 08:40 PM, https://, LA, INCIDENT]]
     # SOME REPORTS MAY NOT HAVE URLS!!! 
-    return render_template('recent_reports.html', reports=incident_arr)
+    return jsonify('reason': 'Recent Reports Bundle Created', reports=incident_arr), 200
 
 @app.route('/map', methods=['GET'])
 def map():
@@ -342,7 +330,7 @@ def map():
         details_arr = []
 
         # [[DATE, LAT, LONG], [DATE, LAT, LONG]]
-    return render_template('map.html', coord=coords_arr)
+    return jsonify('reason': 'Coordinates of Incidents Sent', coord=coords_arr), 200
 
 if __name__ == '__main__':
     app.run()
