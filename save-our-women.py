@@ -4,16 +4,12 @@ import os
 from twilio.rest import Client
 from datetime import datetime, timedelta
 import time
-import googlemaps
 
 
 account_sid = "AC64d5bde78b62b02e3b6a90066b0f70ca"
-auth_token = os.environ.get('API_TWILIO')
+auth_token = "b9a10c6cf4a5ced732ec7fffb871c98b"
 # ask vivian w for twilio api
 client = Client(account_sid, auth_token)
-
-google_api_key = os.environ.get('GOOGLE_API')
-gmap_client = googlemaps.Client(key = google_api_key)
 
 app = Flask(__name__)
 app.secret_key = "hello"
@@ -25,7 +21,7 @@ They can be changed to accomodate for whatever frontend language is used
 '''
 # ask for api
 firebaseConfig = {
-    'apiKey': os.environ.get('API_FIREBASE'),
+    'apiKey': "AIzaSyA1UYeJTygTIPNIBTLd_upZ8EsCjL5iUNs",
     'authDomain': "save-our-women-b9aef.firebaseapp.com",
     'databaseURL': "https://save-our-women-b9aef.firebaseio.com",
     'projectId': "save-our-women-b9aef",
@@ -138,8 +134,8 @@ def forgotpass():
     else: 
          message = "Email has been sent to " + email
 
-        # should flash a message saying that an email has been sent to reset password
-        return jsonify({'reason': 'Email sent to reset password', 'message': message}), 200
+    # should flash a message saying that an email has been sent to reset password
+    return jsonify({'reason': 'Email sent to reset password', 'message': message}), 200
 
 # logs out and returns to start
 
