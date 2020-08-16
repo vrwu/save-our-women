@@ -15,6 +15,7 @@ implementations that need google api:
     the latitude and longitude coordinates so a google map link can be formed and thus sent to emergency contacts
 
 3. make_report
+    using Google Places API
     when typing in a location for the incident, the user can autocomplete their location
         - for example: University of California will bring suggestions like UCLA, UCSD, UCSB etc
     once a selection has been made, the latitude and longitude of that location will be
