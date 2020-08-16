@@ -10,7 +10,7 @@ from geopy import geocoders
 
 
 account_sid = "AC64d5bde78b62b02e3b6a90066b0f70ca"
-auth_token = os.environ.get('API_TWILIO')
+auth_token = "2bc12c8c40506bad0bdd52490eb7e818"
 # ask vivian w for twilio api
 client = Client(account_sid, auth_token)
 
@@ -218,6 +218,13 @@ def send_emergency_sos():
 
     global uid
 
+    '''
+    lat = request.form['latitude']
+    lng = request.form['longitude']
+
+    map_link = "http://www.google.com/maps/place/" + lat + "," + lng
+    '''
+
     all_users = db.child("users").child(uid).child('emergency contacts').get()
     name = str(db.child("users").child(uid).child('details').child('Name').get().val())
     name = name.replace('"', "")
@@ -232,7 +239,7 @@ def send_emergency_sos():
         phone_arr.append(number)
 
         # needs name or else find a way to use their own phone number
-        message = "SOS! Your friend " + name + " is in trouble and needs your help at this location!"
+        message = "SOS! Your friend " + name + " is in trouble and needs your help at this location! " # + map_link
         client.messages.create(
             body=message,
             from_="+13213042130",
