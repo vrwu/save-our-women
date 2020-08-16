@@ -7,10 +7,7 @@ import time
 
 
 account_sid = "AC64d5bde78b62b02e3b6a90066b0f70ca"
-auth_token = "b9a10c6cf4a5ced732ec7fffb871c98b"
-
-# 2bc12c8c40506bad0bdd52490eb7e818
-# use this api key for twilio and then change back if you push to github
+auth_token = "2bc12c8c40506bad0bdd52490eb7e818"
 
 client = Client(account_sid, auth_token)
 
