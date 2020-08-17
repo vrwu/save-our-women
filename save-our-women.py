@@ -15,11 +15,6 @@ app = Flask(__name__)
 app.secret_key = "hello"
 app.permanent_session_lifetime = timedelta(days=30)
 
-'''
-!!! most returns and forms connect with HTML since idk react native/swift/etc and I used quick html for visualization/testing purposes
-They can be changed to accomodate for whatever frontend language is used  
-'''
-# ask for api
 firebaseConfig = {
     'apiKey': "AIzaSyA1UYeJTygTIPNIBTLd_upZ8EsCjL5iUNs",
     'authDomain': "save-our-women-b9aef.firebaseapp.com",
@@ -31,6 +26,7 @@ firebaseConfig = {
     'measurementId': "G-62FZQ6M0FF"
 }
 
+# initialize pyrebase
 firebase = pyrebase.initialize_app(firebaseConfig)
 
 # authentication
@@ -45,7 +41,7 @@ storage = firebase.storage()
 # uid is each user's unique id
 uid = int(0)
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def start():
 
     global uid
@@ -57,7 +53,7 @@ def start():
 
     # user not logged in, prompt to log in page
     else:
-        return({'reason': 'User not logged in'}), 400
+        return({'reason': 'User not logged in'}), 200
 
 
 @app.route('/signup', methods=['POST'])
@@ -140,7 +136,7 @@ def forgotpass():
 # logs out and returns to start
 
 
-@app.route('/logout', methods=['GET', 'POST'])
+@app.route('/logout', methods=['GET'])
 def logout():
 
     session.pop("uid", None)
@@ -186,14 +182,20 @@ def emergency_contacts():
         phone = user.val()
         phone_arr.append(phone)
 
-    return jsonify({'reason': 'Emergency Contact data sent', 'name': name_arr}), 200
+    return jsonify({'reason': 'Emergency Contact data sent', 'name': name_arr, 'phone': phone_arr}), 200
 
 
 @app.route('/add_emergency_contact', methods=['POST'])
 def add_emergency_contact():
 
-    full_name = request.json['name']
-    phone = request.json['num']
+    full_name = request.json['name'] if 'name' in request.json else None
+    phone = request.json['num'] if 'phone' in request.json else None
+
+    if full_name is None:
+        return({'reason': 'Empty name entry'}), 400
+
+    if phone is None:
+        return({'reason': 'Empty phone entry'}), 400
 
     name = str(full_name)
 
@@ -204,14 +206,14 @@ def add_emergency_contact():
 
 
 # sends sos message to the numbers listed below
-@app.route('/send_emergency_sos', methods=['GET'])
+@app.route('/send_emergency_sos', methods=['GET', 'POST'])
 def send_emergency_sos():
 
     global uid
-
+    map_link = ""
     '''
-    lat = request.form['latitude']
-    lng = request.form['longitude']
+    lat = request.json['latitude']
+    lng = request.json['longitude']
 
     map_link = "http://www.google.com/maps/place/" + lat + "," + lng
     '''
@@ -230,7 +232,7 @@ def send_emergency_sos():
         phone_arr.append(number)
 
         # needs name or else find a way to use their own phone number
-        message = "SOS! Your friend " + name + " is in trouble and needs your help at this location!" # + map_link
+        message = "SOS! Your friend " + name + " is in trouble and needs your help at this location!" + map_link
         client.messages.create(
             body=message,
             from_="+13213042130",
