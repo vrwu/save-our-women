@@ -11,8 +11,10 @@ implementations that need google api:
     - https://www.youtube.com/watch?v=AzjWv1X-uyg for google maps for react native tutorial?
 
 2. emergency sos
-    grab current location (grabiing geolocation same as map) of the user and then pass to backend
-    the latitude and longitude coordinates so a google map link can be formed and thus sent to emergency contacts
+    grab current location (grabiing geolocation same as map not using google api) of the user and then pass to backend
+    the latitude and longitude coordinates (through a READ ONLY json form) 
+    so a google map link can be formed and thus sent to emergency contacts
+        - refer to send_emergency_sos.html !!!!!
 
 3. make_report
     using Google Places API
