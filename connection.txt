@@ -99,6 +99,7 @@ recent_reports():
     input: NA
     return: 
         - {'reason': 'Recent Reports Bundle Created', 'reports': incident_arr}, 200
+            - [[DATE + TIME, URL TO IMAGE, LOCATION, INCIDENT], [August 12, 2020 08:40 PM, https://, LA, INCIDENT]]
 
 map():
     method: 'get'
@@ -106,3 +107,4 @@ map():
     input: NA
     return:
         - {'reason': 'Coordinates of Incidents Sent', 'coord': coords_arr}, 200
+            - [[DATE, REPORT, LAT, LONG], [DATE, REPORT, LAT, LONG]]

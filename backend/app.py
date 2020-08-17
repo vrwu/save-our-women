@@ -335,6 +335,10 @@ def map():
         date = date.replace('"', "")
         details_arr.append(date)
 
+    # append corresponding incident report with it
+        incident = db.child("reports").child(date).child("report").get().val()
+        details_arr.append(incident)
+        
         reps = db.child("coordinates").child(date).get()
 
         # iterate through the lat and long INSIDE the dates

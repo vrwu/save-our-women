@@ -175,6 +175,7 @@ def emergency_contacts():
     phone_arr = []
 
     all_users = db.child("users").child(uid).child('emergency contacts').get()
+
     for user in all_users.each():
         name = user.key()
         name_arr.append(name)
@@ -328,6 +329,10 @@ def map():
         date = date.replace('"', "")
         details_arr.append(date)
 
+        # append corresponding incident report with it
+        incident = db.child("reports").child(date).child("report").get().val()
+        details_arr.append(incident)
+
         reps = db.child("coordinates").child(date).get()
 
         # iterate through the lat and long INSIDE the dates
@@ -342,7 +347,7 @@ def map():
         coords_arr.append(details_arr)
         details_arr = []
 
-     # [[DATE, LAT, LONG], [DATE, LAT, LONG]]
+     # [[DATE, REPORT, LAT, LONG], [DATE, REPORT, LAT, LONG]]
     return jsonify({'reason': 'Coordinates of Incidents Sent', 'coord': coords_arr}), 200
 
 if __name__ == '__main__':
