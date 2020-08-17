@@ -75,8 +75,6 @@ export default class profile extends React.Component{
           Email Address:
         </Text>
 
-
-<<<<<<< HEAD
         <TouchableOpacity
           style = {styles.viewContactsButton}
           onPress={() => navigation.navigate('contacts')}
@@ -97,27 +95,7 @@ export default class profile extends React.Component{
       </View>
     )
   }
-=======
-      <TouchableOpacity
-        style = {styles.viewContactsButton}
-        onPress={() => navigation.navigate('list of contacts')}
-      >
-        <Text style = {styles.viewContactsText}>
-          View Contacts
-        </Text>
-      </TouchableOpacity>
 
-      <TouchableOpacity
-        style = {styles.addContactButton}
-        onPress={() => navigation.navigate('contacts')}
-      >
-        <Text style = {styles.addcontactText}>
-          Add Emergency Contacts
-        </Text>
-      </TouchableOpacity>
-    </View>
-  )
->>>>>>> 0ee9bf4172a15b36d525628a426c4d34b0e2a15a
 }
   const styles = StyleSheet.create({
     container: {

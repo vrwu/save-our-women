@@ -18,6 +18,7 @@ import profile from './Welcome/profile';
 import newsfeed from './Welcome/newsfeed';
 import newReport from './Welcome/newReport';
 import {contactList} from './Welcome/contactList';
+import map from './Welcome/map';
 
 
 const VALID_EMAIL = "sow@save-our-women.com"
@@ -112,6 +113,10 @@ export default function App() {
         <Stack.Screen
           name="new report"
           component={newReport}
+        />
+        <Stack.Screen
+          name="map"
+          component={map}
         />
       </Stack.Navigator>
     </NavigationContainer>

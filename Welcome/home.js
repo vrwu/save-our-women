@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
+import MapView from 'react-native-maps';
 import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
   Keyboard, Alert, TextInput, Image
  } from 'react-native';
@@ -38,10 +39,12 @@ import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
 
        <TouchableOpacity
          style = {styles.map}
+         onPress={() =>navigation.navigate('map')}
        >
-         <Text style = {styles.mapText}>
-           Map
-         </Text>
+       <Text style = {styles.mapText}>
+         Map
+       </Text>
+       <MapView style={styles.mapStyle} />
        </TouchableOpacity>
      </View>
    )
@@ -90,7 +93,8 @@ import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
       textAlign: 'right',
       right: 20,
       fontSize: 18,
-      top: 175
+      position: 'absolute',
+      top: 430
     },
 
     makeReport: {
@@ -107,7 +111,7 @@ import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
 
     map: {
       width: 378,
-      height: 400,
+      height: 465,
       position: 'absolute',
       backgroundColor: 'white',
       marginVertical: 300,
@@ -116,4 +120,11 @@ import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
       borderRadius: 25,
       top: 45
     },
+
+    mapStyle: {
+      width: 378,
+      height:400,
+      borderRadius:25,
+      bottom: 35
+    }
 });
