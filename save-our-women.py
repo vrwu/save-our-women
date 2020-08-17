@@ -7,7 +7,7 @@ import time
 
 
 account_sid = "AC64d5bde78b62b02e3b6a90066b0f70ca"
-auth_token = "2bc12c8c40506bad0bdd52490eb7e818"
+auth_token = "5ef6875b39ec719e59f64e5c7427f78c"
 
 client = Client(account_sid, auth_token)
 
