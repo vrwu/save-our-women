@@ -206,17 +206,16 @@ def add_emergency_contact():
 
 
 # sends sos message to the numbers listed below
-@app.route('/send_emergency_sos', methods=['GET', 'POST'])
+@app.route('/send_emergency_sos', methods=['POST'])
 def send_emergency_sos():
 
     global uid
     map_link = ""
-    '''
+
     lat = request.json['latitude']
     lng = request.json['longitude']
 
     map_link = "http://www.google.com/maps/place/" + lat + "," + lng
-    '''
 
     all_users = db.child("users").child(uid).child('emergency contacts').get()
     name = str(db.child("users").child(uid).child('details').child('Name').get().val())

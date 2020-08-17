@@ -215,12 +215,13 @@ def send_emergency_sos():
 
     global uid
 
-    '''
+    if request.method == 'GET':
+        return render_template('send_emergency_sos.html')
+
     lat = request.form['latitude']
     lng = request.form['longitude']
 
     map_link = "http://www.google.com/maps/place/" + lat + "," + lng
-    '''
 
     all_users = db.child("users").child(uid).child('emergency contacts').get()
     name = str(db.child("users").child(uid).child('details').child('Name').get().val())
@@ -236,7 +237,7 @@ def send_emergency_sos():
         phone_arr.append(number)
 
         # needs name or else find a way to use their own phone number
-        message = "SOS! Your friend " + name + " is in trouble and needs your help at this location! " # + map_link
+        message = "SOS! Your friend " + name + " is in trouble and needs your help at this location! " + map_link
         client.messages.create(
             body=message,
             from_="+13213042130",
