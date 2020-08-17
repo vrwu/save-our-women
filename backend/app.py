@@ -10,12 +10,9 @@ from geopy import geocoders
 
 
 account_sid = "AC64d5bde78b62b02e3b6a90066b0f70ca"
-auth_token = "2bc12c8c40506bad0bdd52490eb7e818"
-# ask vivian w for twilio api
-client = Client(account_sid, auth_token)
+auth_token = "5ef6875b39ec719e59f64e5c7427f78c"
 
-google_api_key = os.environ.get('GOOGLE_API')
-gmap_client = googlemaps.Client(key = google_api_key)
+client = Client(account_sid, auth_token)
 
 app = Flask(__name__)
 app.secret_key = "hello"
@@ -27,7 +24,7 @@ They can be changed to accomodate for whatever frontend language is used
 '''
 # ask for api
 firebaseConfig = {
-    'apiKey': os.environ.get('API_FIREBASE'),
+    'apiKey': "AIzaSyA1UYeJTygTIPNIBTLd_upZ8EsCjL5iUNs",
     'authDomain': "save-our-women-b9aef.firebaseapp.com",
     'databaseURL': "https://save-our-women-b9aef.firebaseio.com",
     'projectId': "save-our-women-b9aef",
