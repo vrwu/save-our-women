@@ -73,7 +73,7 @@ add_emergency_contact():
         - {'reason': 'Empty phone entry'}, 400
 
 send_emergency_sos():
-    method: 'get', 'post' # need to find a way to way latitude and longitude to backend
+    method: 'post'
     url: '/send_emergency_sos'
     input:
         - latitude
