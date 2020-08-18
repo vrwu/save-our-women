@@ -5,17 +5,11 @@ from twilio.rest import Client
 from datetime import datetime, timedelta
 import time
 import googlemaps
-from geopy.geocoders import Nominatim 
-from geopy import geocoders
-
 
 account_sid = "AC64d5bde78b62b02e3b6a90066b0f70ca"
 auth_token = "2bc12c8c40506bad0bdd52490eb7e818"
 # ask vivian w for twilio api
 client = Client(account_sid, auth_token)
-
-google_api_key = os.environ.get('GOOGLE_API')
-gmap_client = googlemaps.Client(key = google_api_key)
 
 app = Flask(__name__)
 app.secret_key = "hello"
@@ -27,7 +21,7 @@ They can be changed to accomodate for whatever frontend language is used
 '''
 # ask for api
 firebaseConfig = {
-    'apiKey': os.environ.get('API_FIREBASE'),
+    'apiKey': "AIzaSyA1UYeJTygTIPNIBTLd_upZ8EsCjL5iUNs",
     'authDomain': "save-our-women-b9aef.firebaseapp.com",
     'databaseURL': "https://save-our-women-b9aef.firebaseio.com",
     'projectId': "save-our-women-b9aef",
@@ -172,6 +166,7 @@ def profile():
     email = db.child("users").child(uid).child('details').child('Email').get().val()
     phone = db.child("users").child(uid).child('details').child('Phone Number').get().val()
 
+
     return render_template('profile.html', name=name, email=email, phone=phone)
 
 
@@ -210,7 +205,6 @@ def add_emergency_contact():
         db.child("users").child(uid).child("emergency contacts").child(name).set(phone)
 
     return render_template('home.html')
-
 
 # sends sos message to the numbers listed below
 @app.route('/send_emergency_sos', methods=['GET', 'POST'])
@@ -354,10 +348,14 @@ def map():
     # [[DATE, LAT, LONG], [DATE, LAT, LONG]]
     return render_template('map.html', coord=coords_arr)
 
+
 #Need to implement search
 @app.route('/tipss', methods=['GET', 'POST'])
 def tipss():
+
     return render_template('tipss.html')
+
 
 if __name__ == '__main__':
     app.run()
+
