@@ -354,5 +354,10 @@ def map():
     # [[DATE, LAT, LONG], [DATE, LAT, LONG]]
     return render_template('map.html', coord=coords_arr)
 
+#Need to implement search
+@app.route('/tipss', methods=['GET', 'POST'])
+def tipss():
+    return render_template('tipss.html')
+
 if __name__ == '__main__':
     app.run()
