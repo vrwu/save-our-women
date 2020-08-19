@@ -6,6 +6,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {home} from '../Welcome/home'
 import {EmergencySOS} from '../Welcome/EmergencySOS'
 import {profile} from '../Welcome/profile'
+//import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+//import HomeIcon from '@material-ui/icons/Home';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,7 +18,12 @@ export default function homeScreen({navigation}) {
       <Tab.Screen
         name = "home"
         component = {home}
-        options={{tabBarLabel:'Home'}}
+        options={{
+          tabBarLabel:'Home',
+//          tabBarIcon: ({ color }) => (
+  //          <Icon name="home" size={30} color={color} />
+    //      ),
+        }}
       />
       <Tab.Screen
         name = "SOS"
