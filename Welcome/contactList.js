@@ -1,12 +1,21 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
+import { StackActions } from '@react-navigation/native';
 
 
 export function contactList({navigation}) {
   return (
 
     <View style={styles.container}>
+      <TouchableOpacity
+        onPress={
+          () => navigation.dispatch(StackActions.pop(1))}
+      >
+        <Text style = {styles.backArrow}>
+          ←
+        </Text>
+      </TouchableOpacity>
       <Text style = {styles.title}>
         Emergency Contacts List
       </Text>
@@ -51,17 +60,27 @@ export function contactList({navigation}) {
 }
   const styles = StyleSheet.create({
     container: {
-      backgroundColor: 'rgba(221,221,221,1)',
+      backgroundColor: 'rgba(158, 101, 144, 1)',
       alignSelf:'center',
       height: 130,
       width:420,
 
     },
 
+    backArrow: {
+      fontSize: 25,
+      color: 'rgba(0, 0, 0, 0.3)',
+      left: 5,
+      alignSelf:'flex-start',
+      marginLeft:15,
+      top: 45,
+      position: 'absolute'
+    },
+
     title: {
-      fontSize: 30,
+      fontSize: 27,
       alignSelf: 'center',
-      color: 'rgba(158, 101, 144, 1)',
+      color: 'white',
       fontWeight: 'bold',
       top: 70
     },
