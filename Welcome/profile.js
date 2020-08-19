@@ -1,46 +1,101 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Component}
+ from 'react-native';
 
 
-export function profile({navigation}) {
-  return (
-    <View>
-      <Image style={styles.container}
-        source={require('../src/profileIcon.png')} />
+export default class profile extends React.Component{
+  state = {
+    image: null,
+  };
 
-      <Text style = {styles.nameVar}>
-        Random Name
-      </Text>
+  componentDidMount() {
+    this.getPermissionAsync();
+  }
 
-      <Text style = {styles.phoneText}>
-        Phone Number:
-      </Text>
+  getPermissionAsync = async () => {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        alert('Please turn on camera permissions to upload a photo');
+      }
+    }
+  };
 
-      <Text style = {styles.emailText}>
-        Email Address:
-      </Text>
+  _pickImage = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      console.log(result);
+      if (!result.cancelled) {
+        this.setState({ image: result.uri });
+      }
 
+      console.log(result);
+    } catch (E) {
+      console.log(E);
+    }
+  };
 
-      <TouchableOpacity
-        style = {styles.viewContactsButton}
-        onPress={() => navigation.navigate('list of contacts')}
-      >
-        <Text style = {styles.viewContactsText}>
-          View Contacts
+  render() {
+    const {navigation} = this.props
+    let { image } = this.state;
+    return (
+      <View>
+
+        <TouchableOpacity
+          title="Add Image"
+          onPress={this._pickImage}>
+          <Image style={styles.container}
+            source={require('../src/profileIcon.png')} />
+          <Text style = {styles.addPFP}>
+            +
+          </Text>
+        </TouchableOpacity>
+          {image && <Image source={{uri: image}}
+          style = {styles.pfp} /
+          >}
+
+        <Text style = {styles.nameVar}>
+          Random Name
         </Text>
-      </TouchableOpacity>
 
-      <TouchableOpacity
-        style = {styles.addContactButton}
-        onPress={() => navigation.navigate('contacts')}
-      >
-        <Text style = {styles.addcontactText}>
-          Add Emergency Contacts
+        <Text style = {styles.phoneText}>
+          Phone Number:
         </Text>
-      </TouchableOpacity>
-    </View>
-  )
+
+        <Text style = {styles.emailText}>
+          Email Address:
+        </Text>
+
+        <TouchableOpacity
+          style = {styles.viewContactsButton}
+          onPress={() => navigation.navigate('list of contacts')}
+        >
+          <Text style = {styles.viewContactsText}>
+            View Contacts
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style = {styles.addContactButton}
+          onPress={() => navigation.navigate('contacts')}
+        >
+          <Text style = {styles.addcontactText}>
+            Add Emergency Contacts
+          </Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
 }
   const styles = StyleSheet.create({
     container: {
@@ -122,6 +177,21 @@ export function profile({navigation}) {
       alignSelf:'center'
     },
 
+    addPFP: {
+      color: 'white',
+      bottom: 300,
+      fontSize: 50,
+      position: 'absolute',
+      left: 275
+    },
+
+    pfp: {
+      height: 300,
+      width: 300,
+      position: 'absolute',
+      alignSelf: 'center',
+      top: 50,
+    }
 
 
 

@@ -8,16 +8,18 @@ import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
  } from 'react-native';
 
 import homeScreen from './Welcome/homescreen'
+import home from './Welcome/home'
 import Email from './Welcome/Email';
 import Logo from './Welcome/Logo';
 import {forgotPassScreen} from './Welcome/forgotPassScreen'
 import {signUpScreen} from './Welcome/signUpScreen';
 import {EmergencySOS} from './Welcome/EmergencySOS';
 import {Contacts} from './Welcome/Contacts';
-import {profile} from './Welcome/profile';
+import profile from './Welcome/profile';
 import newsfeed from './Welcome/newsfeed';
 import newReport from './Welcome/newReport';
 import {contactList} from './Welcome/contactList';
+import map from './Welcome/map';
 
 
 const VALID_EMAIL = "sow@save-our-women.com"
@@ -112,6 +114,10 @@ export default function App() {
         <Stack.Screen
           name="new report"
           component={newReport}
+        />
+        <Stack.Screen
+          name="map"
+          component={map}
         />
       </Stack.Navigator>
     </NavigationContainer>

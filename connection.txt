@@ -1,0 +1,110 @@
+200 = success
+400 = fail
+start():
+    method: 'get'
+    url: '/'
+    input: NA
+    return: 
+        - {'reason': 'User still logged in', 'value': uid}, 200 
+        - {'reason': 'User not logged in'}, 200
+
+signup():
+    method: 'post'
+    url: '/signup'
+    input:
+        - name
+        - email
+        - pass
+        - num
+    return:
+        - {'reason': 'Account creation unsuccessful'}, 400
+        - {'reason': 'Account successfully created', 'value': uid}, 200
+
+login():
+    method: 'post'
+    url: '/login'
+    input:
+        - email
+        - pass
+    return:
+        - {'reason': 'User still logged in', 'value': uid}, 200
+        - {'reason': 'Invalid credentials'}, 400
+        - {'reason': 'Account successfully loggin in'}, 200
+
+forgotpass():
+    method: 'post'
+    url: '/forgotpass'
+    input:
+        - email
+    return:
+        - {'reason': 'Empty email entry'}, 400
+        - {'reason': 'Email sent to reset password', 'message': message}, 200
+
+logout():
+    method: 'get'
+    url: '/logout'
+    input: NA
+    return:
+        - {'reason': 'Successful logout'}, 200
+
+profile():
+    method: 'get'
+    url: '/profile'
+    input: NA
+    return:
+        - {'reason': 'Profile data bundle sent', 'name': name, 'email': email, 'phone': phone}, 200
+
+emergency_contacts():
+    method: 'get'
+    url: '/emergency_contacts'
+    input: NA
+    return:
+        - {'reason': 'Emergency Contact data sent', 'name': name_arr, 'phone': phone_arr}, 200
+
+add_emergency_contact():
+    method: 'post'
+    url: '/add_emergency_contact'
+    input:
+        - name
+        -num
+    return:
+        - {'reason': 'Emergency Contact Added'}, 200
+        - {'reason': 'Empty name entry'}, 400
+        - {'reason': 'Empty phone entry'}, 400
+
+send_emergency_sos():
+    method: 'post'
+    url: '/send_emergency_sos'
+    input:
+        - latitude
+        - longitude
+    return:
+        - {'reason': 'Emergency SOS sent to contacts', 'phone': phone_arr}, 200
+
+make_report():
+    method: 'post'
+    url: '/make_report'
+    input:
+        - location
+        - report 
+        - fileToUpload
+        - latitude
+        - longitude
+    return:
+        - {'reason': 'Incident Report created'}, 200
+
+recent_reports():
+    method: 'get'
+    url: '/recent_reports'
+    input: NA
+    return: 
+        - {'reason': 'Recent Reports Bundle Created', 'reports': incident_arr}, 200
+            - [[DATE + TIME, URL TO IMAGE, LOCATION, INCIDENT], [August 12, 2020 08:40 PM, https://, LA, INCIDENT]]
+
+map():
+    method: 'get'
+    url: '/map'
+    input: NA
+    return:
+        - {'reason': 'Coordinates of Incidents Sent', 'coord': coords_arr}, 200
+            - [[DATE, REPORT, LAT, LONG], [DATE, REPORT, LAT, LONG]]

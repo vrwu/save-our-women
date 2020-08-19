@@ -14,7 +14,9 @@ export function EmergencySOS ({navigation}){
         style={styles.details}>
         Press this button to send a SOS
         {'\n'}
-        message to your emergency contacts
+        message to your emergency contacts,
+        {'\n'}
+        including your current location
         </Text>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.SOS}>SOS</Text>

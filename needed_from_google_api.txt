@@ -1,0 +1,30 @@
+implementations that need google api:
+
+1. map
+    grab current location of the user and projects all the incidents as markers on the map
+    -html/js uses Google Maps Javascript API
+    an array of [date, latitude, longitude] is passed to front end from back end
+    date will be the 'content' of the marker
+
+    - https://www.youtube.com/watch?v=Zxf1mnP5zcw this is the tutorial i followed for that
+    - https://gyazo.com/f5058096f8c1c84fb59f1962f549bb9a lynn, ma is the 'content' that appears when press on marker
+    - https://www.youtube.com/watch?v=AzjWv1X-uyg for google maps for react native tutorial?
+
+2. emergency sos
+    grab current location (grabiing geolocation same as map not using google api) of the user and then pass to backend
+    the latitude and longitude coordinates (through a READ ONLY json form) 
+    so a google map link can be formed and thus sent to emergency contacts
+        - refer to send_emergency_sos.html !!!!!
+
+3. make_report
+    using Google Places API
+    when typing in a location for the incident, the user can autocomplete their location
+        - for example: University of California will bring suggestions like UCLA, UCSD, UCSB etc
+    once a selection has been made, the latitude and longitude of that location will be
+    shown as READ ONLY (so users can't edit) text that is sent back to the back end
+    back end will then take the latitude and longitude and push it to the database to store
+        this information of coordinates is then logged in the coordinates part of the database
+        which will be projected on the map
+
+    - https://gyazo.com/e4df46766428bd5243abb6df7077b1d3 typing in the location and having autocomplete options
+    - https://gyazo.com/b7e3d59e1c8913326beb7c553b89221d the latitude and longitude autofills right after selection

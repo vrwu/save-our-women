@@ -3,12 +3,15 @@ from flask import *
 import os
 from twilio.rest import Client
 from datetime import datetime, timedelta
-import pytz
 import time
+import googlemaps
+from geopy.geocoders import Nominatim 
+from geopy import geocoders
+
 
 account_sid = "AC64d5bde78b62b02e3b6a90066b0f70ca"
-auth_token = os.environ.get('API_TWILIO')
-# ask vivian w for twilio api
+auth_token = "5ef6875b39ec719e59f64e5c7427f78c"
+
 client = Client(account_sid, auth_token)
 
 app = Flask(__name__)
@@ -21,7 +24,7 @@ They can be changed to accomodate for whatever frontend language is used
 '''
 # ask for api
 firebaseConfig = {
-    'apiKey': os.environ.get('API_FIREBASE'),
+    'apiKey': "AIzaSyA1UYeJTygTIPNIBTLd_upZ8EsCjL5iUNs",
     'authDomain': "save-our-women-b9aef.firebaseapp.com",
     'databaseURL': "https://save-our-women-b9aef.firebaseio.com",
     'projectId': "save-our-women-b9aef",
@@ -182,7 +185,10 @@ def emergency_contacts():
         name = user.key()
         name_arr.append(name)
 
-    return render_template('emergency_contacts.html', name=name_arr)
+        phone = user.val()
+        phone_arr.append(phone)
+
+    return render_template('emergency_contacts.html', name=name_arr, phone=phone_arr)
 
 
 @app.route('/add_emergency_contact', methods=['GET', 'POST'])
@@ -209,7 +215,17 @@ def send_emergency_sos():
 
     global uid
 
+    if request.method == 'GET':
+        return render_template('send_emergency_sos.html')
+
+    lat = request.form['latitude']
+    lng = request.form['longitude']
+
+    map_link = "http://www.google.com/maps/place/" + lat + "," + lng
+
     all_users = db.child("users").child(uid).child('emergency contacts').get()
+    name = str(db.child("users").child(uid).child('details').child('Name').get().val())
+    name = name.replace('"', "")
 
     phone_arr = []
 
@@ -221,8 +237,9 @@ def send_emergency_sos():
         phone_arr.append(number)
 
         # needs name or else find a way to use their own phone number
+        message = "SOS! Your friend " + name + " is in trouble and needs your help at this location! " + map_link
         client.messages.create(
-            body="Quick, your friend is in trouble at this location!",
+            body=message,
             from_="+13213042130",
             to=number
         )
@@ -237,8 +254,8 @@ def make_report():
         return render_template('make_report.html')
 
     else:
-
-        # not time zoned yet
+        
+        # getting the time and changing to current timezone
         today = datetime.now()
         curr_time = time.localtime()
 
@@ -248,10 +265,12 @@ def make_report():
         clock = clock.strftime("%I:%M %p").lstrip('0')
         date = day + clock
 
-        # user should be able to search with google api 
+        # gets report information to be pushed to database
         location = request.form['location']
         report = request.form['report']
         photo = request.files['fileToUpload']
+        lat = request.form['latitude']
+        lng = request.form['longitude']
 
         picture = str(photo)
 
@@ -263,10 +282,12 @@ def make_report():
             link = storage.child('images/' + picture).get_url(None)
             db.child("reports").child(date).child('image').set(link)
 
-    db.child("reports").child(date).child('location').set(location)
-    db.child("reports").child(date).child('report').set(report)
+        db.child("reports").child(date).child('location').set(location)
+        db.child("reports").child(date).child('report').set(report)
+        db.child("coordinates").child(date).child("latitude").set(lat)
+        db.child("coordinates").child(date).child("longitude").set(lng)
 
-    return render_template('home.html')
+        return render_template('home.html')
 
 # need more instruction on how to filter it: location/time etc
 @app.route('/recent_reports', methods=['GET', 'POST'])
@@ -275,7 +296,6 @@ def recent_reports():
     all_reports = db.child("reports").get()
 
     incident_arr = []
-
     details_arr = []
 
     for report in all_reports.each():
@@ -300,6 +320,41 @@ def recent_reports():
     # returns array of arrays, [[DATE + TIME, URL TO IMAGE, LOCATION, INCIDENT], [August 12, 2020 08:40 PM, https://, LA, INCIDENT]]
     # SOME REPORTS MAY NOT HAVE URLS!!! 
     return render_template('recent_reports.html', reports=incident_arr)
+
+@app.route('/map', methods=['GET'])
+def map():
+
+    all_coords = db.child("coordinates").get()
+
+    coords_arr = []
+    details_arr = []
+
+    # iterate through the coordinates child 
+    for coords in all_coords.each():
+        date = str(coords.key())
+        date = date.replace('"', "")
+        details_arr.append(date)
+
+    # append corresponding incident report with it
+        incident = db.child("reports").child(date).child("report").get().val()
+        details_arr.append(incident)
+        
+        reps = db.child("coordinates").child(date).get()
+
+        # iterate through the lat and long INSIDE the dates
+        for rep in reps.each():
+            detail = str(rep.val())
+            detail = detail.replace('"', "")
+            detail = detail.replace('{', "")
+            detail = detail.replace('}', "")
+
+            details_arr.append(detail)
+
+        coords_arr.append(details_arr)
+        details_arr = []
+
+    # [[DATE, LAT, LONG], [DATE, LAT, LONG]]
+    return render_template('map.html', coord=coords_arr)
 
 if __name__ == '__main__':
     app.run()
