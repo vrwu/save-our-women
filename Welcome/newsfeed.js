@@ -12,7 +12,7 @@ export default class newsfeed extends React.Component {
     super(props);
     this.array = [],
     this.state = {
-      arrayHolder: [],
+      reports: [],
       textInput_Holder: ''
     }
   }
@@ -23,7 +23,7 @@ export default class newsfeed extends React.Component {
 
   joinData = () => {
     this.array.push({title : this.state.textInput_Holder});
-    this.setState({ arrayHolder: [...this.array] })
+    this.setState({ reports: [...this.array] })
   }
 
   render() {
@@ -72,7 +72,7 @@ export default class newsfeed extends React.Component {
       <Text style={styles.buttonText}> Publish </Text>
       </TouchableOpacity>
           <FlatList
-          data = {this.state.arrayHolder}
+          data = {this.state.reports}
           keyExtractor = {(index) => index.toString()}
           renderItem={({ item }) =>
             <Text

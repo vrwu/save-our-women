@@ -12,6 +12,9 @@ import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
 export default class newReport extends React.Component {
   state = {
     image: null,
+    location: '',
+    date: '',
+    description: ''
   };
 
   componentDidMount() {
@@ -105,9 +108,17 @@ export default class newReport extends React.Component {
             }}
           />
           </View>
+
+          <TextInput style = {styles.date}
+            placeholder = "    Date"
+            onChangeText={data => this.setState({ date: data })}
+          >
+          </TextInput>
           <TextInput style = {styles.moreInfo}
             placeholder="   Description"
             multiline={true}
+            onChangeText={data => this.setState({ description: data })}
+
           >
           </TextInput>
 
@@ -200,11 +211,21 @@ const styles = StyleSheet.create({
 
   moreInfo: {
     backgroundColor:'rgba(158, 101, 144, 0.2)',
-    height: 270,
+    height: 200,
     width: 275,
     alignSelf:'center',
     borderRadius: 25,
-    top: 70,
+    top: 80,
+  },
+
+  date: {
+    backgroundColor:'rgba(158, 101, 144, 0.2)',
+    height: 35,
+    width: 275,
+    alignSelf:'center',
+    borderRadius: 25,
+    top: 80,
+    marginVertical: 20
   },
 
   submitButton: {

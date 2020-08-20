@@ -28,11 +28,6 @@ const VALID_PASSWORD = "tech-tank"
 const Stack = createStackNavigator();
 
 function WelcomeScreen({navigation}) {
-  function handleLogin() {
-    if (Email.email == null) {
-      navigation.navigate('home')
-    }
-  }
   return (
     <KeyboardAvoidingView style = {styles.login}>
       <View style={styles.containerOne}>
@@ -50,7 +45,7 @@ function WelcomeScreen({navigation}) {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.button}
-            onPress = {() => { handleLogin()}}
+            onPress = {() => navigation.navigate('home')}
           >
             <Text style={styles.loginText}>
             Login
