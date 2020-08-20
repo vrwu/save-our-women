@@ -66,7 +66,6 @@ export default class newReport extends React.Component {
           <Text style = {styles.secondHeader}>
             Incident Report
           </Text>
-
           <TextInput style = {styles.moreInfo}
             placeholder="   Description"
             multiline={true}
@@ -162,11 +161,11 @@ const styles = StyleSheet.create({
 
   moreInfo: {
     backgroundColor:'rgba(158, 101, 144, 0.2)',
-    height: 400,
+    height: 370,
     width: 275,
     alignSelf:'center',
     borderRadius: 25,
-    top: 25
+    top: 20
   },
 
   submitButton: {

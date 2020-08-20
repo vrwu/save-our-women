@@ -8,7 +8,17 @@ export default class map extends React.Component {
     const {navigation} = this.props
     return (
       <View style={styles.container}>
-        <MapView style={styles.mapStyle} />
+        <MapView style={styles.mapStyle}
+          showsUserLocation ={true}
+        >
+          <MapView.Marker
+            coordinate={{latitude: 37.73538,
+                          longitude: -122.4324,}}
+            title={"test: san francisco"}
+            description={"Date: today"}
+            pinColor = "purple"
+          />
+        </MapView>
         <TouchableOpacity
           style = {styles.backButton}
           onPress={
