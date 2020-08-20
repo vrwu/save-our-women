@@ -3,6 +3,8 @@ import { StackActions } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
+import MapView from 'react-native-maps';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
   Keyboard, Alert, TextInput, Image, Component, Button
 } from 'react-native';
@@ -66,6 +68,24 @@ export default class newReport extends React.Component {
           <Text style = {styles.secondHeader}>
             Incident Report
           </Text>
+          <MapView/>
+          <View style = {{top:25}}>
+          <GooglePlacesAutocomplete
+            placeholder='Search Location'
+            autoFocus = {true}
+            returnKeyType = 'search'
+            fetchDetails = {true}
+            currentLocation = {true}
+            onPress={(data, details = null) => {
+              console.log(data,details);
+
+            }}
+            query={{
+              key: 'AIzaSyAeQmNz_y5iceHHdjfQPFC-JJP98NjBO6U',
+              language: 'en',
+            }}
+          />
+          </View>
           <TextInput style = {styles.moreInfo}
             placeholder="   Description"
             multiline={true}
@@ -161,11 +181,11 @@ const styles = StyleSheet.create({
 
   moreInfo: {
     backgroundColor:'rgba(158, 101, 144, 0.2)',
-    height: 370,
+    height: 270,
     width: 275,
     alignSelf:'center',
     borderRadius: 25,
-    top: 20
+    top: 80
   },
 
   submitButton: {
@@ -174,9 +194,9 @@ const styles = StyleSheet.create({
     width: 125,
     alignSelf: 'center',
     left: 80,
-    marginVertical: 35,
+    marginVertical: 15,
     borderRadius: 25,
-    bottom: 120
+    bottom: 160
   },
 
   addButton: {
@@ -184,7 +204,7 @@ const styles = StyleSheet.create({
     height: 50,
     width: 125,
     alignSelf: 'center',
-    marginVertical: 35,
+    marginVertical: 95,
     borderRadius: 25,
     right: 80,
   },
