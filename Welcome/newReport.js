@@ -38,6 +38,7 @@ export default class newReport extends React.Component {
       console.log(result);
       if (!result.cancelled) {
         this.setState({ image: result.uri });
+        console.log(result.uri)
       }
 
       console.log(result);
@@ -68,17 +69,35 @@ export default class newReport extends React.Component {
           <Text style = {styles.secondHeader}>
             Incident Report
           </Text>
-          <MapView/>
-          <View style = {{top:25}}>
+          <View style = {{flex: 1, top: 20}}>
           <GooglePlacesAutocomplete
             placeholder='Search Location'
-            autoFocus = {true}
+            autoFocus = {false}
             returnKeyType = 'search'
             fetchDetails = {true}
             currentLocation = {true}
+            disableScroll = {false}
+            placeholderTextColor = 'rgba(158, 101, 144, 0.8)'
+            styles = {{
+              textInputContainer: {
+                backgroundColor:'rgba(158, 101, 144, 0.8)',
+                borderTopWidth: 0,
+                borderBottomWidth: 0,
+                borderRadius: -25
+              },
+              textInput: {
+                marginLeft: 0,
+                marginRight: 0,
+                height: 38,
+                color: 'rgba(158, 101, 144, 0.8)',
+                fontSize: 16,
+              },
+              listView: {
+                color: 'rgba(158, 101, 144, 0.8)'
+              }
+            }}
             onPress={(data, details = null) => {
               console.log(data,details);
-
             }}
             query={{
               key: 'AIzaSyAeQmNz_y5iceHHdjfQPFC-JJP98NjBO6U',
@@ -185,7 +204,7 @@ const styles = StyleSheet.create({
     width: 275,
     alignSelf:'center',
     borderRadius: 25,
-    top: 80
+    top: 70,
   },
 
   submitButton: {

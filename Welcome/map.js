@@ -21,23 +21,6 @@ export default class map extends React.Component {
             pinColor = "purple"
           />
         </MapView>
-        <View>
-        <GooglePlacesAutocomplete
-          placeholder='Search Location'
-          autoFocus = {true}
-          returnKeyType = 'search'
-          fetchDetails = {true}
-          currentLocation = {true}
-          onPress={(data, details = null) => {
-            console.log(data,details);
-
-          }}
-          query={{
-            key: 'AIzaSyAeQmNz_y5iceHHdjfQPFC-JJP98NjBO6U',
-            language: 'en',
-          }}
-        />
-        </View>
         <TouchableOpacity
           style = {styles.backButton}
           onPress={
