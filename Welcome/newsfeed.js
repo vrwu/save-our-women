@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StackActions } from '@react-navigation/native';
+import axios from 'axios';
 import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
   Keyboard, Alert, TextInput, Image, ScrollView, FlatList, Component, Root
  } from 'react-native';
@@ -10,20 +11,20 @@ import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
 export default class newsfeed extends React.Component {
   constructor(props){
     super(props);
-    this.array = [],
     this.state = {
+      date: [],
+      location: [],
       reports: [],
-      textInput_Holder: ''
+      image: [],
     }
   }
 
   componentDidMount() {
-    this.setState({ arrayHolder: [...this.array] })
-  }
-
-  joinData = () => {
-    this.array.push({title : this.state.textInput_Holder});
-    this.setState({ reports: [...this.array] })
+    return axios.get('https://jsonplaceholder.typicode.com/users')
+      .then(res => {
+        this.setState({reports:res})
+        console.log(this.state.reports);
+      })
   }
 
   render() {
@@ -56,38 +57,26 @@ export default class newsfeed extends React.Component {
           </Text>
         </TouchableOpacity>
       </View>
-
-        <View>
-        <TextInput
-          style = {styles.testInput}
-          placeholder="Enter Test Report"
-          onChangeText={data => this.setState({ textInput_Holder: data })}
-        />
-
-      <TouchableOpacity
-        style = {styles.testButton}
-        onPress={this.joinData}
-        activeOpacity={0.7}
-      >
-      <Text style={styles.buttonText}> Publish </Text>
-      </TouchableOpacity>
           <FlatList
-          data = {this.state.reports}
-          keyExtractor = {(index) => index.toString()}
-          renderItem={({ item }) =>
-            <Text
-              style={styles.newsContainer}
-            >
-              {item.title}
-            </Text>}
+            style = {{backgroundColor:'blue'}}
+            data = {this.state.reports}
           />
-        </View>
      </View>
 
    )
  }
 }
 
+const NewsCard = ({item }) => {
+    console.log(item)
+    return (
+        <View style={styles.newsContainer}>
+            <Text> {item.title}</Text>
+            <Image source={item.urlToImage ? {uri: item.urlToImage } : null}/>
+            <Text>{item.description}</Text>
+        </View>
+    )
+}
 const styles = StyleSheet.create({
   mainText: {
     fontSize: 20,
@@ -142,7 +131,8 @@ const styles = StyleSheet.create({
     backgroundColor:'white',
     borderRadius: 25,
     marginVertical: 10,
-    top: 80
+    top: 80,
+    color: "black"
   },
 
   testButton: {
@@ -151,6 +141,8 @@ const styles = StyleSheet.create({
 
   testInput: {
     alignSelf:'center',
-  }
+  },
+
+
 
 })
