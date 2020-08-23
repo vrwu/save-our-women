@@ -4,6 +4,8 @@ import os
 from twilio.rest import Client
 from datetime import datetime, timedelta
 import time
+import base64
+
 
 
 account_sid = "AC64d5bde78b62b02e3b6a90066b0f70ca"
@@ -259,19 +261,21 @@ def make_report():
     # gets report information to be pushed to database
     location = request.json['location']
     report = request.json['report']
-    photo = request.files['fileToUpload']
+    photo = request.json['fileToUpload']
     lat = request.json['latitude']
     lng = request.json['longitude']
 
-    picture = str(photo)
+    picture = date + '.png'
+    photo_bytes = photo.encode('utf-8')
+    decoded_image_data = base64.decodebytes(photo_bytes)
 
     # if the person did not upload a picture
-    if picture == "<FileStorage: '' ('application/octet-stream')>":
+    if picture == "":
         link = ""
 
     # picture is uploaded to firebase storage and url is generated and pushed to database
     else:
-        storage.child("images/" + picture).put(photo)
+        storage.child("images/" + picture).put(decoded_image_data)
         link = storage.child('images/' + picture).get_url(None)
         db.child("reports").child(date).child('image').set(link)
 
