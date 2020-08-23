@@ -24,6 +24,7 @@ import map from './Welcome/map';
 
 const VALID_EMAIL = "sow@save-our-women.com"
 const VALID_PASSWORD = "tech-tank"
+var baseURL = 'https://localhost:5000'
 
 const Stack = createStackNavigator();
 

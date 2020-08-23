@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import { StackActions } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
@@ -10,16 +11,54 @@ import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
 } from 'react-native';
 
 export default class newReport extends React.Component {
-  state = {
-    image: null,
-    location: '',
-    date: '',
-    description: ''
-  };
+  constructor(){
+    super()
+    this.state = {
+      image: null,
+      location: null,
+      report: null,
+      latitude: null,
+      longitude: null
+    }
+    this.handleChange = this.handleChange.bind(this)
+  }
+
+  handleChange = async event => {
+    this.setState
+
+  }
 
   componentDidMount() {
     this.getPermissionAsync();
+
+/*
+    axios.post('https://save-our-women-b9aef.firebaseio.com/reports.json', {
+      // data to be sent
+      image: this.state.image,
+      location: this.state.location,
+      report: this.state.report,
+      latitude: this.state.latitude,
+      longitude: this.state.longitude
+
+    })
+    .then(function (response) {
+      console.log(this.state.report);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+  axios({
+    method: 'post',
+    url: '/make_report',
+    data: {
+      location: 'Finn',
+      description: 'Williams'
+    }
+  });
+*/
   }
+
 
   getPermissionAsync = async () => {
     if (Constants.platform.ios) {
@@ -109,11 +148,6 @@ export default class newReport extends React.Component {
           />
           </View>
 
-          <TextInput style = {styles.date}
-            placeholder = "    Date"
-            onChangeText={data => this.setState({ date: data })}
-          >
-          </TextInput>
           <TextInput style = {styles.moreInfo}
             placeholder="   Description"
             multiline={true}
@@ -218,15 +252,7 @@ const styles = StyleSheet.create({
     top: 80,
   },
 
-  date: {
-    backgroundColor:'rgba(158, 101, 144, 0.2)',
-    height: 35,
-    width: 275,
-    alignSelf:'center',
-    borderRadius: 25,
-    top: 80,
-    marginVertical: 20
-  },
+
 
   submitButton: {
     backgroundColor: 'rgba(158, 101, 144, 0.7)',
