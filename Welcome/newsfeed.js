@@ -1,30 +1,64 @@
-import * as React from 'react';
+
+import React, { useState } from "react";
 import { StatusBar } from 'expo-status-bar';
 import { StackActions } from '@react-navigation/native';
 import axios from 'axios';
 import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
-  Keyboard, Alert, TextInput, Image, ScrollView, FlatList, Component, Root
+  Keyboard, Alert, TextInput, Image, ScrollView, FlatList, Component, Root,
+  SafeAreaView, List
  } from 'react-native';
 
- import newReport from '../Welcome/newReport'
+import newReport from '../Welcome/newReport'
+
+const reportItem = ({ date }) => {
+  <View style = {styles.newsContainer}>
+    <Text> {date} </Text>
+  </View>
+}
 
 export default class newsfeed extends React.Component {
+
   constructor(props){
     super(props);
     this.state = {
-      date: [],
-      location: [],
       reports: [],
-      image: [],
+      dates: []
     }
   }
 
   componentDidMount() {
-    return axios.get('https://jsonplaceholder.typicode.com/users')
-      .then(res => {
-        this.setState({reports:res})
-        console.log(this.state.reports);
-      })
+    this.getData()
+  }
+
+  getData = async () => {
+    let apiRecentRep: string = '/recent_reports'
+    var fbInfo = await axios.get('https://save-our-women-b9aef.firebaseio.com/reports.json')
+    var repObj = Object.values(fbInfo)[0]
+    this.setState({dates: Object.keys(repObj)})
+    this.setState({reports: Object.values(repObj)})
+  }
+
+  FlatListItemSeparator = () => {
+  return (
+    <View
+      style={{
+        height: 1,
+        width: "40%",
+        backgroundColor: "rgba(158, 101, 144, 0.2)",
+        alignSelf: 'center',
+        marginVertical: 30
+      }}
+    />
+  );
+}
+
+  componentDidUpdate() {
+    if (this.state.reports == null) {
+      console.log('fail')
+    }
+    else {
+      console.log("success")
+    }
   }
 
   render() {
@@ -56,27 +90,27 @@ export default class newsfeed extends React.Component {
             +
           </Text>
         </TouchableOpacity>
+        <View style = {styles.newsContainer}>
+        <FlatList
+        data={this.state.reports}
+        keyExtractor={(item, index) => index.toString()}
+        ItemSeparatorComponent = { this.FlatListItemSeparator }
+        renderItem={({item}) => <Text style = {{
+          alignSelf: 'center',
+          marginLeft: 20,
+          marginRight: 20,
+          color: 'rgba(0, 0, 0, .8)'
+        }}>{Object.values(item)[0]}{"\n\n"}{Object.values(item)[1]} {Object.values(item)[2]}</Text> }
+
+        />
+          </View>
       </View>
-          <FlatList
-            style = {{backgroundColor:'blue'}}
-            data = {this.state.reports}
-          />
      </View>
 
    )
  }
 }
 
-const NewsCard = ({item }) => {
-    console.log(item)
-    return (
-        <View style={styles.newsContainer}>
-            <Text> {item.title}</Text>
-            <Image source={item.urlToImage ? {uri: item.urlToImage } : null}/>
-            <Text>{item.description}</Text>
-        </View>
-    )
-}
 const styles = StyleSheet.create({
   mainText: {
     fontSize: 20,
@@ -125,24 +159,13 @@ const styles = StyleSheet.create({
   },
 
   newsContainer: {
-    height: 150,
+    height: 660,
     width: 378,
     alignSelf: 'center',
     backgroundColor:'white',
     borderRadius: 25,
     marginVertical: 10,
-    top: 80,
+    top: 60,
     color: "black"
   },
-
-  testButton: {
-    alignSelf:'center',
-  },
-
-  testInput: {
-    alignSelf:'center',
-  },
-
-
-
 })
