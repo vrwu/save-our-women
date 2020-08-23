@@ -9,6 +9,7 @@ import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
  } from 'react-native';
 
 import newReport from '../Welcome/newReport'
+import api from '../baseURL.js'
 
 const reportItem = ({ date }) => {
   <View style = {styles.newsContainer}>
@@ -22,7 +23,6 @@ export default class newsfeed extends React.Component {
     super(props);
     this.state = {
       reports: [],
-      dates: []
     }
   }
 
@@ -31,11 +31,11 @@ export default class newsfeed extends React.Component {
   }
 
   getData = async () => {
-    let apiRecentRep: string = '/recent_reports'
-    var fbInfo = await axios.get('https://save-our-women-b9aef.firebaseio.com/reports.json')
-    var repObj = Object.values(fbInfo)[0]
-    this.setState({dates: Object.keys(repObj)})
-    this.setState({reports: Object.values(repObj)})
+    let apiRecentRep: string = '/recent_reports';
+    var info = await api.get(apiRecentRep)
+    var dataObj = Object.values(info.data.reports)
+    console.log(dataObj)
+    this.setState({reports: dataObj})
   }
 
   FlatListItemSeparator = () => {
@@ -100,7 +100,11 @@ export default class newsfeed extends React.Component {
           marginLeft: 20,
           marginRight: 20,
           color: 'rgba(0, 0, 0, .8)'
-        }}>{Object.values(item)[0]}{"\n\n"}{Object.values(item)[1]} {Object.values(item)[2]}</Text> }
+        }}>
+        {Object.values(item)[0]}
+        {"\n\n"}
+        {Object.values(item)[1]}
+        {Object.values(item)[2]}</Text> }
 
         />
           </View>

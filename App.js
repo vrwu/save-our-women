@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StatusBar } from 'expo-status-bar';
+import axios, { AxiosInstance } from 'axios'
 import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
   Keyboard, Alert, TextInput, Component
  } from 'react-native';
@@ -20,11 +21,6 @@ import newsfeed from './Welcome/newsfeed';
 import newReport from './Welcome/newReport';
 import {contactList} from './Welcome/contactList';
 import map from './Welcome/map';
-
-
-const VALID_EMAIL = "sow@save-our-women.com"
-const VALID_PASSWORD = "tech-tank"
-var baseURL = 'https://localhost:5000'
 
 const Stack = createStackNavigator();
 
