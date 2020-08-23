@@ -14,50 +14,42 @@ export default class newReport extends React.Component {
   state = {
     image: null,
     location: '',
-    report: '',
-    latitude: '',
-    longitude: ''
+    description: '',
+    longitude: '',
+    latitude: ''
   };
-
-  onChangeImage(event) {
-    this.setState({ image: event.target.value });
-  }
-  onChangeLocation(event) {
-    this.setState({ location: event.target.value });
-  }
-
-  onChangeReport(event) {
-    this.setState({ report: event.target.value });
-  }
-
-  onChangeLatitude(event) {
-    this.setState({ latitude: event.target.value });
-  }
-
-  onChangeLongitude(event) {
-    this.setState({ longitude: event.target.value });
-  }
-
-    onSubmit (event) {
-      event.preventDefault()
-
-      const userObject = {
-      image: this.state.image,
-      location: this.state.location,
-      report: this.state.report
-      };
-    // The URL is now localhost:5000/make_report
-      axios.post('https://save-our-women-b9aef.firebaseio.com/reports', userObject)
-        .then(res => console.log(res))
-        .catch(error => console.log(error))
-
-      this.setState({ image: '', location: '', report: '', latitude: '', longitude: '' })
-      }
-
 
   componentDidMount() {
     this.getPermissionAsync();
+
+/*
+    axios.post('https://save-our-women-b9aef.firebaseio.com/reports.json', {
+      // data to be sent
+      image: this.state.image,
+      location: this.state.location,
+      report: this.state.report,
+      latitude: this.state.latitude,
+      longitude: this.state.longitude
+
+    })
+    .then(function (response) {
+      console.log(this.state.report);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+  axios({
+    method: 'post',
+    url: '/make_report',
+    data: {
+      location: 'Finn',
+      description: 'Williams'
+    }
+  });
+
   }
+*/
 
   getPermissionAsync = async () => {
     if (Constants.platform.ios) {
@@ -119,7 +111,6 @@ export default class newReport extends React.Component {
             currentLocation = {true}
             disableScroll = {false}
             placeholderTextColor = 'rgba(158, 101, 144, 0.8)'
-            onChangeLocation={this.onChangeLocation}
             styles = {{
               textInputContainer: {
                 backgroundColor:'rgba(158, 101, 144, 0.8)',
@@ -148,11 +139,11 @@ export default class newReport extends React.Component {
           />
           </View>
 
-
-          <TextInput style = {styles.report}
+          <TextInput style = {styles.moreInfo}
             placeholder="   Description"
             multiline={true}
-            onChangeReport={this.onChangeReport}
+            onChangeText={data => this.setState({ description: data })}
+
           >
           </TextInput>
 
@@ -167,9 +158,7 @@ export default class newReport extends React.Component {
               style = {styles.photoUpload} /
               >}
 
-          <TouchableOpacity style = {styles.submitButton}
-            onSubmit={this.onSubmit}
-          >
+          <TouchableOpacity style = {styles.submitButton}>
             <Text style = {styles.buttonText}> Submit
             </Text>
           </TouchableOpacity>
@@ -245,7 +234,7 @@ const styles = StyleSheet.create({
   },
 
 
-  report: {
+  moreInfo: {
     backgroundColor:'rgba(158, 101, 144, 0.2)',
     height: 200,
     width: 275,

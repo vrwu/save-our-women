@@ -1,4 +1,4 @@
-import pyrebase
+from pyrebase import pyrebase
 from flask import *
 import os
 from twilio.rest import Client
