@@ -1,4 +1,4 @@
-from pyrebase import pyrebase
+import pyrebase
 from flask import *
 import os
 from twilio.rest import Client
@@ -7,7 +7,6 @@ import time
 import googlemaps
 from geopy.geocoders import Nominatim
 from geopy import geocoders
-
 
 
 account_sid = "AC64d5bde78b62b02e3b6a90066b0f70ca"

@@ -11,13 +11,22 @@ import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
 } from 'react-native';
 
 export default class newReport extends React.Component {
-  state = {
-    image: null,
-    location: '',
-    description: '',
-    longitude: '',
-    latitude: ''
-  };
+  constructor(){
+    super()
+    this.state = {
+      image: null,
+      location: null,
+      report: null,
+      latitude: null,
+      longitude: null
+    }
+    this.handleChange = this.handleChange.bind(this)
+  }
+
+  handleChange = async event => {
+    this.setState
+
+  }
 
   componentDidMount() {
     this.getPermissionAsync();
@@ -47,9 +56,9 @@ export default class newReport extends React.Component {
       description: 'Williams'
     }
   });
-
-  }
 */
+  }
+
 
   getPermissionAsync = async () => {
     if (Constants.platform.ios) {
