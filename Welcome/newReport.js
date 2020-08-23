@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import { StackActions } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
@@ -13,9 +14,46 @@ export default class newReport extends React.Component {
   state = {
     image: null,
     location: '',
-    date: '',
-    description: ''
+    report: '',
+    latitude: '',
+    longitude: ''
   };
+
+  onChangeImage(event) {
+    this.setState({ image: event.target.value });
+  }
+  onChangeLocation(event) {
+    this.setState({ location: event.target.value });
+  }
+
+  onChangeReport(event) {
+    this.setState({ report: event.target.value });
+  }
+
+  onChangeLatitude(event) {
+    this.setState({ latitude: event.target.value });
+  }
+
+  onChangeLongitude(event) {
+    this.setState({ longitude: event.target.value });
+  }
+
+    onSubmit (event) {
+      event.preventDefault()
+
+      const userObject = {
+      image: this.state.image,
+      location: this.state.location,
+      report: this.state.report
+      };
+    // The URL is now localhost:5000/make_report
+      axios.post('https://save-our-women-b9aef.firebaseio.com/reports', userObject)
+        .then(res => console.log(res))
+        .catch(error => console.log(error))
+
+      this.setState({ image: '', location: '', report: '', latitude: '', longitude: '' })
+      }
+
 
   componentDidMount() {
     this.getPermissionAsync();
@@ -81,6 +119,7 @@ export default class newReport extends React.Component {
             currentLocation = {true}
             disableScroll = {false}
             placeholderTextColor = 'rgba(158, 101, 144, 0.8)'
+            onChangeLocation={this.onChangeLocation}
             styles = {{
               textInputContainer: {
                 backgroundColor:'rgba(158, 101, 144, 0.8)',
@@ -109,16 +148,11 @@ export default class newReport extends React.Component {
           />
           </View>
 
-          <TextInput style = {styles.date}
-            placeholder = "    Date"
-            onChangeText={data => this.setState({ date: data })}
-          >
-          </TextInput>
-          <TextInput style = {styles.moreInfo}
+
+          <TextInput style = {styles.report}
             placeholder="   Description"
             multiline={true}
-            onChangeText={data => this.setState({ description: data })}
-
+            onChangeReport={this.onChangeReport}
           >
           </TextInput>
 
@@ -133,7 +167,9 @@ export default class newReport extends React.Component {
               style = {styles.photoUpload} /
               >}
 
-          <TouchableOpacity style = {styles.submitButton}>
+          <TouchableOpacity style = {styles.submitButton}
+            onSubmit={this.onSubmit}
+          >
             <Text style = {styles.buttonText}> Submit
             </Text>
           </TouchableOpacity>
@@ -209,7 +245,7 @@ const styles = StyleSheet.create({
   },
 
 
-  moreInfo: {
+  report: {
     backgroundColor:'rgba(158, 101, 144, 0.2)',
     height: 200,
     width: 275,
@@ -218,15 +254,7 @@ const styles = StyleSheet.create({
     top: 80,
   },
 
-  date: {
-    backgroundColor:'rgba(158, 101, 144, 0.2)',
-    height: 35,
-    width: 275,
-    alignSelf:'center',
-    borderRadius: 25,
-    top: 80,
-    marginVertical: 20
-  },
+
 
   submitButton: {
     backgroundColor: 'rgba(158, 101, 144, 0.7)',
