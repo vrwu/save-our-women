@@ -265,6 +265,7 @@ def make_report():
     lat = request.json['latitude']
     lng = request.json['longitude']
 
+    # decode base64
     picture = date + '.png'
     photo_bytes = photo.encode('utf-8')
     decoded_image_data = base64.decodebytes(photo_bytes)
