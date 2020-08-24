@@ -4,6 +4,8 @@ import os
 from twilio.rest import Client
 from datetime import datetime, timedelta
 import time
+import base64
+
 
 
 account_sid = "AC64d5bde78b62b02e3b6a90066b0f70ca"
@@ -108,7 +110,7 @@ def login():
      # pop up message return "Invalid email and/or password"
     except:
         return({'reason': 'Invalid credentials'}), 400
-
+    
     # create a permanent session of x days
     session.permanent = True
     uid = user['localId']
@@ -127,7 +129,7 @@ def forgotpass():
     if email is None:
         return({'reason': 'Empty email entry'}), 400
 
-    else:
+    else: 
          message = "Email has been sent to " + email
 
     # should flash a message saying that an email has been sent to reset password
@@ -154,36 +156,72 @@ def home():
 # profile // TO BE EDITED, needs to display user information!!
 '''
 
-@app.route('/profile', methods=['GET'])
+@app.route('/profile', methods=['GET', 'PUT'])
 def profile():
 
     global uid
-    name = db.child("users").child(uid).child('details').child('Name').get().val()
-    email = db.child("users").child(uid).child('details').child('Email').get().val()
-    phone = db.child("users").child(uid).child('details').child('Phone Number').get().val()
+    
+    # for viewing profile
+    if request.method == 'GET':
+        name = db.child("users").child(uid).child('details').child('Name').get().val()
+        email = db.child("users").child(uid).child('details').child('Email').get().val()
+        phone = db.child("users").child(uid).child('details').child('Phone Number').get().val()
 
-    return jsonify({'reason': 'Profile data bundle sent', 'name': name, 'email': email, 'phone': phone}), 200
+        return jsonify({'reason': 'Profile data bundle sent', 'name': name, 'email': email, 'phone': phone}), 200
 
+    # for updating profile
+    else:
+        name = request.json['name']
+        email = request.json['email']
+        phone = request.json['num']
+        photo = request.json['fileToUpload']
+
+        # decode base64
+        picture = name + '.png'
+        photo_bytes = photo.encode('utf-8')
+        decoded_image_data = base64.decodebytes(photo_bytes)
+
+        # if the person did not upload a picture
+        if picture == "":
+            link = ""
+
+        # picture is uploaded to firebase storage and url is generated and pushed to database
+        else:
+            storage.child("images/" + picture).put(decoded_image_data)
+            link = storage.child('images/' + picture).get_url(None)
+            db.child("users").child(uid).child('details').child('Profile Picture').set(link)
+
+        # update any values changed
+        db.child("users").child(uid).child("details").update({"Name": name})
+        db.child("users").child(uid).child("details").update({"Email": email})
+        db.child("users").child(uid).child("details").update({"Phone": email})
+
+        return jsonify({'reason': 'Profile details updated'}), 200
 
 @app.route('/emergency_contacts', methods=['GET'])
 def emergency_contacts():
 
     global uid
 
-    # arrays
-    name_arr = []
-    phone_arr = []
+    # arrays 
+    contacts_arr = []
+    person_arr = []
 
     all_users = db.child("users").child(uid).child('emergency contacts').get()
 
+    # iterate through emergency contacts and 
     for user in all_users.each():
         name = user.key()
-        name_arr.append(name)
+        person_arr.append(name)
 
         phone = user.val()
-        phone_arr.append(phone)
+        person_arr.append(phone)
 
-    return jsonify({'reason': 'Emergency Contact data sent', 'name': name_arr, 'phone': phone_arr}), 200
+        contacts_arr.append(person_arr)
+        person_arr = []
+
+    # return array of arrays [[Name, Number], [Name, Number]]
+    return jsonify({'reason': 'Emergency Contact data sent', 'contacts': contacts_arr}), 200
 
 
 @app.route('/add_emergency_contact', methods=['POST'])
@@ -259,7 +297,7 @@ def make_report():
     # gets report information to be pushed to database
     location = request.json['location']
     report = request.json['report']
-    photo = request.json['image']
+    photo = request.json['fileToUpload']
     lat = request.json['latitude']
     lng = request.json['longitude']
 
@@ -289,7 +327,7 @@ def make_report():
 # need more instruction on how to filter it: location/time etc
 @app.route('/recent_reports', methods=['GET'])
 def recent_reports():
-
+    
     all_reports = db.child("reports").get()
 
     incident_arr = []
@@ -312,10 +350,10 @@ def recent_reports():
 
         incident_arr.insert(0, details_arr)
         details_arr = []
-
+        
 
     # returns array of arrays, [[DATE + TIME, URL TO IMAGE, LOCATION, INCIDENT], [August 12, 2020 08:40 PM, https://, LA, INCIDENT]]
-    # SOME REPORTS MAY NOT HAVE URLS!!!
+    # SOME REPORTS MAY NOT HAVE URLS!!! 
     return jsonify({'reason': 'Recent Reports Bundle Created', 'reports': incident_arr}), 200
 
 @app.route('/map', methods=['GET'])
@@ -326,7 +364,7 @@ def map():
     coords_arr = []
     details_arr = []
 
-    # iterate through the coordinates child
+    # iterate through the coordinates child 
     for coords in all_coords.each():
         date = str(coords.key())
         date = date.replace('"', "")

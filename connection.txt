@@ -59,7 +59,8 @@ emergency_contacts():
     url: '/emergency_contacts'
     input: NA
     return:
-        - {'reason': 'Emergency Contact data sent', 'name': name_arr, 'phone': phone_arr}, 200
+        - {'reason': 'Emergency Contact data sent', 'contacts': contacts_arr}, 200
+            - [[Name, Number], [Name, Number]]
 
 add_emergency_contact():
     method: 'post'
