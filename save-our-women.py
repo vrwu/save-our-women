@@ -303,9 +303,9 @@ def make_report():
     else:
         storage.child("images/" + picture).put(decoded_image_data)
         link = storage.child('images/' + picture).get_url(None)
-        db.child("reports").child(date).child('image').set(link)
 
     # push more information to database
+    db.child("reports").child(date).child('image').set(link)
     db.child("reports").child(date).child('location').set(location)
     db.child("reports").child(date).child('report').set(report)
     db.child("coordinates").child(date).child("latitude").set(lat)
@@ -325,25 +325,18 @@ def recent_reports():
     for report in all_reports.each():
         date = str(report.key())
         date = date.replace('"', "")
-        day = "date: " + date
-        details_arr.append(day)
 
         reps = db.child("reports").child(date).get()
 
         for rep in reps.each():
-            detail = str(rep.key())
+            detail = str(rep.val())
             detail = detail.replace('"', "")
             detail = detail.replace('{', "")
             detail = detail.replace('}', "")
 
-            detail2 = str(rep.val())
-            detail2 = detail2.replace('"', "")
-            detail2 = detail2.replace('{', "")
-            detail2 = detail2.replace('}', "")
-
-            detail = detail + ": " + detail2
-
-            details_arr.append(detail)
+            details_arr.insert(0, detail)
+            
+        details_arr.insert(0, date)
 
         incident_arr.insert(0, details_arr)
         details_arr = []
