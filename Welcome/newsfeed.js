@@ -34,23 +34,60 @@ export default class newsfeed extends React.Component {
     let apiRecentRep: string = '/recent_reports';
     var info = await api.get(apiRecentRep)
     var dataObj = Object.values(info.data.reports)
-    console.log(dataObj)
     this.setState({reports: dataObj})
   }
 
   FlatListItemSeparator = () => {
-  return (
-    <View
-      style={{
-        height: 1,
-        width: "40%",
-        backgroundColor: "rgba(158, 101, 144, 0.2)",
-        alignSelf: 'center',
-        marginVertical: 30
-      }}
-    />
-  );
-}
+    return (
+      <View
+        style={{
+          height: 1,
+          width: "40%",
+          backgroundColor: "rgba(158, 101, 144, 0.2)",
+          alignSelf: 'center',
+          marginVertical: 30
+        }}
+      />
+    );
+  }
+
+  renderItem = ({ item }) => {
+    var img = Object.values(item)[2]
+    var imgURL = img.toString()
+    if (imgURL.length != 0) {
+      return (
+        <View>
+          <Text style = {styles.date}>
+            {Object.values(item[0])}
+          </Text>
+          <Text style = {styles.location}>
+          {Object.values(item[1])}
+          </Text>
+          <Text style = {styles.details}>
+            {Object.values(item[3])}
+          </Text>
+          <Image source = {{uri: imgURL}}
+            style = {styles.picture}
+          />
+        </View>
+      )
+    }
+    else {
+      return (
+        <View>
+          <Text style = {styles.date}>
+            {Object.values(item[0])}
+          </Text>
+          <Text style = {styles.location}>
+          {Object.values(item[1])}
+          </Text>
+          <Text style = {styles.details}>
+            {Object.values(item[3])}
+          </Text>
+        </View>
+      )
+    }
+  }
 
   componentDidUpdate() {
     if (this.state.reports == null) {
@@ -69,12 +106,6 @@ export default class newsfeed extends React.Component {
         <Text style = {styles.mainText}>
           Newsfeed
         </Text>
-        <TextInput
-          style = {styles.searchBox}
-          placeholder = "Search"
-          placeholderTextColor = "#FFFFFF"
-        >
-        </TextInput>
         <TouchableOpacity
           onPress={
             () => navigation.dispatch(StackActions.pop(1))}
@@ -93,19 +124,10 @@ export default class newsfeed extends React.Component {
         <View style = {styles.newsContainer}>
         <FlatList
         data={this.state.reports}
+        extraData={this.state}
         keyExtractor={(item, index) => index.toString()}
         ItemSeparatorComponent = { this.FlatListItemSeparator }
-        renderItem={({item}) => <Text style = {{
-          alignSelf: 'center',
-          marginLeft: 20,
-          marginRight: 20,
-          color: 'rgba(0, 0, 0, .8)'
-        }}>
-        {Object.values(item)[0]}
-        {"\n\n"}
-        {Object.values(item)[1]}
-        {Object.values(item)[2]}</Text> }
-
+        renderItem={this.renderItem}
         />
           </View>
       </View>
@@ -120,7 +142,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     textAlign:'center',
-    top: 50,
+    top: 60,
     color: 'white'
   },
 
@@ -138,7 +160,7 @@ const styles = StyleSheet.create({
     color: 'rgba(0, 0, 0, 0.3)',
     alignSelf:'flex-start',
     marginLeft:15,
-    bottom: 3,
+    bottom: -21,
     position: 'absolute'
   },
 
@@ -147,19 +169,7 @@ const styles = StyleSheet.create({
     color: 'rgba(0, 0, 0, 0.3)',
     alignSelf:'flex-end',
     marginRight: 15,
-    bottom: 40
-  },
-
-  searchBox: {
-    width: 300,
-    height: 30,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    borderRadius: 25,
-    paddingHorizontal: 13,
-    fontSize: 16,
-    color: '#FFFFFF',
-    top: 80,
-    alignSelf: 'center'
+    bottom: 15
   },
 
   newsContainer: {
@@ -169,7 +179,42 @@ const styles = StyleSheet.create({
     backgroundColor:'white',
     borderRadius: 25,
     marginVertical: 10,
-    top: 60,
+    top: 100,
     color: "black"
   },
+
+  date: {
+    fontSize: 19,
+    fontWeight: 'bold',
+    marginVertical: 10,
+    marginLeft: 20,
+    color: 'rgba(0, 0, 0, 0.6)',
+  },
+
+  location: {
+    fontSize: 14,
+    marginLeft: 0,
+    marginRight: 30,
+    marginLeft: 30,
+    bottom: 5,
+    alignSelf: 'center',
+    color: 'rgba(0, 0, 0, 0.6)',
+  },
+
+  details: {
+    fontSize: 14,
+    marginVertical: 5,
+    alignSelf: 'flex-start',
+    left: 50,
+    color: 'rgba(0, 0, 0, 0.6)',
+  },
+
+  picture: {
+    width: 350,
+    height: 400,
+    resizeMode: 'cover',
+    alignSelf: 'center',
+    borderRadius: 20,
+    marginVertical: 40,
+  }
 })

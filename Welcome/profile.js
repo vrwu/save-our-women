@@ -49,7 +49,6 @@ export default class profile extends React.Component{
     let { image } = this.state;
     return (
       <View>
-
         <TouchableOpacity
           title="Add Image"
           onPress={this._pickImage}>
