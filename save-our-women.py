@@ -325,15 +325,23 @@ def recent_reports():
     for report in all_reports.each():
         date = str(report.key())
         date = date.replace('"', "")
-        details_arr.append(date)
+        day = "date: " + date
+        details_arr.append(day)
 
         reps = db.child("reports").child(date).get()
 
         for rep in reps.each():
-            detail = str(rep.val())
+            detail = str(rep.key())
             detail = detail.replace('"', "")
             detail = detail.replace('{', "")
             detail = detail.replace('}', "")
+
+            detail2 = str(rep.val())
+            detail2 = detail2.replace('"', "")
+            detail2 = detail2.replace('{', "")
+            detail2 = detail2.replace('}', "")
+
+            detail = detail + ": " + detail2
 
             details_arr.append(detail)
 
