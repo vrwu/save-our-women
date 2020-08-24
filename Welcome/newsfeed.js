@@ -1,16 +1,70 @@
-import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+import React, { useState } from "react";
 import { StatusBar } from 'expo-status-bar';
 import { StackActions } from '@react-navigation/native';
+import axios from 'axios';
 import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
-  Keyboard, Alert, TextInput, Image, ScrollView
+  Keyboard, Alert, TextInput, Image, ScrollView, FlatList, Component, Root,
+  SafeAreaView, List
  } from 'react-native';
 
- export function newsfeed({navigation}) {
-   return(
-     <ScrollView>
+import newReport from '../Welcome/newReport'
+import api from '../baseURL.js'
+
+const reportItem = ({ date }) => {
+  <View style = {styles.newsContainer}>
+    <Text> {date} </Text>
+  </View>
+}
+
+export default class newsfeed extends React.Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      reports: [],
+    }
+  }
+
+  componentDidMount() {
+    this.getData()
+  }
+
+  getData = async () => {
+    let apiRecentRep: string = '/recent_reports';
+    var info = await api.get(apiRecentRep)
+    var dataObj = Object.values(info.data.reports)
+    console.log(dataObj)
+    this.setState({reports: dataObj})
+  }
+
+  FlatListItemSeparator = () => {
+  return (
+    <View
+      style={{
+        height: 1,
+        width: "40%",
+        backgroundColor: "rgba(158, 101, 144, 0.2)",
+        alignSelf: 'center',
+        marginVertical: 30
+      }}
+    />
+  );
+}
+
+  componentDidUpdate() {
+    if (this.state.reports == null) {
+      console.log('fail')
+    }
+    else {
+      console.log("success")
+    }
+  }
+
+  render() {
+    const {navigation} = this.props;
+    return(
+     <View>
       <View style = {styles.header}>
         <Text style = {styles.mainText}>
           Newsfeed
@@ -36,63 +90,30 @@ import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
             +
           </Text>
         </TouchableOpacity>
+        <View style = {styles.newsContainer}>
+        <FlatList
+        data={this.state.reports}
+        keyExtractor={(item, index) => index.toString()}
+        ItemSeparatorComponent = { this.FlatListItemSeparator }
+        renderItem={({item}) => <Text style = {{
+          alignSelf: 'center',
+          marginLeft: 20,
+          marginRight: 20,
+          color: 'rgba(0, 0, 0, .8)'
+        }}>
+        {Object.values(item)[0]}
+        {"\n\n"}
+        {Object.values(item)[1]}
+        {Object.values(item)[2]}</Text> }
+
+        />
+          </View>
       </View>
-
-        <TouchableOpacity style = {styles.newsContainer}>
-        </TouchableOpacity>
-
-        <TouchableOpacity style = {styles.newsContainer}>
-          <View style = {styles.addPhoto}>
-            <Text style = {{alignSelf:'center', top: 200}}>
-              No Photo
-            </Text>
-          </View>
-          <View style = {styles.addText}>
-            <Text style = {styles.descriptionBox}>
-            August 1, 2020
-            </Text>
-            <Text>
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-incididunt ut labore et dolore magna aliqua. Ut enim ad minim ven
-            </Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style = {styles.newsContainer}>
-        <View style = {styles.addPhoto}>
-          <Text style = {{alignSelf:'center', top: 200}}>
-            No Photo
-          </Text>
-        </View>
-        <View style = {styles.addText}>
-          <Text style = {styles.descriptionBox}>
-          August 1, 2020
-          </Text>
-          <Text>
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-incididunt ut labore et dolore magna aliqua. Ut enim ad minim ven
-          </Text>
-        </View>
-        </TouchableOpacity>
-        <TouchableOpacity style = {styles.newsContainer}>
-        <View style = {styles.addPhoto}>
-          <Text style = {{alignSelf:'center', top: 200}}>
-            No Photo
-          </Text>
-        </View>
-        <View style = {styles.addText}>
-          <Text style = {styles.descriptionBox}>
-          August 1, 2020
-          </Text>
-          <Text>
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-incididunt ut labore et dolore magna aliqua. Ut enim ad minim ven
-          </Text>
-        </View>
-        </TouchableOpacity>
-     </ScrollView>
+     </View>
 
    )
  }
+}
 
 const styles = StyleSheet.create({
   mainText: {
@@ -142,31 +163,13 @@ const styles = StyleSheet.create({
   },
 
   newsContainer: {
-    height: 250,
+    height: 660,
     width: 378,
     alignSelf: 'center',
     backgroundColor:'white',
     borderRadius: 25,
     marginVertical: 10,
-    top: 60
+    top: 60,
+    color: "black"
   },
-
-  addPhoto: {
-    height: 200,
-    width: 150,
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
-    top:25,
-    left: 25
-  },
-
-  addText: {
-    height: 200,
-    width: 180,
-    alignSelf:'center',
-    bottom: 175,
-    left: 85
-  },
-
-  descriptionBox: {
-  }
 })

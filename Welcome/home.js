@@ -4,46 +4,51 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
+import MapView from 'react-native-maps';
 import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
   Keyboard, Alert, TextInput, Image
  } from 'react-native';
 
-export function home({navigation}) {
-  return (
-    <View>
-      <View style = {styles.container}>
-      </View>
+ export function home({navigation}) {
+   return (
+     <View>
+       <View style = {styles.container}>
+       </View>
 
-      <Text style = {styles.homeText}>
-        Home
-      </Text>
+       <Text style = {styles.homeText}>
+         Home
+       </Text>
 
-      <TouchableOpacity
-        style = {styles.sendAlert}
-      >
-        <Text style = {styles.smallText}>
-          Send Alert
-        </Text>
-      </TouchableOpacity>
+       <TouchableOpacity
+         style = {styles.sendAlert}
+         onPress={() => navigation.navigate('newsfeed')}
+       >
+         <Text style = {styles.smallText}>
+           Newsfeed
+         </Text>
+       </TouchableOpacity>
 
-      <TouchableOpacity
-        style = {styles.makeReport}
-      >
-        <Text style = {styles.smallText}>
-          Make Report
-        </Text>
-      </TouchableOpacity>
+       <TouchableOpacity
+         style = {styles.makeReport}
+         onPress={() =>navigation.navigate('new report')}
+       >
+         <Text style = {styles.smallText}>
+           Make Report
+         </Text>
+       </TouchableOpacity>
 
-      <TouchableOpacity
-        style = {styles.map}
-      >
-        <Text style = {styles.mapText}>
-          Map
-        </Text>
-      </TouchableOpacity>
-    </View>
-  )
-}
+       <TouchableOpacity
+         style = {styles.map}
+         onPress={() =>navigation.navigate('map')}
+       >
+       <Text style = {styles.mapText}>
+         Map
+       </Text>
+       <MapView style={styles.mapStyle} />
+       </TouchableOpacity>
+     </View>
+   )
+ }
   const styles = StyleSheet.create({
     container: {
       top: -10,
@@ -88,7 +93,8 @@ export function home({navigation}) {
       textAlign: 'right',
       right: 20,
       fontSize: 18,
-      top: 175
+      position: 'absolute',
+      top: 430
     },
 
     makeReport: {
@@ -105,7 +111,7 @@ export function home({navigation}) {
 
     map: {
       width: 378,
-      height: 400,
+      height: 465,
       position: 'absolute',
       backgroundColor: 'white',
       marginVertical: 300,
@@ -114,4 +120,11 @@ export function home({navigation}) {
       borderRadius: 25,
       top: 45
     },
+
+    mapStyle: {
+      width: 378,
+      height:400,
+      borderRadius:25,
+      bottom: 35
+    }
 });

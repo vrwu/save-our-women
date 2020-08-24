@@ -4,8 +4,6 @@ import os
 from twilio.rest import Client
 from datetime import datetime, timedelta
 import time
-import base64
-
 
 
 account_sid = "AC64d5bde78b62b02e3b6a90066b0f70ca"
@@ -110,7 +108,7 @@ def login():
      # pop up message return "Invalid email and/or password"
     except:
         return({'reason': 'Invalid credentials'}), 400
-    
+
     # create a permanent session of x days
     session.permanent = True
     uid = user['localId']
@@ -129,7 +127,7 @@ def forgotpass():
     if email is None:
         return({'reason': 'Empty email entry'}), 400
 
-    else: 
+    else:
          message = "Email has been sent to " + email
 
     # should flash a message saying that an email has been sent to reset password
@@ -172,7 +170,7 @@ def emergency_contacts():
 
     global uid
 
-    # arrays 
+    # arrays
     name_arr = []
     phone_arr = []
 
@@ -261,7 +259,7 @@ def make_report():
     # gets report information to be pushed to database
     location = request.json['location']
     report = request.json['report']
-    photo = request.json['fileToUpload']
+    photo = request.json['image']
     lat = request.json['latitude']
     lng = request.json['longitude']
 
@@ -291,7 +289,7 @@ def make_report():
 # need more instruction on how to filter it: location/time etc
 @app.route('/recent_reports', methods=['GET'])
 def recent_reports():
-    
+
     all_reports = db.child("reports").get()
 
     incident_arr = []
@@ -314,10 +312,10 @@ def recent_reports():
 
         incident_arr.insert(0, details_arr)
         details_arr = []
-        
+
 
     # returns array of arrays, [[DATE + TIME, URL TO IMAGE, LOCATION, INCIDENT], [August 12, 2020 08:40 PM, https://, LA, INCIDENT]]
-    # SOME REPORTS MAY NOT HAVE URLS!!! 
+    # SOME REPORTS MAY NOT HAVE URLS!!!
     return jsonify({'reason': 'Recent Reports Bundle Created', 'reports': incident_arr}), 200
 
 @app.route('/map', methods=['GET'])
@@ -328,7 +326,7 @@ def map():
     coords_arr = []
     details_arr = []
 
-    # iterate through the coordinates child 
+    # iterate through the coordinates child
     for coords in all_coords.each():
         date = str(coords.key())
         date = date.replace('"', "")

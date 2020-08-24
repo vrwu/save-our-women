@@ -3,30 +3,28 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StatusBar } from 'expo-status-bar';
+import axios, { AxiosInstance } from 'axios'
 import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
   Keyboard, Alert, TextInput, Component
  } from 'react-native';
 
 import homeScreen from './Welcome/homescreen'
+import home from './Welcome/home'
 import Email from './Welcome/Email';
 import Logo from './Welcome/Logo';
 import {forgotPassScreen} from './Welcome/forgotPassScreen'
 import {signUpScreen} from './Welcome/signUpScreen';
 import {EmergencySOS} from './Welcome/EmergencySOS';
 import {Contacts} from './Welcome/Contacts';
-import {profile} from './Welcome/profile';
-
-const VALID_EMAIL = "sow@save-our-women.com"
-const VALID_PASSWORD = "tech-tank"
+import profile from './Welcome/profile';
+import newsfeed from './Welcome/newsfeed';
+import newReport from './Welcome/newReport';
+import {contactList} from './Welcome/contactList';
+import map from './Welcome/map';
 
 const Stack = createStackNavigator();
 
 function WelcomeScreen({navigation}) {
-  function handleLogin() {
-    if (Email.email == null) {
-      navigation.navigate('home')
-    }
-  }
   return (
     <KeyboardAvoidingView style = {styles.login}>
       <View style={styles.containerOne}>
@@ -44,7 +42,7 @@ function WelcomeScreen({navigation}) {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.button}
-            onPress = {() => { handleLogin()}}
+            onPress = {() => navigation.navigate('home')}
           >
             <Text style={styles.loginText}>
             Login
@@ -96,6 +94,22 @@ export default function App() {
         <Stack.Screen
           name="profile page"
           component={profile}
+        />
+        <Stack.Screen
+          name="list of contacts"
+          component={contactList}
+        />
+        <Stack.Screen
+          name="newsfeed"
+          component={newsfeed}
+        />
+        <Stack.Screen
+          name="new report"
+          component={newReport}
+        />
+        <Stack.Screen
+          name="map"
+          component={map}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -5,7 +5,7 @@ from twilio.rest import Client
 from datetime import datetime, timedelta
 import time
 import googlemaps
-from geopy.geocoders import Nominatim 
+from geopy.geocoders import Nominatim
 from geopy import geocoders
 
 
@@ -20,7 +20,7 @@ app.permanent_session_lifetime = timedelta(days=30)
 
 '''
 !!! most returns and forms connect with HTML since idk react native/swift/etc and I used quick html for visualization/testing purposes
-They can be changed to accomodate for whatever frontend language is used  
+They can be changed to accomodate for whatever frontend language is used
 '''
 # ask for api
 firebaseConfig = {
@@ -102,7 +102,7 @@ def login():
             uid = session['uid']
             return render_template('home.html', value=uid)
 
-        else: 
+        else:
             return render_template('login.html')
 
     else:
@@ -116,7 +116,7 @@ def login():
     except:
         # pop up message return "Invalid email and/or password"
         return render_template('login.html')
-    
+
     session.permanent = True
     uid = user['localId']
     session["uid"] = uid
@@ -254,7 +254,7 @@ def make_report():
         return render_template('make_report.html')
 
     else:
-        
+
         # getting the time and changing to current timezone
         today = datetime.now()
         curr_time = time.localtime()
@@ -292,7 +292,7 @@ def make_report():
 # need more instruction on how to filter it: location/time etc
 @app.route('/recent_reports', methods=['GET', 'POST'])
 def recent_reports():
-    
+
     all_reports = db.child("reports").get()
 
     incident_arr = []
@@ -315,10 +315,10 @@ def recent_reports():
 
         incident_arr.insert(0, details_arr)
         details_arr = []
-        
+
 
     # returns array of arrays, [[DATE + TIME, URL TO IMAGE, LOCATION, INCIDENT], [August 12, 2020 08:40 PM, https://, LA, INCIDENT]]
-    # SOME REPORTS MAY NOT HAVE URLS!!! 
+    # SOME REPORTS MAY NOT HAVE URLS!!!
     return render_template('recent_reports.html', reports=incident_arr)
 
 @app.route('/map', methods=['GET'])
@@ -329,7 +329,7 @@ def map():
     coords_arr = []
     details_arr = []
 
-    # iterate through the coordinates child 
+    # iterate through the coordinates child
     for coords in all_coords.each():
         date = str(coords.key())
         date = date.replace('"', "")
@@ -338,7 +338,7 @@ def map():
     # append corresponding incident report with it
         incident = db.child("reports").child(date).child("report").get().val()
         details_arr.append(incident)
-        
+
         reps = db.child("coordinates").child(date).get()
 
         # iterate through the lat and long INSIDE the dates

@@ -1,60 +1,190 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import axios from 'axios';
 import { StackActions } from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker';
+import Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions';
+import MapView from 'react-native-maps';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
-  Keyboard, Alert, TextInput, Image
+  Keyboard, Alert, TextInput, Image, Component, Button
 } from 'react-native';
 
-import homeScreen from '../Welcome/homescreen'
-import {newsfeed} from '../Welcome/newsfeed'
+export default class newReport extends React.Component {
+  constructor(){
+    super()
+    this.state = {
+      image: null,
+      location: null,
+      report: null,
+      latitude: null,
+      longitude: null
+    }
+    this.handleChange = this.handleChange.bind(this)
+  }
 
-export function newReport({navigation}) {
-  return(
-    <View style = {styles.background}>
+  handleChange = async event => {
+    this.setState
 
-      <Text style = {styles.mainText}>
-        Make a Report
-      </Text>
+  }
 
-      <Text style = {styles.smallText}>
-        Publish an online report about a potential threat or incident. Provide
-        a description of the perpetuator or upload an image or video of the
-        incident.
-        If an emergency situation has occurred, contact authorities immediately
-        for medical help.
-      </Text>
-      <View style = {styles.container}>
+  componentDidMount() {
+    this.getPermissionAsync();
 
-        <Text style = {styles.secondHeader}>
-          Incident Report
+/*
+    axios.post('https://save-our-women-b9aef.firebaseio.com/reports.json', {
+      // data to be sent
+      image: this.state.image,
+      location: this.state.location,
+      report: this.state.report,
+      latitude: this.state.latitude,
+      longitude: this.state.longitude
+
+    })
+    .then(function (response) {
+      console.log(this.state.report);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+  axios({
+    method: 'post',
+    url: '/make_report',
+    data: {
+      location: 'Finn',
+      description: 'Williams'
+    }
+  });
+*/
+  }
+
+
+  getPermissionAsync = async () => {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        alert('Please turn on camera permissions to upload a photo');
+      }
+    }
+  };
+
+  _pickImage = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      console.log(result);
+      if (!result.cancelled) {
+        this.setState({ image: result.uri });
+        console.log(result.uri)
+      }
+
+      console.log(result);
+    } catch (E) {
+      console.log(E);
+    }
+  };
+
+  render() {
+    const {navigation} = this.props
+    let { image } = this.state;
+    return(
+      <View style = {styles.background}>
+
+        <Text style = {styles.mainText}>
+          Make a Report
         </Text>
-        <TextInput style = {styles.infoBox}
-          placeholder="   Subject"
-        >
-        </TextInput>
-        <TextInput style = {styles.moreInfo}
-          placeholder="   Description"
-        >
-        </TextInput>
 
-        <TouchableOpacity style = {styles.submitButton}>
-          <Text style = {styles.buttonText}> Submit
+        <Text style = {styles.smallText}>
+          Publish an online report about a potential threat or incident. Provide
+          a description of the perpetuator or upload an image or video of the
+          incident.
+          If an emergency situation has occurred, contact authorities immediately
+          for medical help.
+        </Text>
+        <View style = {styles.container}>
+
+          <Text style = {styles.secondHeader}>
+            Incident Report
+          </Text>
+          <View style = {{flex: 1, top: 20}}>
+          <GooglePlacesAutocomplete
+            placeholder='Search Location'
+            autoFocus = {false}
+            returnKeyType = 'search'
+            fetchDetails = {true}
+            currentLocation = {true}
+            disableScroll = {false}
+            placeholderTextColor = 'rgba(158, 101, 144, 0.8)'
+            styles = {{
+              textInputContainer: {
+                backgroundColor:'rgba(158, 101, 144, 0.8)',
+                borderTopWidth: 0,
+                borderBottomWidth: 0,
+                borderRadius: -25
+              },
+              textInput: {
+                marginLeft: 0,
+                marginRight: 0,
+                height: 38,
+                color: 'rgba(158, 101, 144, 0.8)',
+                fontSize: 16,
+              },
+              listView: {
+                color: 'rgba(158, 101, 144, 0.8)'
+              }
+            }}
+            onPress={(data, details = null) => {
+              console.log(data,details);
+            }}
+            query={{
+              key: 'AIzaSyAeQmNz_y5iceHHdjfQPFC-JJP98NjBO6U',
+              language: 'en',
+            }}
+          />
+          </View>
+
+          <TextInput style = {styles.moreInfo}
+            placeholder="   Description"
+            multiline={true}
+            onChangeText={data => this.setState({ description: data })}
+
+          >
+          </TextInput>
+
+          <TouchableOpacity
+            style = {styles.addButton}
+            title="Add Image"
+            onPress={this._pickImage}>
+              <Text style = {styles.buttonText}> Add Image
+              </Text>
+          </TouchableOpacity>
+              {image && <Image source={require('../src/icons/polaroid.png')}
+              style = {styles.photoUpload} /
+              >}
+
+          <TouchableOpacity style = {styles.submitButton}>
+            <Text style = {styles.buttonText}> Submit
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity
+          style = {styles.backButton}
+          onPress={
+            () => navigation.dispatch(StackActions.pop(1))}
+        >
+          <Text style = {styles.backArrow}>
+            ←
           </Text>
         </TouchableOpacity>
       </View>
-
-      <TouchableOpacity
-        style = {styles.backButton}
-        onPress={
-          () => navigation.dispatch(StackActions.pop(1))}
-      >
-        <Text style = {styles.backArrow}>
-          ←
-        </Text>
-      </TouchableOpacity>
-    </View>
-  )
+    )
+  }
 }
 
 const styles = StyleSheet.create({
@@ -112,30 +242,37 @@ const styles = StyleSheet.create({
     top: 10,
   },
 
-  infoBox: {
-    backgroundColor: 'rgba(158, 101, 144, 0.2)',
-    height: 50,
-    width: 275,
-    alignSelf: 'center',
-    marginVertical: 25,
-    borderRadius: 25
-  },
 
   moreInfo: {
     backgroundColor:'rgba(158, 101, 144, 0.2)',
-    height: 50,
+    height: 200,
     width: 275,
     alignSelf:'center',
-    borderRadius: 25
+    borderRadius: 25,
+    top: 80,
   },
+
+
 
   submitButton: {
     backgroundColor: 'rgba(158, 101, 144, 0.7)',
     height: 50,
-    width: 275,
+    width: 125,
     alignSelf: 'center',
-    marginVertical: 25,
-    borderRadius: 25
+    left: 80,
+    marginVertical: 15,
+    borderRadius: 25,
+    bottom: 160
+  },
+
+  addButton: {
+    backgroundColor: 'rgba(158, 101, 144, 0.5)',
+    height: 50,
+    width: 125,
+    alignSelf: 'center',
+    marginVertical: 95,
+    borderRadius: 25,
+    right: 80,
   },
 
   buttonText: {
@@ -144,5 +281,14 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "bold",
     marginVertical: 15
+  },
+
+  photoUpload: {
+    height: 50,
+    width: 50,
+    position: 'absolute',
+    left: 75,
+    top: 520
+
   }
 })
