@@ -145,17 +145,6 @@ def logout():
 
     return jsonify({'reason': 'Successful logout'}), 200
 
-# dont think need a home page for back end?
-'''
-@app.route('/home', methods=['GET', 'POST'])
-def home():
-
-    global uid
-    return render_template('home.html', value=uid)
-
-# profile // TO BE EDITED, needs to display user information!!
-'''
-
 @app.route('/profile', methods=['GET', 'PUT'])
 def profile():
 
