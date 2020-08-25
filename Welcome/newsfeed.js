@@ -107,6 +107,7 @@ export default class newsfeed extends React.Component {
           Newsfeed
         </Text>
         <TouchableOpacity
+          style = {styles.backArrow}
           onPress={
             () => navigation.dispatch(StackActions.pop(1))}
         >
@@ -115,6 +116,8 @@ export default class newsfeed extends React.Component {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
+          style = {styles.addReport}
+
           onPress={() =>navigation.navigate('new report')}
         >
           <Text style = {styles.addReport}>
@@ -159,8 +162,8 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: 'rgba(0, 0, 0, 0.3)',
     alignSelf:'flex-start',
-    marginLeft:15,
-    bottom: -21,
+    marginLeft:5,
+    bottom: 46,
     position: 'absolute'
   },
 
@@ -168,8 +171,8 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: 'rgba(0, 0, 0, 0.3)',
     alignSelf:'flex-end',
-    marginRight: 15,
-    bottom: 15
+    right: 5,
+    bottom: 1
   },
 
   newsContainer: {
