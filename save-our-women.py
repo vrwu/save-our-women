@@ -141,6 +141,8 @@ def forgotpass():
 @app.route('/logout', methods=['GET'])
 def logout():
 
+    global uid
+
     session.pop("uid", None)
 
     return jsonify({'reason': 'Successful logout'}), 200
@@ -149,6 +151,9 @@ def logout():
 def profile():
 
     global uid
+
+    if uid == 0:
+        return({'reason': 'Cannot get Profile, User not logged in'}), 400
     
     # for viewing profile
     if request.method == 'GET':
@@ -160,10 +165,7 @@ def profile():
 
     # for updating profile
     else:
-        name = request.json['name']
-        email = request.json['email']
-        phone = request.json['num']
-        photo = request.json['fileToUpload']
+        photo = request.json['fileToUpload'] if 'fileToUpload' in request.json else None
 
         # decode base64
         picture = name + '.png'
@@ -171,8 +173,8 @@ def profile():
         decoded_image_data = base64.decodebytes(photo_bytes)
 
         # if the person did not upload a picture
-        if picture == "":
-            link = ""
+        if picture is None:
+            return({'reason': 'Empty photo entry'}), 400
 
         # picture is uploaded to firebase storage and url is generated and pushed to database
         else:
@@ -180,17 +182,28 @@ def profile():
             link = storage.child('images/' + picture).get_url(None)
             db.child("users").child(uid).child('details').child('Profile Picture').set(link)
 
+        return jsonify({'reason': 'Profile picture updated'}), 200
+
+# for if we want to update profile details
+'''
+        name = request.json['name']
+        email = request.json['email']
+        phone = request.json['num']
+
         # update any values changed
         db.child("users").child(uid).child("details").update({"Name": name})
         db.child("users").child(uid).child("details").update({"Email": email})
         db.child("users").child(uid).child("details").update({"Phone": email})
-
-        return jsonify({'reason': 'Profile details updated'}), 200
+'''
+        
 
 @app.route('/emergency_contacts', methods=['GET'])
 def emergency_contacts():
 
     global uid
+
+    if uid == 0:
+        return({'reason': 'Cannot get Emergency Contacts, User not logged in'}), 400
 
     # arrays 
     contacts_arr = []
@@ -216,6 +229,11 @@ def emergency_contacts():
 @app.route('/add_emergency_contact', methods=['POST'])
 def add_emergency_contact():
 
+    global uid
+
+    if uid == 0:
+        return({'reason': 'Cannot get Add Emergency Contact, User not logged in'}), 400
+
     full_name = request.json['name'] if 'name' in request.json else None
     phone = request.json['num'] if 'phone' in request.json else None
 
@@ -238,6 +256,10 @@ def add_emergency_contact():
 def send_emergency_sos():
 
     global uid
+
+    if uid == 0:
+        return({'reason': 'Cannot get Send Emergency SOS, User not logged in'}), 400
+
     map_link = ""
 
     lat = request.json['latitude']
