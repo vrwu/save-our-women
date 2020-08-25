@@ -94,7 +94,7 @@ export default class newsfeed extends React.Component {
       console.log('fail')
     }
     else {
-      console.log("success")
+      console.log("newsfeed")
     }
   }
 

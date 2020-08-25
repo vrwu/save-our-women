@@ -19,7 +19,7 @@ import {Contacts} from './Welcome/Contacts';
 import profile from './Welcome/profile';
 import newsfeed from './Welcome/newsfeed';
 import newReport from './Welcome/newReport';
-import {contactList} from './Welcome/contactList';
+import contactList from './Welcome/contactList';
 import map from './Welcome/map';
 
 const Stack = createStackNavigator();
