@@ -18,9 +18,6 @@ export default class newsfeed extends React.Component {
     this.getData()
   }
 
-  getData = async () => {
-  }
-
   render() {
     const {navigation} = this.props;
     return (
