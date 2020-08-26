@@ -9,23 +9,72 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
   Keyboard, Alert, TextInput, Image, Component, Button
 } from 'react-native';
+import api from '../baseURL'
+import ImgToBase64 from 'react-native-image-base64';
 
 export default class newReport extends React.Component {
   constructor(){
     super()
     this.state = {
       image: null,
-      location: null,
-      report: null,
-      latitude: null,
-      longitude: null
+      location: '',
+      report: '',
+      latitude: '',
+      longitude: ''
     }
-    this.handleChange = this.handleChange.bind(this)
+    this.handleChangeDescription = this.handleChangeDescription.bind(this)
+    this.handleChangeLocation = this.handleChangeLocation.bind(this)
+    this.handleChangeLatitude = this.handleChangeLatitude.bind(this)
+    this.handleChangeLongitude = this.handleChangeLongitude.bind(this)
+    this._pickImage = this._pickImage.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+
   }
 
-  handleChange = async event => {
-    this.setState
+ handleChangeDescription = (textValue) => {
+    console.log(this.state.report)
+    this.setState({
+      report: textValue
+    })
+  }
 
+  handleChangeLocation = (textValue) => {
+     this.setState({
+       location: data.terms[0].value
+     })
+   }
+
+    handleChangeLatitude = (event) => {
+       this.setState({
+         latitude: details.geometry.location.lat
+       })
+     }
+
+     handleChangeLongitude = (event) => {
+        this.setState({
+          report: details.geometry.location.lng
+        })
+      }
+
+
+
+ handleSubmit () {
+    let baseURL: string = '/make_report';
+    let payload : object = {
+      "location": this.state.location,
+      "report": this.state.report,
+      "image": this.state.image,
+      "latitude": this.state.latitude,
+      "longitude": this.state.longitude
+    };
+
+    api.post(baseURL, payload)
+      .then(function (response) {
+        console.log(this.state.report);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   componentDidMount() {
@@ -79,8 +128,8 @@ export default class newReport extends React.Component {
       });
       console.log(result);
       if (!result.cancelled) {
-        this.setState({ image: result.uri });
-        console.log(result.uri)
+        this.setState({ image: ImgToBase64.getBase64String(result.uri) });
+        console.log(ImgToBase64.getBase64String(result.uri.uri))
       }
 
       console.log(result);
@@ -88,6 +137,8 @@ export default class newReport extends React.Component {
       console.log(E);
     }
   };
+
+
 
   render() {
     const {navigation} = this.props
@@ -139,7 +190,12 @@ export default class newReport extends React.Component {
               }
             }}
             onPress={(data, details = null) => {
-              console.log(data,details);
+              console.log(details.geometry.location.lat)
+              console.log(details.geometry.location.lng)
+              console.log(data.terms[0].value)
+              this.handleChangeLatitude
+              this.handleChangeLongitude
+              this.handleChangeLocation
             }}
             query={{
               key: 'AIzaSyAeQmNz_y5iceHHdjfQPFC-JJP98NjBO6U',
@@ -151,7 +207,7 @@ export default class newReport extends React.Component {
           <TextInput style = {styles.moreInfo}
             placeholder="   Description"
             multiline={true}
-            onChangeText={data => this.setState({ description: data })}
+            onChangeText={this.handleChangeDescription}
 
           >
           </TextInput>
@@ -167,7 +223,10 @@ export default class newReport extends React.Component {
               style = {styles.photoUpload} /
               >}
 
-          <TouchableOpacity style = {styles.submitButton}>
+          <TouchableOpacity
+            style = {styles.submitButton}
+            onPress={() => this.handleSubmit()}
+          >
             <Text style = {styles.buttonText}> Submit
             </Text>
           </TouchableOpacity>
@@ -175,6 +234,7 @@ export default class newReport extends React.Component {
 
         <TouchableOpacity
           style = {styles.backButton}
+
           onPress={
             () => navigation.dispatch(StackActions.pop(1))}
         >

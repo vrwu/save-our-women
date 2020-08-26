@@ -8,6 +8,7 @@ import {
   Keyboard,
   Console
 } from 'react-native';
+import api from '../baseURL'
 
 // sample login
 const VALID_EMAIL = "sow@save-our-women.com"
@@ -18,9 +19,41 @@ export default class Email extends Component {
     super(props);
     this.state = {
       email: '',
-      password: ''
+      pass: ''
     }
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChangeEmail = this.handleChangeEmail.bind(this);
+    this.handleChangePass = this.handleChangePass.bind(this);
   }
+
+  handleChangeEmail = (textValue) => {
+     this.setState({
+       email: textValue
+     })
+   }
+
+   handleChangePass = (textValue) => {
+      this.setState({
+        pass: textValue
+      })
+    }
+
+    handleSubmit () {
+       let baseURL: string = '/login';
+       let payload : object = {
+         "email": this.state.email,
+         "pass": this.state.pass
+       };
+
+       api.post(baseURL, payload)
+         .then(function (response) {
+           console.log(this.state.email);
+           console.log(this.state.pass);
+         })
+         .catch(function (error) {
+           console.log(error);
+         });
+     }
 
   render() {
     const {navigation} = this.props;
@@ -34,8 +67,7 @@ export default class Email extends Component {
             autoCorrect={false}
             keyboardType='email-address'
             label='enter email'
-            onChangeText={text => this.setState({email:text}, () => {
-              console.log(this.state.email, 'email change')})}
+            onChangeText={this.handleChangeEmail}
           />
           <TextInput style={styles.inputBoxTwo}
             value={this.state.password}
@@ -45,9 +77,8 @@ export default class Email extends Component {
             secureTextEntry={true}
             autoCapitalize='none'
             autoCorrect={false}
-            onChangeText=
-              {text => this.setState({password:text},
-                () => {console.log(this.state.password)})}
+            onChangeText={this.handleChangePass}
+
           />
         </View>
     )
