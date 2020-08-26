@@ -204,7 +204,7 @@ def emergency_contacts():
 
     if uid == 0:
         return({'reason': 'Cannot get Emergency Contacts, User not logged in'}), 400
-
+        
     # arrays 
     contacts_arr = []
     person_arr = []
@@ -235,7 +235,7 @@ def add_emergency_contact():
         return({'reason': 'Cannot get Add Emergency Contact, User not logged in'}), 400
 
     full_name = request.json['name'] if 'name' in request.json else None
-    phone = request.json['num'] if 'phone' in request.json else None
+    phone = request.json['num'] if 'num' in request.json else None
 
     if full_name is None:
         return({'reason': 'Empty name entry'}), 400
