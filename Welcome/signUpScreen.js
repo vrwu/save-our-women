@@ -1,13 +1,42 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput,
   KeyboardAvoidingView
  } from 'react-native';
-
+import api from '../baseURL'
 
 export function signUpScreen({navigation}){
+  //hooks
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [num, setNum] = useState("");
+  const [pass, setPass] = useState("");
+
+
+  function handleSubmit () {
+     let baseURL: string = '/signup';
+     let payload : object = {
+       "name": name,
+       "email": email,
+       "num": num,
+       "pass": pass
+     };
+
+     api.post(baseURL, payload)
+       .then(function (response) {
+         console.log(name);
+         console.log(email);
+         console.log(num);
+         console.log(pass);
+
+
+       })
+       .catch(function (error) {
+         console.log(error);
+       });
+   }
   return (
     <KeyboardAvoidingView style = {styles.keyboard}
     behavior ='padding'>
@@ -20,6 +49,10 @@ export function signUpScreen({navigation}){
           placeholderTextColor="#FFFFFF"
           enablesReturnKeyAutomatically={true}
           autoCorrect={false}
+          onChangeText={(text) => {
+            setName(text)
+            console.log(name)}}
+          value={name}
         />
         <TextInput style={styles.email}
           autoCapitalize='none'
@@ -28,6 +61,8 @@ export function signUpScreen({navigation}){
           enablesReturnKeyAutomatically={true}
           autoCorrect={false}
           keyboardType='email-address'
+          onChangeText={(text) => setEmail(text)}
+          value={email}
         />
         <TextInput style={styles.phoneNumber}
           placeholder="Phone Number"
@@ -35,6 +70,8 @@ export function signUpScreen({navigation}){
           enablesReturnKeyAutomatically={true}
           autoCapitalize='none'
           autoCorrect={false}
+          onChangeText={(text) => setNum(text)}
+          value={num}
         />
         <TextInput style={styles.password}
           placeholder="Password"
@@ -43,10 +80,13 @@ export function signUpScreen({navigation}){
           enablesReturnKeyAutomatically={true}
           autoCapitalize='none'
           autoCorrect={false}
+          onChangeText={(text) => setPass(text)}
+          value={pass}
         />
         <TouchableOpacity
           style = {styles.button}
-          onPress={() => navigation.navigate('contacts')}
+          onPress={(event) => handleSubmit()}
+          onPress={() =>navigation.navigate('contacts')}
         >
           <Text style={styles.SignUpText}> Sign Up </Text>
         </TouchableOpacity>

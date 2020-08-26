@@ -26,6 +26,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-google-places-autocomplete": "^1.8.0",
+    "react-native-image-base64": "^0.1.4",
     "react-native-image-crop-picker": "^0.32.2",
     "react-native-image-picker": "^2.3.3",
     "react-native-maps": "^0.25.0",

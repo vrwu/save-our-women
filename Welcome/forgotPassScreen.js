@@ -1,5 +1,5 @@
 
-import * as React from 'react';
+import React, {useState} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StackActions } from '@react-navigation/native';
@@ -8,8 +8,26 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput,
   KeyboardAvoidingView, Component, Alert
  }
 from 'react-native';
+import api from '../baseURL'
 
 export function forgotPassScreen({navigation}){
+  //hooks
+  const [email, setEmail] = useState("");
+
+  function handleSubmit () {
+     let baseURL: string = '/forgotpass';
+     let payload : object = {
+       "email": email,
+     };
+
+     api.post(baseURL, payload)
+       .then(function (response) {
+         console.log(email);
+       })
+       .catch(function (error) {
+         console.log(error);
+       });
+   }
 
   return (
     <KeyboardAvoidingView style = {styles.keyboard}
@@ -33,6 +51,8 @@ export function forgotPassScreen({navigation}){
           password.
         </Text>
         <TextInput style = {styles.email}
+          onChangeText={(text) => setEmail(text)}
+          value={email}
           autoCapitalize = 'none'
           placeholder = 'Email'
           placeholderTextColor = '#FFFFFF'
@@ -42,6 +62,7 @@ export function forgotPassScreen({navigation}){
         </TextInput>
         <TouchableOpacity style = {styles.enterButton}
           title = {"Send Email"}
+          onPress={() => handleSubmit()}
           onPress={
             () =>  Alert.alert('Email Sent!')}
         >

@@ -1,12 +1,37 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput,
   KeyboardAvoidingView
  } from 'react-native';
+import api from '../baseURL'
 
 export function Contacts({navigation}){
+
+  //hooks
+  const [name, setName] = useState("");
+  const [num, setNum] = useState("");
+
+
+
+  function handleSubmit () {
+     let baseURL: string = '/add_emergency_contact';
+     let payload : object = {
+       "name": name,
+       "num": num
+     };
+
+     api.post(baseURL, payload)
+       .then(function (response) {
+         console.log(name);
+         console.log(num);
+       })
+       .catch(function (error) {
+         console.log(error);
+       });
+   }
+
   return (
     <KeyboardAvoidingView style = {styles.keyboard}
     behavior ='padding'>
@@ -14,23 +39,34 @@ export function Contacts({navigation}){
         <StatusBar style="auto" />
         <Text style={styles.title}>Add Emergency Contacts</Text>
         <TextInput style={styles.name}
+
+          clearButtonMode="always"
           autoCapitalize='none'
           placeholder="Name"
           placeholderTextColor="#FFFFFF"
           enablesReturnKeyAutomatically={true}
           autoCorrect={false}
+          onChangeText={(text) => {
+            setName(text)
+            console.log(name)}}
+          value={name}
         />
         <TextInput style={styles.phoneNumber}
+          clearButtonMode="always"
           placeholder="Phone Number"
           placeholderTextColor="#FFFFFF"
           enablesReturnKeyAutomatically={true}
           autoCapitalize='none'
           autoCorrect={false}
+          onChangeText={(text) => {
+            setNum(text)
+            console.log(num)}}
+          value={num}
         />
 
         <TouchableOpacity
           style = {styles.SubmitButton}
-          onPress={() => navigation.navigate('contacts')}
+          onPress={(event) =>handleSubmit()}
         >
           <Text style={styles.SubmitText}> Submit </Text>
         </TouchableOpacity>

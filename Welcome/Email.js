@@ -11,6 +11,7 @@ import {
   Dimensions,
   Image
 } from 'react-native';
+import api from '../baseURL'
 
 import api from '../baseURL.js'
 
@@ -23,6 +24,9 @@ export default class Email extends Component {
       emailInput: '',
       passInput: '',
     }
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChangeEmail = this.handleChangeEmail.bind(this);
+    this.handleChangePass = this.handleChangePass.bind(this);
   }
 
   componentDidMount() {
@@ -31,7 +35,7 @@ export default class Email extends Component {
 
   getData = async () => {
     let apiUsers: string = '/login';
-    
+
 
   }
 
@@ -51,8 +55,7 @@ export default class Email extends Component {
             autoCorrect={false}
             keyboardType='email-address'
             label='enter email'
-            onChangeText={text => this.setState({email:text}, () => {
-              console.log(this.state.email, 'email change')})}
+            onChangeText={this.handleChangeEmail}
           />
           <TextInput style={styles.inputBoxTwo}
             value={this.state.password}
@@ -62,9 +65,8 @@ export default class Email extends Component {
             secureTextEntry={true}
             autoCapitalize='none'
             autoCorrect={false}
-            onChangeText=
-              {text => this.setState({password:text},
-                () => {console.log(this.state.password)})}
+            onChangeText={this.handleChangePass}
+
           />
           <TouchableOpacity
             onPress={() =>navigation.navigate('forgot password')}
