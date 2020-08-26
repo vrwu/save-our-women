@@ -1,30 +1,101 @@
-import * as React from 'react';
+
+import React, { useState } from "react";
 import { StatusBar } from 'expo-status-bar';
 import { StackActions } from '@react-navigation/native';
 import axios from 'axios';
 import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
-  Keyboard, Alert, TextInput, Image, ScrollView, FlatList, Component, Root
+  Keyboard, Alert, TextInput, Image, ScrollView, FlatList, Component, Root,
+  SafeAreaView, List
  } from 'react-native';
 
- import newReport from '../Welcome/newReport'
+import newReport from '../Welcome/newReport'
+import api from '../baseURL.js'
+
+const reportItem = ({ date }) => {
+  <View style = {styles.newsContainer}>
+    <Text> {date} </Text>
+  </View>
+}
 
 export default class newsfeed extends React.Component {
+
   constructor(props){
     super(props);
     this.state = {
-      date: [],
-      location: [],
       reports: [],
-      image: [],
     }
   }
 
   componentDidMount() {
-    return axios.get('https://jsonplaceholder.typicode.com/users')
-      .then(res => {
-        this.setState({reports:res})
-        console.log(this.state.reports);
-      })
+    this.getData()
+  }
+
+  getData = async () => {
+    let apiRecentRep: string = '/recent_reports';
+    var info = await api.get(apiRecentRep)
+    var dataObj = Object.values(info.data.reports)
+    this.setState({reports: dataObj})
+  }
+
+  FlatListItemSeparator = () => {
+    return (
+      <View
+        style={{
+          height: 1,
+          width: "40%",
+          backgroundColor: "rgba(158, 101, 144, 0.2)",
+          alignSelf: 'center',
+          marginVertical: 30
+        }}
+      />
+    );
+  }
+
+  renderItem = ({ item }) => {
+    var img = Object.values(item)[2]
+    var imgURL = img.toString()
+    if (imgURL.length != 0) {
+      return (
+        <View>
+          <Text style = {styles.date}>
+            {Object.values(item[0])}
+          </Text>
+          <Text style = {styles.location}>
+          {Object.values(item[1])}
+          </Text>
+          <Text style = {styles.details}>
+            {Object.values(item[3])}
+          </Text>
+          <Image source = {{uri: imgURL}}
+            style = {styles.picture}
+          />
+        </View>
+      )
+    }
+    else {
+      return (
+        <View>
+          <Text style = {styles.date}>
+            {Object.values(item[0])}
+          </Text>
+          <Text style = {styles.location}>
+          {Object.values(item[1])}
+          </Text>
+          <Text style = {styles.details}>
+            {Object.values(item[3])}
+          </Text>
+        </View>
+      )
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.state.reports == null) {
+      console.log('fail')
+    }
+    else {
+      console.log("newsfeed")
+    }
   }
 
   render() {
@@ -35,13 +106,8 @@ export default class newsfeed extends React.Component {
         <Text style = {styles.mainText}>
           Newsfeed
         </Text>
-        <TextInput
-          style = {styles.searchBox}
-          placeholder = "Search"
-          placeholderTextColor = "#FFFFFF"
-        >
-        </TextInput>
         <TouchableOpacity
+          style = {styles.backArrow}
           onPress={
             () => navigation.dispatch(StackActions.pop(1))}
         >
@@ -50,39 +116,36 @@ export default class newsfeed extends React.Component {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
+          style = {styles.addReport}
+
           onPress={() =>navigation.navigate('new report')}
         >
           <Text style = {styles.addReport}>
             +
           </Text>
         </TouchableOpacity>
+        <View style = {styles.newsContainer}>
+        <FlatList
+        data={this.state.reports}
+        extraData={this.state}
+        keyExtractor={(item, index) => index.toString()}
+        ItemSeparatorComponent = { this.FlatListItemSeparator }
+        renderItem={this.renderItem}
+        />
+          </View>
       </View>
-          <FlatList
-            style = {{backgroundColor:'blue'}}
-            data = {this.state.reports}
-          />
      </View>
 
    )
  }
 }
 
-const NewsCard = ({item }) => {
-    console.log(item)
-    return (
-        <View style={styles.newsContainer}>
-            <Text> {item.title}</Text>
-            <Image source={item.urlToImage ? {uri: item.urlToImage } : null}/>
-            <Text>{item.description}</Text>
-        </View>
-    )
-}
 const styles = StyleSheet.create({
   mainText: {
     fontSize: 20,
     fontWeight: "bold",
     textAlign:'center',
-    top: 50,
+    top: 60,
     color: 'white'
   },
 
@@ -99,8 +162,8 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: 'rgba(0, 0, 0, 0.3)',
     alignSelf:'flex-start',
-    marginLeft:15,
-    bottom: 3,
+    marginLeft:5,
+    bottom: 46,
     position: 'absolute'
   },
 
@@ -108,41 +171,53 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: 'rgba(0, 0, 0, 0.3)',
     alignSelf:'flex-end',
-    marginRight: 15,
-    bottom: 40
-  },
-
-  searchBox: {
-    width: 300,
-    height: 30,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    borderRadius: 25,
-    paddingHorizontal: 13,
-    fontSize: 16,
-    color: '#FFFFFF',
-    top: 80,
-    alignSelf: 'center'
+    right: 5,
+    bottom: 1
   },
 
   newsContainer: {
-    height: 150,
+    height: 660,
     width: 378,
     alignSelf: 'center',
     backgroundColor:'white',
     borderRadius: 25,
     marginVertical: 10,
-    top: 80,
+    top: 100,
     color: "black"
   },
 
-  testButton: {
-    alignSelf:'center',
+  date: {
+    fontSize: 19,
+    fontWeight: 'bold',
+    marginVertical: 10,
+    marginLeft: 20,
+    color: 'rgba(0, 0, 0, 0.6)',
   },
 
-  testInput: {
-    alignSelf:'center',
+  location: {
+    fontSize: 14,
+    marginLeft: 0,
+    marginRight: 30,
+    marginLeft: 30,
+    bottom: 5,
+    alignSelf: 'center',
+    color: 'rgba(0, 0, 0, 0.6)',
   },
 
+  details: {
+    fontSize: 14,
+    marginVertical: 5,
+    alignSelf: 'flex-start',
+    left: 50,
+    color: 'rgba(0, 0, 0, 0.6)',
+  },
 
-
+  picture: {
+    width: 350,
+    height: 400,
+    resizeMode: 'cover',
+    alignSelf: 'center',
+    borderRadius: 20,
+    marginVertical: 40,
+  }
 })

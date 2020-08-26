@@ -1,11 +1,53 @@
 import React from 'react';
 import MapView from 'react-native-maps';
+import axios from 'axios';
 import { StackActions } from '@react-navigation/native';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-
 import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 
+import api from '../baseURL.js'
+
 export default class map extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      locations: [],
+    }
+  }
+
+  componentDidMount() {
+    this.getData()
+  }
+
+  getData = async () => {
+    let apiLocations: string = '/map';
+    var info = await api.get(apiLocations)
+    var dataObj = info.data.coord
+    this.setState({locations: dataObj})
+    console.log(dataObj)
+  }
+
+  componentDidUpdate() {
+    if (this.state.locations == null) {
+      console.log("fail")
+    }
+    else {
+      console.log("success")
+
+    }
+  }
+
+  mapMarkers = () => {
+    return this.state.locations.map((report) =>
+      <MapView.Marker
+        pinColor = "purple"
+        coordinate = {{
+          latitude: Object.values(report[2]),
+          longitude: Object.values(report[2])
+        }}>
+      </MapView.Marker>
+    )
+  }
+
   render() {
     const {navigation} = this.props
     return (

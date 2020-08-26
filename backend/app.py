@@ -280,8 +280,8 @@ def make_report():
         else:
             storage.child("images/" + picture).put(photo)
             link = storage.child('images/' + picture).get_url(None)
-            db.child("reports").child(date).child('image').set(link)
 
+        db.child("reports").child(date).child('image').set(link)
         db.child("reports").child(date).child('location').set(location)
         db.child("reports").child(date).child('report').set(report)
         db.child("coordinates").child(date).child("latitude").set(lat)
