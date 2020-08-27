@@ -23,29 +23,9 @@ export default class map extends React.Component {
     var info = await api.get(apiLocations)
     var dataObj = info.data.coord
     this.setState({locations: dataObj})
-    console.log(dataObj)
-  }
-
-  componentDidUpdate() {
-    if (this.state.locations == null) {
-      console.log("fail")
+    for (var key in dataObj) {
+    //  console.log(dataObj[key][2] + ", " + dataObj[key][3])
     }
-    else {
-      console.log("success")
-
-    }
-  }
-
-  mapMarkers = () => {
-    return this.state.locations.map((report) =>
-      <MapView.Marker
-        pinColor = "purple"
-        coordinate = {{
-          latitude: Object.values(report[2]),
-          longitude: Object.values(report[2])
-        }}>
-      </MapView.Marker>
-    )
   }
 
   render() {
@@ -55,13 +35,20 @@ export default class map extends React.Component {
         <MapView style={styles.mapStyle}
           showsUserLocation ={true}
         >
-          <MapView.Marker
-            coordinate={{latitude: 37.73538,
-                          longitude: -122.4324,}}
-            title={"test: san francisco"}
-            description={"Date: today"}
-            pinColor = "purple"
-          />
+          {this.state.locations.map((report, index) => {
+            return (
+              <MapView.Marker
+                key = {index}
+                onLoad={() => this.forceUpdate()}
+                coordinate={{ latitude: parseFloat(report[2]),
+                  longitude: parseFloat(report[3]) }}
+                title = {report[0]}
+                description = {report[1]}
+                pinColor = 'purple'
+              >
+              </MapView.Marker>
+            )
+          })}
         </MapView>
         <TouchableOpacity
           style = {styles.backButton}
@@ -85,6 +72,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   mapStyle: {
+    top:10,
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },

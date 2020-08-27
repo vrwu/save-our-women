@@ -74,7 +74,8 @@ def signup():
 
     # message 'Account creation failed. Please ensure a new email or a password of at least 6 characters'
     except:
-        return({'reason': 'Account creation unsuccessful'}), 400
+        return({'reason': 'Account creation unsuccessful - ' 
+        'Please ensure a new email or a password of at least 6 characters'}), 400
 
     # sets session as permanent for x days and establishes the user uid
     global uid
@@ -281,7 +282,7 @@ def send_emergency_sos():
         phone_arr.append(number)
 
         # needs name or else find a way to use their own phone number
-        message = "SOS! Your friend " + name + " is in trouble and needs your help at this location!" + map_link
+        message = "SOS! Your friend " + name + " is in trouble and needs your help at this location! " + map_link
         client.messages.create(
             body=message,
             from_="+13213042130",

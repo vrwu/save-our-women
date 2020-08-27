@@ -11,7 +11,6 @@ import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
 import homeScreen from './Welcome/homescreen'
 import home from './Welcome/home'
 import Email from './Welcome/Email';
-import Logo from './Welcome/Logo';
 import {forgotPassScreen} from './Welcome/forgotPassScreen'
 import {signUpScreen} from './Welcome/signUpScreen';
 import {EmergencySOS} from './Welcome/EmergencySOS';
@@ -24,44 +23,6 @@ import map from './Welcome/map';
 
 const Stack = createStackNavigator();
 
-function WelcomeScreen({navigation}) {
-  return (
-    <KeyboardAvoidingView style = {styles.login}>
-      <View style={styles.containerOne}>
-        <StatusBar style="auto" />
-        <Logo/>
-        <Text style={styles.SOWText}>save our women</Text>
-        <Email/>
-        <View>
-          <TouchableOpacity
-            onPress={() =>navigation.navigate('forgot password')}
-          >
-            <Text
-              style={styles.forgotPass}>
-                  Forgot password?</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.button}
-            onPress = {() => navigation.navigate('home')}
-          >
-            <Text style={styles.loginText}>
-            Login
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style = {styles.noAcc}
-            onPress={() => navigation.navigate('sign up')}
-          >
-            <Text> Don't have an account?</Text>
-            <Text style = {styles.signupText}> Sign Up. </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </KeyboardAvoidingView>
-  );
-}
-
 export default function App() {
   return (
     <NavigationContainer>
@@ -73,7 +34,7 @@ export default function App() {
       >
         <Stack.Screen
           name="welcome"
-          component={WelcomeScreen}
+          component={Email}
         />
         <Stack.Screen
           name="forgot password"
