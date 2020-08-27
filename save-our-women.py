@@ -74,7 +74,8 @@ def signup():
 
     # message 'Account creation failed. Please ensure a new email or a password of at least 6 characters'
     except:
-        return({'reason': 'Account creation unsuccessful'}), 400
+        return({'reason': 'Account creation unsuccessful - ' 
+        'Please ensure a new email or a password of at least 6 characters'}), 400
 
     # sets session as permanent for x days and establishes the user uid
     global uid
