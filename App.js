@@ -22,13 +22,6 @@ import newReport from './Welcome/newReport';
 import contactList from './Welcome/contactList';
 import map from './Welcome/map';
 
-<<<<<<< HEAD
-
-const VALID_EMAIL = "sow@save-our-women.com"
-const VALID_PASSWORD = "tech-tank"
-
-=======
->>>>>>> fbfa368a76378c80eddff81ed4d66e9ec908dc92
 const Stack = createStackNavigator();
 
 function WelcomeScreen({navigation}) {

@@ -20,22 +20,23 @@ export function signUpScreen({navigation}){
      let payload : object = {
        "name": name,
        "email": email,
-       "num": num,
-       "pass": pass
+       "pass": pass,
+       "num": num
      };
 
      api.post(baseURL, payload)
        .then(function (response) {
          console.log(name);
          console.log(email);
-         console.log(num);
          console.log(pass);
+         console.log(num);
 
 
        })
        .catch(function (error) {
          console.log(error);
        });
+       navigation.navigate('contacts')
    }
   return (
     <KeyboardAvoidingView style = {styles.keyboard}
@@ -85,8 +86,7 @@ export function signUpScreen({navigation}){
         />
         <TouchableOpacity
           style = {styles.button}
-          onPress={(event) => handleSubmit()}
-          onPress={() =>navigation.navigate('contacts')}
+          onPress={() => handleSubmit()}
         >
           <Text style={styles.SignUpText}> Sign Up </Text>
         </TouchableOpacity>
