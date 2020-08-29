@@ -66,6 +66,7 @@ def signup():
     email = request.json['email']
     password = request.json['pass']
     phone = request.json['num']
+    photo = ""
 
     # creates an account on database and requests for verification
     try:
@@ -84,7 +85,7 @@ def signup():
     session["uid"] = uid
 
     # assigns data and pushes to database
-    data = {"Name": name, "Email": email, "Phone Number": phone}
+    data = {"Name": name, "Email": email, "Phone Number": phone, "Profile Picture": photo}
     db.child("users").child(uid).child("details").set(data)
 
     return jsonify({'reason': 'Account successfully created', 'value': uid}), 200
@@ -161,8 +162,9 @@ def profile():
         name = db.child("users").child(uid).child('details').child('Name').get().val()
         email = db.child("users").child(uid).child('details').child('Email').get().val()
         phone = db.child("users").child(uid).child('details').child('Phone Number').get().val()
+        photo = db.child("users").child(uid).child('details').child('Profile Picture').get().val()
 
-        return jsonify({'reason': 'Profile data bundle sent', 'name': name, 'email': email, 'phone': phone}), 200
+        return jsonify({'reason': 'Profile data bundle sent', 'name': name, 'email': email, 'phone': phone, 'photo': photo}), 200
 
     # for updating profile
     else:
