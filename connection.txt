@@ -52,8 +52,15 @@ profile():
     url: '/profile'
     input: NA
     return:
-        - {'reason': 'Profile data bundle sent', 'name': name, 'email': email, 'phone': phone}, 200
+        - {'reason': 'Profile data bundle sent', 'name': name, 'email': email, 'phone': phone, 'photo': photo}, 200
 
+    method: 'put'
+    url: '/profile'
+    input: 
+        - photo
+    output:
+        - {'reason': 'Profile picture updated'}, 200
+        - {'reason': 'Empty photo entry'}, 400
 emergency_contacts():
     method: 'get'
     url: '/emergency_contacts'
