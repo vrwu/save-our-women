@@ -168,19 +168,21 @@ def profile():
 
     # for updating profile
     else:
+        
         photo = request.json['fileToUpload'] if 'fileToUpload' in request.json else None
 
-        # decode base64
-        picture = name + '.png'
-        photo_bytes = photo.encode('utf-8')
-        decoded_image_data = base64.decodebytes(photo_bytes)
-
         # if the person did not upload a picture
-        if picture is None:
+        if photo is None:
             return({'reason': 'Empty photo entry'}), 400
-
-        # picture is uploaded to firebase storage and url is generated and pushed to database
+        
         else:
+            # decode base64
+            name = db.child("users").child(uid).child('details').child('Name').get().val()
+            picture = name + '.png'
+            photo_bytes = photo.encode('utf-8')
+            decoded_image_data = base64.decodebytes(photo_bytes)
+
+            # picture is uploaded to firebase storage and url is generated and pushed to database
             storage.child("images/" + picture).put(decoded_image_data)
             link = storage.child('images/' + picture).get_url(None)
             db.child("users").child(uid).child('details').child('Profile Picture').set(link)
