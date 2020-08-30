@@ -6,14 +6,17 @@ import * as Permissions from 'expo-permissions';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Component}
  from 'react-native';
 
+ import api from '../baseURL.js'
 
 export default class profile extends React.Component{
   state = {
     image: null,
+    profile: []
   };
 
   componentDidMount() {
     this.getPermissionAsync();
+    this.getData();
   }
 
   getPermissionAsync = async () => {
@@ -44,6 +47,13 @@ export default class profile extends React.Component{
     }
   };
 
+  getData = async() => {
+    let apiProfile: string = '/profile';
+    var info = await api.get(apiProfile);
+    this.setState({profile: Object.values(info.data)});
+    console.log(this.state.profile)
+  }
+
   render() {
     const {navigation} = this.props
     let { image } = this.state;
@@ -63,15 +73,15 @@ export default class profile extends React.Component{
           >}
 
         <Text style = {styles.nameVar}>
-          Random Name
+          {this.state.profile[1]}
         </Text>
 
         <Text style = {styles.phoneText}>
-          Phone Number:
+          Phone: {this.state.profile[2]}
         </Text>
 
         <Text style = {styles.emailText}>
-          Email Address:
+          Email: {this.state.profile[0]}
         </Text>
 
         <TouchableOpacity
@@ -103,17 +113,17 @@ export default class profile extends React.Component{
       backgroundColor:'rgba(158, 101, 144, 1)',
       height: 400,
       width:420,
+      borderRadius: 25
 
     },
 
-    //*name variable generated from database*
     nameVar: {
       fontSize: 25,
-      marginLeft: 50,
       position: 'absolute',
       color: 'white',
       fontWeight: 'bold',
-      top: 355
+      top: 355,
+      alignSelf: 'center'
     },
 
     phoneText: {
