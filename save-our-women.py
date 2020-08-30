@@ -1,3 +1,4 @@
+
 import pyrebase
 from flask import *
 import os
@@ -112,7 +113,7 @@ def login():
      # pop up message return "Invalid email and/or password"
     except:
         return({'reason': 'Invalid credentials'}), 400
-
+    
     # create a permanent session of x days
     session.permanent = True
     uid = user['localId']
@@ -131,7 +132,7 @@ def forgotpass():
     if email is None:
         return({'reason': 'Empty email entry'}), 400
 
-    else:
+    else: 
          message = "Email has been sent to " + email
 
     # should flash a message saying that an email has been sent to reset password
@@ -156,7 +157,7 @@ def profile():
 
     if uid == 0:
         return({'reason': 'Cannot get Profile, User not logged in'}), 400
-
+    
     # for viewing profile
     if request.method == 'GET':
         name = db.child("users").child(uid).child('details').child('Name').get().val()
@@ -194,13 +195,12 @@ def profile():
         name = request.json['name']
         email = request.json['email']
         phone = request.json['num']
-
         # update any values changed
         db.child("users").child(uid).child("details").update({"Name": name})
         db.child("users").child(uid).child("details").update({"Email": email})
         db.child("users").child(uid).child("details").update({"Phone": email})
 '''
-
+        
 
 @app.route('/emergency_contacts', methods=['GET'])
 def emergency_contacts():
@@ -209,14 +209,14 @@ def emergency_contacts():
 
     if uid == 0:
         return({'reason': 'Cannot get Emergency Contacts, User not logged in'}), 400
-
-    # arrays
+        
+    # arrays 
     contacts_arr = []
     person_arr = []
 
     all_users = db.child("users").child(uid).child('emergency contacts').get()
 
-    # iterate through emergency contacts and
+    # iterate through emergency contacts and 
     for user in all_users.each():
         name = user.key()
         person_arr.append(name)
@@ -343,7 +343,7 @@ def make_report():
 # need more instruction on how to filter it: location/time etc
 @app.route('/recent_reports', methods=['GET'])
 def recent_reports():
-
+    
     all_reports = db.child("reports").get()
 
     incident_arr = []
@@ -362,15 +362,15 @@ def recent_reports():
             detail = detail.replace('}', "")
 
             details_arr.insert(0, detail)
-
+            
         details_arr.insert(0, date)
 
         incident_arr.insert(0, details_arr)
         details_arr = []
-
+        
 
     # returns array of arrays, [[DATE + TIME, URL TO IMAGE, LOCATION, INCIDENT], [August 12, 2020 08:40 PM, https://, LA, INCIDENT]]
-    # SOME REPORTS MAY NOT HAVE URLS!!!
+    # SOME REPORTS MAY NOT HAVE URLS!!! 
     return jsonify({'reason': 'Recent Reports Bundle Created', 'reports': incident_arr}), 200
 
 @app.route('/map', methods=['GET'])
@@ -381,7 +381,7 @@ def map():
     coords_arr = []
     details_arr = []
 
-    # iterate through the coordinates child
+    # iterate through the coordinates child 
     for coords in all_coords.each():
         date = str(coords.key())
         date = date.replace('"', "")
