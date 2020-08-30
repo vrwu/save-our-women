@@ -18,6 +18,17 @@ export default class newsfeed extends React.Component {
     this.getData()
   }
 
+  getData = async () => {
+    let apiContacts: string = '/emergency_contacts';
+    var info = await api.get(apiContacts)
+      .then(function(response) {
+        console.log(response)
+      })
+      .catch((error) => {
+        console.log(error)
+      });
+  }
+
   render() {
     const {navigation} = this.props;
     return (
