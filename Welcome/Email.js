@@ -11,36 +11,62 @@ import {
   Dimensions,
   Image
 } from 'react-native';
-import api from '../baseURL'
 
-import api from '../baseURL.js'
+import api from '../baseURL'
 
 export default class Email extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      emails: [],
-      passwords: [],
-      emailInput: '',
-      passInput: '',
+      email: '',
+      pass: '',
     }
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChangeEmail = this.handleChangeEmail.bind(this);
     this.handleChangePass = this.handleChangePass.bind(this);
   }
 
-  componentDidMount() {
-    this.getData();
+  handleChangeEmail = (textValue) => {
+   this.setState({
+     email: textValue
+   })
+   console.log(this.state.email)
+
   }
 
-  getData = async () => {
+  handleChangePass = (textValue) => {
+    this.setState({
+      pass: textValue
+    })
+  }
+
+  handleSubmit() {
+    const {navigation} = this.props;
     let apiUsers: string = '/login';
+    let payload : object = {
+      "email": this.state.email,
+      "pass": this.state.pass
+    };
+    api.post(apiUsers, payload)
+      .then(function(response){
+        console.log(response)
+        navigation.navigate('home')
+      })
+      .catch((error) => {
+        console.log(error)
+      });
+  }
 
-
+  componentDidUpdate() {
+    if (this.state.email  == null) {
+      console.log('fail')
+    }
+    else {
+      console.log("success")
+    }
   }
 
   render() {
-    const {navigation} = this.props;
     return(
       <View style = {styles.bg}>
         <Image style={styles.logo}
@@ -55,7 +81,7 @@ export default class Email extends Component {
             autoCorrect={false}
             keyboardType='email-address'
             label='enter email'
-            onChangeText={this.handleChangeEmail}
+            onChangeText={(text) => this.handleChangeEmail(text)}
           />
           <TextInput style={styles.inputBoxTwo}
             value={this.state.password}
@@ -65,7 +91,7 @@ export default class Email extends Component {
             secureTextEntry={true}
             autoCapitalize='none'
             autoCorrect={false}
-            onChangeText={this.handleChangePass}
+            onChangeText={(text) => this.handleChangePass(text)}
 
           />
           <TouchableOpacity
@@ -77,7 +103,7 @@ export default class Email extends Component {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.loginButton}
-            onPress = {() => navigation.navigate('home')}
+            onPress = {() => this.handleSubmit()}
           >
             <Text style={styles.loginText}>
             Login
