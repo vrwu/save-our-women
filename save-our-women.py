@@ -66,6 +66,7 @@ def signup():
     email = request.json['email']
     password = request.json['pass']
     phone = request.json['num']
+    photo = ""
 
     # creates an account on database and requests for verification
     try:
@@ -74,7 +75,8 @@ def signup():
 
     # message 'Account creation failed. Please ensure a new email or a password of at least 6 characters'
     except:
-        return({'reason': 'Account creation unsuccessful'}), 400
+        return({'reason': 'Account creation unsuccessful - ' 
+        'Please ensure a new email or a password of at least 6 characters'}), 400
 
     # sets session as permanent for x days and establishes the user uid
     global uid
@@ -83,7 +85,7 @@ def signup():
     session["uid"] = uid
 
     # assigns data and pushes to database
-    data = {"Name": name, "Email": email, "Phone Number": phone}
+    data = {"Name": name, "Email": email, "Phone Number": phone, "Profile Picture": photo}
     db.child("users").child(uid).child("details").set(data)
 
     return jsonify({'reason': 'Account successfully created', 'value': uid}), 200
@@ -160,24 +162,27 @@ def profile():
         name = db.child("users").child(uid).child('details').child('Name').get().val()
         email = db.child("users").child(uid).child('details').child('Email').get().val()
         phone = db.child("users").child(uid).child('details').child('Phone Number').get().val()
+        photo = db.child("users").child(uid).child('details').child('Profile Picture').get().val()
 
-        return jsonify({'reason': 'Profile data bundle sent', 'name': name, 'email': email, 'phone': phone}), 200
+        return jsonify({'reason': 'Profile data bundle sent', 'name': name, 'email': email, 'phone': phone, 'photo': photo}), 200
 
     # for updating profile
     else:
+        
         photo = request.json['fileToUpload'] if 'fileToUpload' in request.json else None
 
-        # decode base64
-        picture = name + '.png'
-        photo_bytes = photo.encode('utf-8')
-        decoded_image_data = base64.decodebytes(photo_bytes)
-
         # if the person did not upload a picture
-        if picture is None:
+        if photo is None:
             return({'reason': 'Empty photo entry'}), 400
-
-        # picture is uploaded to firebase storage and url is generated and pushed to database
+        
         else:
+            # decode base64
+            name = db.child("users").child(uid).child('details').child('Name').get().val()
+            picture = name + '.png'
+            photo_bytes = photo.encode('utf-8')
+            decoded_image_data = base64.decodebytes(photo_bytes)
+
+            # picture is uploaded to firebase storage and url is generated and pushed to database
             storage.child("images/" + picture).put(decoded_image_data)
             link = storage.child('images/' + picture).get_url(None)
             db.child("users").child(uid).child('details').child('Profile Picture').set(link)
