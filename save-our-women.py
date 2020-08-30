@@ -1,4 +1,3 @@
-
 import pyrebase
 from flask import *
 import os
@@ -195,6 +194,7 @@ def profile():
         name = request.json['name']
         email = request.json['email']
         phone = request.json['num']
+
         # update any values changed
         db.child("users").child(uid).child("details").update({"Name": name})
         db.child("users").child(uid).child("details").update({"Email": email})
