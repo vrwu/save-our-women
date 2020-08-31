@@ -51,7 +51,19 @@ export default class profile extends React.Component{
     let apiProfile: string = '/profile';
     var info = await api.get(apiProfile);
     this.setState({profile: Object.values(info.data)});
-    console.log(this.state.profile)
+  }
+
+  handleLogOut() {
+    let apiLogOut: string = '/logout';
+    var obj = api.get(apiLogOut)
+    console.log(obj);
+    navigation.navigate('welcome')
+    .then(function(response) {
+      console.log(response)
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   }
 
   render() {
@@ -99,6 +111,15 @@ export default class profile extends React.Component{
         >
           <Text style = {styles.addcontactText}>
             Add Emergency Contacts
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style = {styles.outButton}
+          onPress={ () =>   navigation.navigate('welcome')}
+
+        >
+          <Text style = {styles.addcontactText}>
+            Log Out
           </Text>
         </TouchableOpacity>
       </View>
@@ -157,7 +178,7 @@ export default class profile extends React.Component{
       height: 50,
       backgroundColor: 'rgba(158, 101, 144, 1)',
       borderRadius:25,
-      top: 200,
+      top: 190,
       //marginBottom: 10,
       //later on figure out how to position button from the bottom so that
       //it's not pushed down by the contacts shown from backend
@@ -179,11 +200,21 @@ export default class profile extends React.Component{
       height: 50,
       backgroundColor: 'rgba(158, 101, 144, 1)',
       borderRadius:25,
-      top: 210,
+      top: 190,
+      marginVertical: 10,
       //marginBottom: 10,
       //later on figure out how to position button from the bottom so that
       //it's not pushed down by the contacts shown from backend
       alignSelf:'center'
+    },
+
+    outButton: {
+      width: 300,
+      height: 50,
+      backgroundColor: 'rgba(158, 101, 144, 1)',
+      borderRadius:25,
+      top: 190,
+      alignSelf: 'center'
     },
 
     addPFP: {
