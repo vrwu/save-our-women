@@ -119,7 +119,7 @@ def login():
     session["uid"] = uid
 
     # a pop up message with logged in should show and it should then proceed to the home page
-    return jsonify({'reason': 'Account successfully loggin in'}), 200
+    return jsonify({'reason': 'Account successfully loggin in', 'value': uid}), 200
 
 
 @app.route('/forgotpass', methods=['POST'])
@@ -147,7 +147,7 @@ def logout():
 
     session.pop("uid", None)
 
-    return jsonify({'reason': 'Successful logout'}), 200
+    return jsonify({'reason': 'Successful logout', 'value': uid}), 200
 
 @app.route('/profile', methods=['GET', 'PUT'])
 def profile():
