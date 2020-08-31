@@ -54,9 +54,9 @@ export default class profile extends React.Component{
   }
 
   handleLogOut = async () => {
+    const {navigation} = this.props;
     let apiLogOut: string = '/logout';
     var obj = await api.get(apiLogOut)
-    console.log(obj)
     .then(function(response) {
       console.log(response)
       navigation.navigate('welcome')

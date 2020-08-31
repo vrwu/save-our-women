@@ -1,10 +1,17 @@
 import * as React from 'react';
 import axios from 'axios';
 import { NavigationContainer } from '@react-navigation/native';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, FlatList
+} from 'react-native';
 import { StackActions } from '@react-navigation/native';
 
 import api from '../baseURL.js'
+
+const Item = ({ title }) => (
+  <View style={styles.item}>
+    <Text style={styles.title}>{title}</Text>
+  </View>
+);
 
 export default class contactList extends React.Component {
   constructor(props){
@@ -19,10 +26,34 @@ export default class contactList extends React.Component {
   }
 
   getData = async () => {
-    let apiContacts: string = '/profile';
+    let apiContacts: string = '/emergency_contacts';
     var info = await api.get(apiContacts)
     var dataObj = Object.values(info.data)
-    this.setState({reports: dataObj})
+    this.setState({contacts: dataObj[0]})
+    console.log(this.state.contacts)
+  };
+
+  renderItem = ({ item }) => {
+    return(
+      <View>
+        <Text style = {{alignSelf: 'center', fontSize: 15}}>
+          {Object.values(item[0])}{'\n'}{JSON.stringify(item[1])}{'\n'}
+        </Text>
+      </View>
+    )
+  };
+
+  FlatListItemSeparator = () => {
+    return (
+      <View
+        style={{
+          height: 1,
+          width: "40%",
+          backgroundColor: "rgba(158, 101, 144, 0.2)",
+          alignSelf: 'center',
+        }}
+      />
+    );
   }
 
   render() {
@@ -38,9 +69,19 @@ export default class contactList extends React.Component {
                 ←
               </Text>
             </TouchableOpacity>
+            <Text style = {styles.header}>Contacts</Text>
+            <View style = {{width: Dimensions.get('window').width,
+             height: Dimensions.get('window').height / 2,
+             top: 100
+          }}>
+            <FlatList
+              data={this.state.contacts}
+              extraData={this.state}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={this.renderItem}
+            />
+            </View>
           </View>
-        <View styles = {styles.innerBanner}>
-        </View>
       </View>
 
     );
@@ -79,8 +120,23 @@ export default class contactList extends React.Component {
       left: 5,
       alignSelf:'flex-start',
       marginLeft:15,
-      top: 55,
+      top: 50,
       position: 'absolute'
+    },
+
+    header: {
+      fontSize: 25,
+      position: 'absolute',
+      alignSelf: 'center',
+      top: 50,
+      color: 'rgba(0, 0, 0, 0.6)',
+    },
+
+    item: {
+      backgroundColor: '#f9c2ff',
+      padding: 20,
+      marginVertical: 8,
+      marginHorizontal: 16,
     },
 
 });
