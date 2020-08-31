@@ -41,7 +41,7 @@ export default class Email extends Component {
   }
 
   handleSubmit() {
-    const {navi} = this.props;
+    const {navigation} = this.props
     let apiUsers: string = '/login';
     let payload : object = {
       "email": this.state.email,
@@ -50,7 +50,7 @@ export default class Email extends Component {
     api.post(apiUsers, payload)
       .then(function(response){
         console.log(response)
-        navi.navigate('home')
+        navigation.navigate('home')
       })
       .catch((error) => {
         console.log(error)
@@ -67,7 +67,6 @@ export default class Email extends Component {
   }
 
   render() {
-    const {navigation} = this.props
     return(
       <View style = {styles.bg}>
         <Image style={styles.logo}

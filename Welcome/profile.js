@@ -53,17 +53,20 @@ export default class profile extends React.Component{
     this.setState({profile: Object.values(info.data)});
   }
 
-  handleLogOut() {
+  handleLogOut = async () => {
     let apiLogOut: string = '/logout';
-    var obj = api.get(apiLogOut)
-    console.log(obj);
-    navigation.navigate('welcome')
+    var obj = await api.get(apiLogOut)
+    console.log(obj)
     .then(function(response) {
       console.log(response)
+      navigation.navigate('welcome')
     })
     .catch(function (error) {
       console.log(error);
     });
+  }
+
+  componentDidUpdate() {
   }
 
   render() {
@@ -115,7 +118,7 @@ export default class profile extends React.Component{
         </TouchableOpacity>
         <TouchableOpacity
           style = {styles.outButton}
-          onPress={ () =>   navigation.navigate('welcome')}
+          onPress={ () =>  this.handleLogOut()}
 
         >
           <Text style = {styles.addcontactText}>

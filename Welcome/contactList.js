@@ -6,11 +6,11 @@ import { StackActions } from '@react-navigation/native';
 
 import api from '../baseURL.js'
 
-export default class newsfeed extends React.Component {
+export default class contactList extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      users: [],
+      contacts: [],
     }
   }
 
@@ -19,7 +19,10 @@ export default class newsfeed extends React.Component {
   }
 
   getData = async () => {
-
+    let apiContacts: string = '/profile';
+    var info = await api.get(apiContacts)
+    var dataObj = Object.values(info.data)
+    this.setState({reports: dataObj})
   }
 
   render() {
