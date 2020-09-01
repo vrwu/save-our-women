@@ -1,66 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import api from '../baseURL';
-import GetLocation from 'react-native-get-location';
+import * as Location from 'expo-location';
+
 
 export function EmergencySOS ({navigation}){
-  const [latitude, setLat] = useState("");
-  const [longitude, setLng] = useState("");
+  const [latitude, setLat] = useState(null);
+  const [longitude, setLng] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
 
-  function _requestLocation(){
+    useEffect(() => {
+      (async () => {
+        let { status } = await Location.requestPermissionsAsync();
+        
+        if (status !== 'granted') {
+          setErrorMsg('Permission to access location was denied');
+        }
 
-
-    GetLocation.getCurrentPosition({
-        enableHighAccuracy: true,
-        timeout: 150000,
-    })
-        .then(location => {
-            setLat(location.latitude)
-            setLng(location.longitude)
-            console.log(location.latitude)
-            console.log(location.longitude)
-        })
-        .catch(ex => {
-            const { code, message } = ex;
-            console.warn(code, message);
-            if (code === 'CANCELLED') {
-                Alert.alert('Location cancelled by user or by another request');
-            }
-            if (code === 'UNAVAILABLE') {
-                Alert.alert('Location service is disabled or unavailable');
-            }
-            if (code === 'TIMEOUT') {
-                Alert.alert('Location request timed out');
-            }
-            if (code === 'UNAUTHORIZED') {
-                Alert.alert('Authorization denied');
-            }
-            setLat(null)
-            setLng(null)
-        });
-        handleSubmit()
-  }
+        let location = await Location.getCurrentPositionAsync({})
+        let latitude = location.coords.latitude;
+        let longitude = location.coords.longitude;
+        setLat(latitude);
+        setLng(longitude);
+        console.log(latitude);
+        console.log(longitude);
+      })();
+    });
 
   function handleSubmit () {
-     let baseURL: string = '/signup';
+     let baseURL: string = '/send_emergency_sos';
      let payload : object = {
-       "name": name,
-       "email": email,
-       "num": num,
-       "pass": pass
+       "latitude": latitude,
+       "longitude": longitude
      };
 
      api.post(baseURL, payload)
        .then(function (response) {
-         console.log(name);
-         console.log(email);
-         console.log(num);
-         console.log(pass);
-
+         console.log("payload: ");
+         console.log(payload);
 
        })
        .catch(function (error) {
@@ -80,7 +61,13 @@ export function EmergencySOS ({navigation}){
         {'\n'}
         including your current location
         </Text>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            handleSubmit()
+          }}
+        >
+
           <Text style={styles.SOS}>SOS</Text>
         </TouchableOpacity>
       </View>

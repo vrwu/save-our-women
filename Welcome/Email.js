@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import api from '../baseURL'
 
-import api from '../baseURL.js'
+
 
 export default class Email extends Component {
   constructor(props) {
@@ -24,9 +24,9 @@ export default class Email extends Component {
       emailInput: '',
       passInput: '',
     }
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChangeEmail = this.handleChangeEmail.bind(this);
-    this.handleChangePass = this.handleChangePass.bind(this);
+  //  this.handleSubmit = this.handleSubmit.bind(this);
+    //this.handleChangeEmail = this.handleChangeEmail.bind(this);
+    //this.handleChangePass = this.handleChangePass.bind(this);
   }
 
   componentDidMount() {
