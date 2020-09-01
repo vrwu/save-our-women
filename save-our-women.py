@@ -270,7 +270,9 @@ def send_emergency_sos():
     lat = request.json['latitude']
     lng = request.json['longitude']
 
-    map_link = "http://www.google.com/maps/place/" + lat + "," + lng
+
+
+    map_link = "http://www.google.com/maps/place/" + str(lat) + "," + str(lng)
 
     all_users = db.child("users").child(uid).child('emergency contacts').get()
     name = str(db.child("users").child(uid).child('details').child('Name').get().val())
