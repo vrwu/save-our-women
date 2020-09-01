@@ -6,14 +6,17 @@ import * as Permissions from 'expo-permissions';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Component}
  from 'react-native';
 
+ import api from '../baseURL.js'
 
 export default class profile extends React.Component{
   state = {
     image: null,
+    profile: []
   };
 
   componentDidMount() {
     this.getPermissionAsync();
+    this.getData();
   }
 
   getPermissionAsync = async () => {
@@ -44,6 +47,28 @@ export default class profile extends React.Component{
     }
   };
 
+  getData = async() => {
+    let apiProfile: string = '/profile';
+    var info = await api.get(apiProfile);
+    this.setState({profile: Object.values(info.data)});
+  }
+
+  handleLogOut = async () => {
+    const {navigation} = this.props;
+    let apiLogOut: string = '/logout';
+    var obj = await api.get(apiLogOut)
+    .then(function(response) {
+      console.log(response)
+      navigation.navigate('welcome')
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  componentDidUpdate() {
+  }
+
   render() {
     const {navigation} = this.props
     let { image } = this.state;
@@ -63,15 +88,15 @@ export default class profile extends React.Component{
           >}
 
         <Text style = {styles.nameVar}>
-          Random Name
+          {this.state.profile[1]}
         </Text>
 
         <Text style = {styles.phoneText}>
-          Phone Number:
+          Phone: {this.state.profile[2]}
         </Text>
 
         <Text style = {styles.emailText}>
-          Email Address:
+          Email: {this.state.profile[0]}
         </Text>
 
         <TouchableOpacity
@@ -91,6 +116,15 @@ export default class profile extends React.Component{
             Add Emergency Contacts
           </Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style = {styles.outButton}
+          onPress={ () =>  this.handleLogOut()}
+
+        >
+          <Text style = {styles.addcontactText}>
+            Log Out
+          </Text>
+        </TouchableOpacity>
       </View>
     )
   }
@@ -103,17 +137,17 @@ export default class profile extends React.Component{
       backgroundColor:'rgba(158, 101, 144, 1)',
       height: 400,
       width:420,
+      borderRadius: 25
 
     },
 
-    //*name variable generated from database*
     nameVar: {
       fontSize: 25,
-      marginLeft: 50,
       position: 'absolute',
       color: 'white',
       fontWeight: 'bold',
-      top: 355
+      top: 355,
+      alignSelf: 'center'
     },
 
     phoneText: {
@@ -147,7 +181,7 @@ export default class profile extends React.Component{
       height: 50,
       backgroundColor: 'rgba(158, 101, 144, 1)',
       borderRadius:25,
-      top: 200,
+      top: 190,
       //marginBottom: 10,
       //later on figure out how to position button from the bottom so that
       //it's not pushed down by the contacts shown from backend
@@ -169,11 +203,21 @@ export default class profile extends React.Component{
       height: 50,
       backgroundColor: 'rgba(158, 101, 144, 1)',
       borderRadius:25,
-      top: 210,
+      top: 190,
+      marginVertical: 10,
       //marginBottom: 10,
       //later on figure out how to position button from the bottom so that
       //it's not pushed down by the contacts shown from backend
       alignSelf:'center'
+    },
+
+    outButton: {
+      width: 300,
+      height: 50,
+      backgroundColor: 'rgba(158, 101, 144, 1)',
+      borderRadius:25,
+      top: 190,
+      alignSelf: 'center'
     },
 
     addPFP: {

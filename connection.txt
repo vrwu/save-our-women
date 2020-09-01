@@ -29,7 +29,7 @@ login():
     return:
         - {'reason': 'User still logged in', 'value': uid}, 200
         - {'reason': 'Invalid credentials'}, 400
-        - {'reason': 'Account successfully loggin in'}, 200
+        - {'reason': 'Account successfully loggin in', 'value': uid}, 200
 
 forgotpass():
     method: 'post'
@@ -45,15 +45,23 @@ logout():
     url: '/logout'
     input: NA
     return:
-        - {'reason': 'Successful logout'}, 200
+        - {'reason': 'Successful logout', 'value': uid}, 200
 
 profile():
     method: 'get'
     url: '/profile'
     input: NA
     return:
-        - {'reason': 'Profile data bundle sent', 'name': name, 'email': email, 'phone': phone}, 200
+        - {'reason': 'Profile data bundle sent', 'name': name, 'email': email, 'phone': phone, 'photo': photo}, 200
 
+    method: 'put'
+    url: '/profile'
+    input: 
+        - photo
+    output:
+        - {'reason': 'Profile picture updated'}, 200
+        - {'reason': 'Empty photo entry'}, 400
+        
 emergency_contacts():
     method: 'get'
     url: '/emergency_contacts'
