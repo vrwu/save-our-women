@@ -23,6 +23,8 @@ import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
          style = {styles.sendAlert}
          onPress={() => navigation.navigate('newsfeed')}
        >
+         <Image style = {styles.icon}
+           source={require('../src/icons/newsfeed.png')} />
          <Text style = {styles.smallText}>
            Newsfeed
          </Text>
@@ -32,6 +34,8 @@ import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
          style = {styles.makeReport}
          onPress={() =>navigation.navigate('new report')}
        >
+       <Image style = {styles.icon}
+         source={require('../src/icons/report.png')} />
          <Text style = {styles.smallText}>
            Make Report
          </Text>
@@ -126,5 +130,15 @@ import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
       height:400,
       borderRadius:25,
       bottom: 35
+    },
+
+    icon: {
+      width: 50,
+      height: 50,
+      position: 'absolute',
+      top: 25,
+      left: 25,
+      backgroundColor:'rgba(158, 101, 144, 0.03)',
+      opacity: .4
     }
 });

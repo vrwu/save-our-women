@@ -1,8 +1,10 @@
+
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
+import ImgToBase64 from 'react-native-image-base64';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Component}
  from 'react-native';
 

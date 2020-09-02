@@ -36,7 +36,10 @@ export default class contactList extends React.Component {
   renderItem = ({ item }) => {
     return(
       <View>
-        <Text style = {{alignSelf: 'center', fontSize: 15}}>
+      <Image style = {styles.icon}
+        source={require('../src/icons/phone.png')} />
+        <Text style = {{alignSelf: 'center', fontSize: 15,
+        color: 'rgba(0, 00, 0, 0.6)'}}>
           {Object.values(item[0])}{'\n'}{JSON.stringify(item[1])}{'\n'}
         </Text>
       </View>
@@ -51,6 +54,7 @@ export default class contactList extends React.Component {
           width: "40%",
           backgroundColor: "rgba(158, 101, 144, 0.2)",
           alignSelf: 'center',
+          marginVertical: 20
         }}
       />
     );
@@ -71,7 +75,7 @@ export default class contactList extends React.Component {
             </TouchableOpacity>
             <Text style = {styles.header}>Contacts</Text>
             <View style = {{width: Dimensions.get('window').width,
-             height: Dimensions.get('window').height / 2,
+             height: Dimensions.get('window').height / 1.35,
              top: 100
           }}>
             <FlatList
@@ -79,6 +83,7 @@ export default class contactList extends React.Component {
               extraData={this.state}
               keyExtractor={(item, index) => index.toString()}
               renderItem={this.renderItem}
+              ItemSeparatorComponent = { this.FlatListItemSeparator }
             />
             </View>
           </View>
@@ -138,5 +143,14 @@ export default class contactList extends React.Component {
       marginVertical: 8,
       marginHorizontal: 16,
     },
+
+    icon: {
+      height: 20,
+      width: 20,
+      position: 'absolute',
+      top: 5,
+      left: 100,
+      opacity: 0.5,
+    }
 
 });
