@@ -204,10 +204,10 @@ export default class newReport extends React.Component {
           </View>
 
           <TextInput style = {styles.moreInfo}
-            placeholder="   Description"
+            placeholder="Description"
             multiline={true}
             onChangeText={this.handleChangeDescription}
-
+            placeholderTextColor = 'rgba(158, 101, 144, 0.8)'
           >
           </TextInput>
 
@@ -303,12 +303,10 @@ const styles = StyleSheet.create({
 
 
   moreInfo: {
-    backgroundColor:'rgba(158, 101, 144, 0.2)',
-    height: 200,
-    width: 275,
-    alignSelf:'center',
+    height: 250,
+    width: 335,
     borderRadius: 25,
-    top: 80,
+    left: 20
   },
 
 

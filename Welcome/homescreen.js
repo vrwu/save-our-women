@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {home} from '../Welcome/home'
 import {EmergencySOS} from '../Welcome/EmergencySOS'
 import profile from '../Welcome/profile'
+import tips from '../Welcome/tips'
 //import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 //import HomeIcon from '@material-ui/icons/Home';
 
@@ -13,8 +14,7 @@ const Tab = createBottomTabNavigator();
 
 export default function homeScreen({navigation}) {
   return(
-    <Tab.Navigator
-    >
+    <Tab.Navigator>
       <Tab.Screen
         name = "home"
         component = {home}
@@ -28,6 +28,11 @@ export default function homeScreen({navigation}) {
         name = "SOS"
         component = {EmergencySOS}
         options = {{tabBarLabel:'SOS'}}
+      />
+      <Tab.Screen
+        name = "tips"
+        component = {tips}
+        options = {{tabBarLabel: 'Tips'}}
       />
       <Tab.Screen
         name = "profile"

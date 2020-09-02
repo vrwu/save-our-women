@@ -38,7 +38,8 @@ export default class contactList extends React.Component {
       <View>
       <Image style = {styles.icon}
         source={require('../src/icons/phone.png')} />
-        <Text style = {{alignSelf: 'center', fontSize: 15}}>
+        <Text style = {{alignSelf: 'center', fontSize: 15,
+        color: 'rgba(0, 00, 0, 0.6)'}}>
           {Object.values(item[0])}{'\n'}{JSON.stringify(item[1])}{'\n'}
         </Text>
       </View>
@@ -149,7 +150,7 @@ export default class contactList extends React.Component {
       position: 'absolute',
       top: 5,
       left: 100,
-      opacity: 0.5
+      opacity: 0.5,
     }
 
 });
