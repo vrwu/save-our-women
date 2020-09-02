@@ -1,4 +1,3 @@
-
 import React from 'react';
 import axios from 'axios';
 import { StackActions } from '@react-navigation/native';
@@ -11,9 +10,10 @@ import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
   Keyboard, Alert, TextInput, Image, Component, Button
 } from 'react-native';
 import api from '../baseURL'
-import ImgToBase64 from 'react-native-image-base64';
+
 
 export default class newReport extends React.Component {
+
   constructor(){
     super()
     this.state = {
@@ -33,38 +33,45 @@ export default class newReport extends React.Component {
   }
 
  handleChangeDescription = (textValue) => {
-    console.log(this.state.report)
     this.setState({
       report: textValue
     })
   }
 
-  handleChangeLocation = (textValue) => {
+  handleChangeLocation = (val) => {
      this.setState({
-       location: data.terms[0].value
+       location: val
      })
+     console.log(this.state.location);
    }
 
-    handleChangeLatitude = (event) => {
+    handleChangeLatitude = (val) => {
        this.setState({
-         latitude: details.geometry.location.lat
+         latitude: val
        })
+            console.log(this.state.latitude);
      }
 
-     handleChangeLongitude = (event) => {
+     handleChangeLongitude = (val) => {
         this.setState({
-          report: details.geometry.location.lng
+          longitude: val
         })
+             console.log(this.state.longitude);
       }
 
 
 
  handleSubmit () {
+   //console.log(this.state)
     let baseURL: string = '/make_report';
+    console.log(this.state.report)
+    console.log(this.state.location)
+    console.log(this.state.latitude)
+    console.log(this.state.longitude)
     let payload : object = {
       "location": this.state.location,
       "report": this.state.report,
-      "image": this.state.image,
+      "fileToUpload": this.state.image,
       "latitude": this.state.latitude,
       "longitude": this.state.longitude
     };
@@ -81,30 +88,6 @@ export default class newReport extends React.Component {
   componentDidMount() {
     this.getPermissionAsync();
 
-/*
-    axios.post('https://save-our-women-b9aef.firebaseio.com/reports.json', {
-      // data to be sent
-      image: this.state.image,
-      location: this.state.location,
-      report: this.state.report,
-      latitude: this.state.latitude,
-      longitude: this.state.longitude
-    })
-    .then(function (response) {
-      console.log(this.state.report);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  axios({
-    method: 'post',
-    url: '/make_report',
-    data: {
-      location: 'Finn',
-      description: 'Williams'
-    }
-  });
-*/
   }
 
 
@@ -120,18 +103,19 @@ export default class newReport extends React.Component {
   _pickImage = async () => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
+        base64: true,
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
         aspect: [4, 3],
         quality: 1,
       });
-      console.log(result);
-      if (!result.cancelled) {
-        this.setState({ image: ImgToBase64.getBase64String(result.uri) });
-        console.log(ImgToBase64.getBase64String(result.uri.uri))
-      }
 
-      console.log(result);
+      if (!result.cancelled) {
+
+        this.setState({
+          image: String(result.base64)
+        })
+      }
     } catch (E) {
       console.log(E);
     }
@@ -189,12 +173,9 @@ export default class newReport extends React.Component {
               }
             }}
             onPress={(data, details = null) => {
-              console.log(details.geometry.location.lat)
-              console.log(details.geometry.location.lng)
-              console.log(data.terms[0].value)
-              this.handleChangeLatitude
-              this.handleChangeLongitude
-              this.handleChangeLocation
+              this.handleChangeLatitude(details.geometry.location.lat);
+              this.handleChangeLongitude(details.geometry.location.lng);
+              this.handleChangeLocation(data.terms[0].value);
             }}
             query={{
               key: 'AIzaSyAeQmNz_y5iceHHdjfQPFC-JJP98NjBO6U',

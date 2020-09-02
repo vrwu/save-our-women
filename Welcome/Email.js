@@ -67,6 +67,7 @@ export default class Email extends Component {
   }
 
   render() {
+    const {navigation} = this.props
     return(
       <View style = {styles.bg}>
         <Image style={styles.logo}
