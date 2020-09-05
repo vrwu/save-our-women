@@ -7,7 +7,7 @@ import {home} from '../Welcome/home'
 import {EmergencySOS} from '../Welcome/EmergencySOS'
 import profile from '../Welcome/profile'
 import tips from '../Welcome/tips'
-import videos from '../Welcome/videos'
+import {videos} from '../Welcome/videos'
 //import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 //import HomeIcon from '@material-ui/icons/Home';
 

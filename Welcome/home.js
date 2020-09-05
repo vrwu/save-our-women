@@ -64,7 +64,7 @@ import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView,
     },
 
     homeText: {
-      fontSize: 20,
+      fontSize: 25,
       fontWeight: "bold",
       alignSelf: 'center',
       bottom: 125,
