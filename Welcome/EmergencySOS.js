@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import api from '../baseURL';
 import * as Location from 'expo-location';
@@ -16,7 +16,7 @@ export function EmergencySOS ({navigation}){
     useEffect(() => {
       (async () => {
         let { status } = await Location.requestPermissionsAsync();
-        
+
         if (status !== 'granted') {
           setErrorMsg('Permission to access location was denied');
         }
@@ -67,9 +67,9 @@ export function EmergencySOS ({navigation}){
             handleSubmit()
           }}
         >
-
-          <Text style={styles.SOS}>SOS</Text>
         </TouchableOpacity>
+        <Image style={styles.icon}
+          source={require('../src/icons/alarmSOS.png')} />
       </View>
 
   );
@@ -83,15 +83,16 @@ const styles = StyleSheet.create({
   },
 
 
-  SOS: {
+  icon: {
     alignItems: 'center',
     textAlign: 'center',
     alignSelf: 'center',
-    marginVertical: 118,
+    marginVertical: 250,
     justifyContent: 'center',
     color:'#FFFFFF',
-    fontSize: 100,
-    position: 'relative',
+    position: 'absolute',
+    height: 300,
+    width: 300
 
   },
 

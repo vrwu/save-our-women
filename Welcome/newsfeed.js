@@ -33,6 +33,7 @@ export default class newsfeed extends React.Component {
     let apiRecentRep: string = '/recent_reports';
     var info = await api.get(apiRecentRep)
     var dataObj = Object.values(info.data.reports)
+    console.log(dataObj)
     this.setState({reports: dataObj})
   }
 
@@ -51,7 +52,7 @@ export default class newsfeed extends React.Component {
   }
 
   renderItem = ({ item }) => {
-    var img = Object.values(item)[2]
+    var img = Object.values(item)[3]
     var imgURL = img.toString()
     if (imgURL.length != 0) {
       return (
@@ -60,10 +61,10 @@ export default class newsfeed extends React.Component {
             {Object.values(item[0])}
           </Text>
           <Text style = {styles.location}>
-          {Object.values(item[1])}
+          {Object.values(item[2])}
           </Text>
           <Text style = {styles.details}>
-            {Object.values(item[3])}
+            {Object.values(item[1])}
           </Text>
           <Image source = {{uri: imgURL}}
             style = {styles.picture}
@@ -78,10 +79,10 @@ export default class newsfeed extends React.Component {
             {Object.values(item[0])}
           </Text>
           <Text style = {styles.location}>
-          {Object.values(item[1])}
+          {Object.values(item[2])}
           </Text>
           <Text style = {styles.details}>
-            {Object.values(item[3])}
+            {Object.values(item[1])}
           </Text>
         </View>
       )
@@ -204,6 +205,7 @@ const styles = StyleSheet.create({
   },
 
   details: {
+    marginRight: 50,
     fontSize: 14,
     marginVertical: 5,
     alignSelf: 'flex-start',
