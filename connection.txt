@@ -54,7 +54,7 @@ profile():
     return:
         - {'reason': 'Profile data bundle sent', 'name': name, 'email': email, 'phone': phone, 'photo': photo}, 200
 
-    method: 'put'
+    method: 'post'
     url: '/profile'
     input: 
         - photo
