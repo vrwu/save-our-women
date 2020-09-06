@@ -222,8 +222,7 @@ def emergency_contacts():
         name = user.key()
         person_arr.append(name)
 
-        phone = user.val()
-        phone = phone.replace('"', "")
+        phone = user.get.()val()
         person_arr.append(phone)
 
         contacts_arr.append(person_arr)
