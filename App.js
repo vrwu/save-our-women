@@ -20,7 +20,7 @@ import newsfeed from './Welcome/newsfeed';
 import newReport from './Welcome/newReport';
 import contactList from './Welcome/contactList';
 import map from './Welcome/map';
-import {videos} from './Welcome/videos';
+
 
 const Stack = createStackNavigator();
 
@@ -73,10 +73,7 @@ export default function App() {
           name="map"
           component={map}
         />
-        <Stack.Screen
-          name="videos"
-          component={videos}
-        />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

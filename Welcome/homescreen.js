@@ -7,7 +7,7 @@ import {home} from '../Welcome/home'
 import {EmergencySOS} from '../Welcome/EmergencySOS'
 import profile from '../Welcome/profile'
 import tips from '../Welcome/tips'
-import {videos} from '../Welcome/videos'
+import vid from '../Welcome/vid'
 //import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 //import HomeIcon from '@material-ui/icons/Home';
 
@@ -27,7 +27,7 @@ export default function homeScreen({navigation}) {
       />
       <Tab.Screen
         name = "Videos"
-        component = {videos}
+        component = {vid}
         options = {{tabBarLabel:'Videos'}}
       />
       <Tab.Screen
