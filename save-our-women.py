@@ -149,7 +149,7 @@ def logout():
 
     return jsonify({'reason': 'Successful logout', 'value': uid}), 200
 
-@app.route('/profile', methods=['GET', 'POST'])
+@app.route('/profile', methods=['GET', 'PUT'])
 def profile():
 
     global uid
