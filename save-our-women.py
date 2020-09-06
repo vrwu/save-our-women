@@ -65,6 +65,7 @@ def signup():
     name = request.json['name']
     email = request.json['email']
     password = request.json['pass']
+    phone = phone.replace('"', "")
     phone = request.json['num']
     photo = ""
 
@@ -249,7 +250,7 @@ def add_emergency_contact():
         return({'reason': 'Empty phone entry'}), 400
 
     name = str(full_name)
-
+    phone = phone.replace('"', "")
     # Name: Phone Number
     db.child("users").child(uid).child("emergency contacts").child(name).set(phone)
 
