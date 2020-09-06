@@ -78,6 +78,7 @@ export default class newReport extends React.Component {
 
     api.post(baseURL, payload)
       .then(function (response) {
+        Alert.alert('Report posted to Newsfeed!')
         console.log(this.state.report);
       })
       .catch(function (error) {

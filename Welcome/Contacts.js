@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput,
-  KeyboardAvoidingView
+  KeyboardAvoidingView, Alert
  } from 'react-native';
 import api from '../baseURL'
 
@@ -24,6 +24,7 @@ export function Contacts({navigation}){
 
      api.post(baseURL, payload)
        .then(function (response) {
+         Alert.alert('Emergency contact added!')
          console.log(name);
          console.log(num);
        })

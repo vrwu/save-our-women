@@ -39,7 +39,7 @@ export function signUpScreen({navigation}){
        navigation.navigate('contacts')
    }
   return (
-    <KeyboardAvoidingView style = {styles.keyboard}
+    <View style = {styles.keyboard}
     behavior ='padding'>
       <View style = {styles.container}>
         <StatusBar style="auto" />
@@ -91,7 +91,7 @@ export function signUpScreen({navigation}){
           <Text style={styles.SignUpText}> Sign Up </Text>
         </TouchableOpacity>
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 
