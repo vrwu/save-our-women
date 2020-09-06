@@ -1,4 +1,5 @@
 
+
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
@@ -37,23 +38,10 @@ export default class profile extends React.Component{
         allowsEditing: true,
         aspect: [4, 3],
         quality: 1,
-        base64: true
       });
       console.log(result);
       if (!result.cancelled) {
-        console.log(result.base64)
-        this.setState({image: String(result.base64)});
-        let apiProfile: string = '/profile';
-        let payload : object = {
-          "photo": this.state.image
-        };
-        var pfp = await api.put(apiProfile, payload)
-        .then(function(response) {
-          console.log(this.state.report);
-        })
-        .catch( (error) => {
-          console.log(error);
-        });
+        this.setState({ image: result.uri });
       }
 
       console.log(result);
@@ -66,10 +54,6 @@ export default class profile extends React.Component{
     let apiProfile: string = '/profile';
     var info = await api.get(apiProfile);
     this.setState({profile: Object.values(info.data)});
-    console.log(this.state.profile)
-    if (this.state.profile.length > 4) {
-      this.setState({image: Object.values(this.state.profile[3])})
-    }
   }
 
   handleLogOut = async () => {
