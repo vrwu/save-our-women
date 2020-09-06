@@ -65,8 +65,8 @@ def signup():
     name = request.json['name']
     email = request.json['email']
     password = request.json['pass']
-    phone = phone.replace('"', "")
     phone = request.json['num']
+    phone = phone.replace('"', "")
     photo = ""
 
     # creates an account on database and requests for verification
