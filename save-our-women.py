@@ -223,6 +223,7 @@ def emergency_contacts():
         person_arr.append(name)
 
         phone = user.val()
+        phone = int(phone)
         person_arr.append(phone)
 
         contacts_arr.append(person_arr)
