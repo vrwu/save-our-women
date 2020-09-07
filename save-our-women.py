@@ -251,7 +251,7 @@ def add_emergency_contact():
         return({'reason': 'Empty phone entry'}), 400
 
     name = str(full_name)
-    phone = phone.replace('"', "")
+
     # Name: Phone Number
     db.child("users").child(uid).child("emergency contacts").child(name).set(phone)
 
